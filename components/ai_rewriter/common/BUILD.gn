@@ -4,8 +4,9 @@
 # You can obtain one at https://mozilla.org/MPL/2.0/.
 
 import("//brave/components/ai_rewriter/common/buildflags/buildflags.gni")
-assert(enable_ai_rewriter)
+#assert(enable_ai_rewriter)
 
+if (enable_ai_rewriter) {
 component("common") {
   output_name = "ai_rewriter_common"
 
@@ -22,4 +23,5 @@ component("common") {
     "//brave/components/ai_chat/core/common",
     "//brave/components/ai_rewriter/common/buildflags",
   ]
+}
 }
