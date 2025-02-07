@@ -49,10 +49,6 @@ export default function addBraveRoutes(r: Partial<SettingsRoutes>) {
   }
   r.BRAVE_NEW_TAB = r.BASIC.createSection('/newTab', 'newTab')
 
-  if (pageVisibility.leoAssistant) {
-    r.BRAVE_LEO_ASSISTANT =
-      r.BASIC.createSection('/leo-ai', 'leoAssistant')
-  }
   if (pageVisibility.content) {
     r.BRAVE_CONTENT = r.BASIC.createSection('/braveContent', 'content')
     // Move fonts from APPEARANCE to BRAVE_CONTENT
@@ -80,12 +76,6 @@ export default function addBraveRoutes(r: Partial<SettingsRoutes>) {
     if (isLocalhostAccessFeatureEnabled) {
       r.SITE_SETTINGS_LOCALHOST_ACCESS = r.SITE_SETTINGS
         .createChild('localhostAccess')
-    }
-    const isOpenAIChatFromBraveSearchEnabled =
-      loadTimeData.getBoolean('isOpenAIChatFromBraveSearchEnabled')
-    if (isOpenAIChatFromBraveSearchEnabled) {
-      r.SITE_SETTINGS_BRAVE_OPEN_AI_CHAT =
-        r.SITE_SETTINGS.createChild('braveOpenAIChat')
     }
     const isNativeBraveWalletFeatureEnabled =
       loadTimeData.getBoolean('isNativeBraveWalletFeatureEnabled')

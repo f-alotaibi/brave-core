@@ -7,8 +7,4 @@
 
 namespace web_app {
 
-TEST(WebAppHelpers, Brave_IsValidWebAppUrl) {
-  EXPECT_TRUE(IsValidWebAppUrl(GURL("chrome://leo-ai")));
-}
-
 }  // namespace web_app

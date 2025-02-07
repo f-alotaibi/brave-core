@@ -57,14 +57,6 @@ extends SettingsBraveClearBrowsingDataOnExitPageElementBase {
           return loadTimeData.getBoolean('isChildAccount')
         },
       },
-
-      isAIChatAndHistoryAllowed_: {
-        type: Boolean,
-        value() {
-          return loadTimeData.getBoolean('isLeoAssistantAllowed')
-              && loadTimeData.getBoolean('isLeoAssistantHistoryAllowed')
-        },
-      }
     }
   }
 

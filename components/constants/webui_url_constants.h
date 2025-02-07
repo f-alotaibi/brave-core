@@ -83,12 +83,6 @@ inline constexpr char kSpeedreaderPanelURL[] =
     "chrome://brave-speedreader.top-chrome";
 inline constexpr char kSpeedreaderPanelHost[] = "brave-speedreader.top-chrome";
 inline constexpr char kShortcutsURL[] = "chrome://settings/system/shortcuts";
-inline constexpr char kAIChatUIURL[] = "chrome://leo-ai/";
-inline constexpr char kAIChatUIHost[] = "leo-ai";
-inline constexpr char kAIChatUntrustedConversationUIURL[] =
-    "chrome-untrusted://leo-ai-conversation-entries/";
-inline constexpr char kAIChatUntrustedConversationUIHost[] =
-    "leo-ai-conversation-entries";
 inline constexpr char kBraveGettingStartedURL[] = "chrome://getting-started/";
 inline constexpr char kBraveGettingStartedHost[] = "getting-started";
 inline constexpr char kRewriterUIURL[] = "chrome://rewriter/";
@@ -98,13 +92,5 @@ inline constexpr char16_t kTransactionSimulationLearnMoreURL[] =
     u"https://github.com/brave/brave-browser/wiki/Transaction-Simulation";
 
 inline constexpr char kBraveUINewTabURL[] = "chrome://newtab/";
-
-// Hosts that are allowed to be installed as PWAs, which is usually
-// a blocked action for WebUIs. In Chromium, the "password-manager" host
-// is already allowed.
-inline constexpr auto kInstallablePWAWebUIHosts =
-    base::MakeFixedFlatSet<std::string_view>({
-        kAIChatUIHost,
-    });
 
 #endif  // BRAVE_COMPONENTS_CONSTANTS_WEBUI_URL_CONSTANTS_H_

@@ -66,7 +66,6 @@ function getPageVisibility () {
     // custom properties
     braveSync: !loadTimeData.getBoolean('isSyncDisabled'),
     braveWallet: loadTimeData.getBoolean('isBraveWalletAllowed'),
-    leoAssistant: loadTimeData.getBoolean('isLeoAssistantAllowed'),
     content: alwaysTrueProxy,
     playlist: loadTimeData.getBoolean('isPlaylistAllowed'),
     speedreader: loadTimeData.getBoolean('isSpeedreaderFeatureEnabled'),

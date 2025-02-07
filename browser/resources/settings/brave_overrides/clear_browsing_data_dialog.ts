@@ -120,36 +120,5 @@ RegisterPolymerTemplateModifications({
     } else {
       rewardsResetLink.textContent = loadTimeData.getString('resetRewardsData')
     }
-
-    // Append Leo reset checkbox
-    const isLeoAssistantAndHistoryAllowed =
-      loadTimeData.getBoolean('isLeoAssistantAllowed')
-        && loadTimeData.getBoolean('isLeoAssistantHistoryAllowed')
-    if (isLeoAssistantAndHistoryAllowed) {
-      const cacheCheckbox = templateContent
-        .querySelector('[id="cacheCheckbox"]')
-      if (!cacheCheckbox) {
-        console.error(
-          '[Settings] missing cacheCheckbox in clear-browsing-data-dialog')
-        return
-      }
-      cacheCheckbox.insertAdjacentHTML(
-        'beforebegin',
-        getTrustedHTML`
-        <settings-checkbox
-          id="leoResetCheckbox"
-          pref="{{prefs.browser.clear_data.brave_leo}}"
-          label="[[i18n('aiChatClearHistoryData')]]"
-          sub-label="[[i18n('aiChatClearHistoryDataSubLabel')]]"
-          disabled="[[clearingInProgress_]]"
-          no-set-pref>
-        </settings-checkbox>`)
-
-      const leoResetCheckbox =
-        templateContent.querySelector('[id="leoResetCheckbox"]')
-      if (!leoResetCheckbox) {
-        console.error('[Settings] missing Leo reset link')
-      }
-    }
   }
 })

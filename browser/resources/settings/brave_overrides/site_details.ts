@@ -99,24 +99,6 @@ RegisterPolymerTemplateModifications({
         }
         curChild++
       }
-      // AI Chat feature
-      const isOpenAIChatFromBraveSearchEnabled =
-        loadTimeData.getBoolean('isOpenAIChatFromBraveSearchEnabled')
-      if (isOpenAIChatFromBraveSearchEnabled) {
-        insertBefore(firstPermissionItem, html`<site-details-permission
-             category="[[contentSettingsTypesEnum_.BRAVE_OPEN_AI_CHAT]]"
-             icon="user">
-           </site-details-permission>`)
-        const braveAIChatSettings = templateContent.querySelector(
-          `div.list-frame > site-details-permission:nth-child(${curChild})`)
-        if (!braveAIChatSettings) {
-          console.error('[Settings] Couldn\'t find Brave AI chat settings')
-        } else {
-          braveAIChatSettings.setAttribute(
-            'label', loadTimeData.getString('siteSettingsBraveOpenAIChat'))
-        }
-        curChild++
-      }
       const isNativeBraveWalletEnabled =
         loadTimeData.getBoolean('isNativeBraveWalletFeatureEnabled')
       if (isNativeBraveWalletEnabled) {

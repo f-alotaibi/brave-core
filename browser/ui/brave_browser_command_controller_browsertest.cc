@@ -248,7 +248,6 @@ IN_PROC_BROWSER_TEST_F(BraveBrowserCommandControllerTest,
   EXPECT_TRUE(command_controller->IsCommandEnabled(IDC_OPEN_GUEST_PROFILE));
   EXPECT_TRUE(
       command_controller->IsCommandEnabled(IDC_SHOW_BRAVE_WEBCOMPAT_REPORTER));
-  EXPECT_FALSE(command_controller->IsCommandEnabled(IDC_TOGGLE_AI_CHAT));
 }
 
 // Create guest browser and test its brave commands status.
@@ -278,7 +277,6 @@ IN_PROC_BROWSER_TEST_F(BraveBrowserCommandControllerTest,
   EXPECT_FALSE(command_controller->IsCommandEnabled(IDC_OPEN_GUEST_PROFILE));
   EXPECT_TRUE(
       command_controller->IsCommandEnabled(IDC_SHOW_BRAVE_WEBCOMPAT_REPORTER));
-  EXPECT_FALSE(command_controller->IsCommandEnabled(IDC_TOGGLE_AI_CHAT));
 }
 
 // Launch tor window and check its command status.
@@ -310,7 +308,6 @@ IN_PROC_BROWSER_TEST_F(BraveBrowserCommandControllerTest,
   EXPECT_TRUE(command_controller->IsCommandEnabled(IDC_OPEN_GUEST_PROFILE));
   EXPECT_TRUE(
       command_controller->IsCommandEnabled(IDC_SHOW_BRAVE_WEBCOMPAT_REPORTER));
-  EXPECT_FALSE(command_controller->IsCommandEnabled(IDC_TOGGLE_AI_CHAT));
 
   // Check tor commands when tor is disabled.
   TorProfileServiceFactory::SetTorDisabled(true);
@@ -321,19 +318,6 @@ IN_PROC_BROWSER_TEST_F(BraveBrowserCommandControllerTest,
       command_controller->IsCommandEnabled(IDC_NEW_OFFTHERECORD_WINDOW_TOR));
 }
 #endif
-
-IN_PROC_BROWSER_TEST_F(BraveBrowserCommandControllerTest,
-                       ToggleAIChat_ControlledByPolicy) {
-  auto* command_controller = browser()->command_controller();
-  // Sanity check policy is enabled by default
-  EXPECT_TRUE(command_controller->IsCommandEnabled(IDC_TOGGLE_AI_CHAT));
-  // When AI Chat is blocked by policy, the commands should not be available
-  BlockAIChatByPolicy(true);
-  EXPECT_FALSE(command_controller->IsCommandEnabled(IDC_TOGGLE_AI_CHAT));
-  // When AI Chat is unblocked by policy, the commands should become available
-  BlockAIChatByPolicy(false);
-  EXPECT_TRUE(command_controller->IsCommandEnabled(IDC_TOGGLE_AI_CHAT));
-}
 
 IN_PROC_BROWSER_TEST_F(BraveBrowserCommandControllerTest,
                        BraveCommandsCloseTabsToLeft) {
@@ -429,44 +413,3 @@ IN_PROC_BROWSER_TEST_F(BraveBrowserCommandControllerTest,
   }
 }
 
-#if defined(TOOLKIT_VIEWS)
-IN_PROC_BROWSER_TEST_F(BraveBrowserCommandControllerTest,
-                       BraveCommandsToggleAIChat) {
-  SidePanelEntryKey ai_chat_key =
-      SidePanelEntry::Key(SidePanelEntryId::kChatUI);
-  auto* side_panel_coordinator =
-      browser()->GetFeatures().side_panel_coordinator();
-  ASSERT_TRUE(base::test::RunUntil([&]() {
-    return browser()->GetBrowserView().unified_side_panel()->state() ==
-           SidePanel::State::kClosed;
-  }));
-
-  // initially no panel is showing
-  EXPECT_FALSE(side_panel_coordinator->IsSidePanelEntryShowing(ai_chat_key));
-  EXPECT_FALSE(side_panel_coordinator->IsSidePanelShowing());
-  // after command, ai chat panel is showing
-  browser()->command_controller()->ExecuteCommand(IDC_TOGGLE_AI_CHAT);
-  EXPECT_TRUE(side_panel_coordinator->IsSidePanelShowing());
-  EXPECT_TRUE(side_panel_coordinator->IsSidePanelEntryShowing(ai_chat_key));
-  // after command again, no panel is showing
-  browser()->command_controller()->ExecuteCommand(IDC_TOGGLE_AI_CHAT);
-  WaitForSidePanelClose();
-  EXPECT_FALSE(side_panel_coordinator->IsSidePanelEntryShowing(ai_chat_key));
-  EXPECT_FALSE(side_panel_coordinator->IsSidePanelShowing());
-
-  // open a different side panel
-  SidePanelEntryKey bookmarks_key =
-      SidePanelEntry::Key(SidePanelEntryId::kBookmarks);
-  side_panel_coordinator->Toggle(bookmarks_key,
-                                 SidePanelOpenTrigger::kToolbarButton);
-  // after command, ai chat panel is showing
-  browser()->command_controller()->ExecuteCommand(IDC_TOGGLE_AI_CHAT);
-  EXPECT_TRUE(side_panel_coordinator->IsSidePanelShowing());
-  EXPECT_TRUE(side_panel_coordinator->IsSidePanelEntryShowing(ai_chat_key));
-  // after command again, no panel is showing
-  browser()->command_controller()->ExecuteCommand(IDC_TOGGLE_AI_CHAT);
-  WaitForSidePanelClose();
-  EXPECT_FALSE(side_panel_coordinator->IsSidePanelEntryShowing(ai_chat_key));
-  EXPECT_FALSE(side_panel_coordinator->IsSidePanelShowing());
-}
-#endif

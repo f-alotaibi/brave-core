@@ -12,8 +12,7 @@
 
 // Add some extra items to WebUI hosts considered valid for PWAs
 #define kChromeUIPasswordManagerHost \
-  kChromeUIPasswordManagerHost &&    \
-      !base::Contains(kInstallablePWAWebUIHosts, url.host_piece())
+  kChromeUIPasswordManagerHost
 
 #include "src/components/webapps/browser/banners/app_banner_manager.cc"
 #undef kChromeUIPasswordManagerHost

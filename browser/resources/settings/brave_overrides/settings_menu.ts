@@ -273,15 +273,6 @@ RegisterPolymerTemplateModifications({
       privacyEl.insertAdjacentElement('afterend', web3El)
     }
 
-    // Add leo item
-    const leoAssistantEl = createMenuElement(
-      loadTimeData.getString('leoAssistant'),
-      '/leo-ai',
-      'product-brave-leo',
-      'leoAssistant',
-    )
-    web3El.insertAdjacentElement('afterend', leoAssistantEl)
-
     // Add Sync item
     const syncEl = createMenuElement(
       loadTimeData.getString('braveSync'),
@@ -289,7 +280,7 @@ RegisterPolymerTemplateModifications({
       'product-sync',
       'braveSync',
     )
-    leoAssistantEl.insertAdjacentElement('afterend', syncEl)
+    web3El.insertAdjacentElement('afterend', syncEl)
 
     // Add search item
     const searchEl = getMenuElement(templateContent, '/search')
