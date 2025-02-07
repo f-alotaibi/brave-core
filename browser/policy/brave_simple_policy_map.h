@@ -6,7 +6,6 @@
 #ifndef BRAVE_BROWSER_POLICY_BRAVE_SIMPLE_POLICY_MAP_H_
 #define BRAVE_BROWSER_POLICY_BRAVE_SIMPLE_POLICY_MAP_H_
 
-#include "brave/components/ai_chat/core/common/pref_names.h"
 #include "brave/components/brave_vpn/common/buildflags/buildflags.h"
 #include "brave/components/constants/pref_names.h"
 #include "brave/components/ipfs/buildflags/buildflags.h"
@@ -57,8 +56,6 @@ inline constexpr PolicyToPreferenceMapEntry kBraveSimplePolicyMap[] = {
     {policy::key::kBraveVPNDisabled, brave_vpn::prefs::kManagedBraveVPNDisabled,
      base::Value::Type::BOOLEAN},
 #endif
-    {policy::key::kBraveAIChatEnabled, ai_chat::prefs::kEnabledByPolicy,
-     base::Value::Type::BOOLEAN},
 
 #if BUILDFLAG(DEPRECATE_IPFS)
     {policy::key::kIPFSEnabled, ipfs::prefs::kIPFSEnabledByPolicy,

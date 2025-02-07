@@ -31,7 +31,6 @@
 #include "brave/browser/ui/views/tabs/vertical_tab_utils.h"
 #include "brave/browser/ui/views/toolbar/brave_toolbar_view.h"
 #include "brave/browser/ui/views/toolbar/side_panel_button.h"
-#include "brave/components/ai_chat/core/common/features.h"
 #include "brave/components/constants/brave_switches.h"
 #include "brave/components/playlist/common/features.h"
 #include "brave/components/sidebar/browser/constants.h"
@@ -261,10 +260,6 @@ class SidebarBrowserTest : public InProcessBrowserTest {
       item_count -= 1;
     }
 #endif
-
-    if (!ai_chat::features::IsAIChatEnabled()) {
-      item_count -= 1;
-    }
 
     return item_count;
   }

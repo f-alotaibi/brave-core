@@ -11,7 +11,6 @@
 #include "brave/browser/ui/color/brave_color_id.h"
 #include "brave/browser/ui/views/omnibox/brave_omnibox_popup_view_views.h"
 #include "brave/browser/ui/views/omnibox/brave_search_conversion_promotion_view.h"
-#include "brave/components/omnibox/browser/leo_provider.h"
 #include "brave/components/omnibox/browser/promotion_utils.h"
 #include "brave/grit/brave_theme_resources.h"
 #include "chrome/browser/browser_process.h"
@@ -66,12 +65,6 @@ void BraveOmniboxResultView::OnSelectionStateChanged() {
 }
 
 gfx::Image BraveOmniboxResultView::GetIcon() const {
-  if (LeoProvider::IsMatchFromLeoProvider(match_)) {
-    // As Leo icon has gradient color, we can't use vector icon because it lacks
-    // of gradient color.
-    return ui::ResourceBundle::GetSharedInstance().GetImageNamed(
-        IDR_LEO_FAVICON);
-  }
   return OmniboxResultView::GetIcon();
 }
 
@@ -134,28 +127,12 @@ void BraveOmniboxResultView::UpdateForBraveSearchConversion() {
 }
 
 void BraveOmniboxResultView::UpdateForLeoMatch() {
-  if (LeoProvider::IsMatchFromLeoProvider(match_)) {
-    constexpr int kLeoMatchPadding = 4;
-    SetProperty(views::kMarginsKey, gfx::Insets().set_top(kLeoMatchPadding));
-    if (auto* cp = GetColorProvider()) {
-      SetBorder(views::CreatePaddedBorder(
-          views::CreateSolidSidedBorder(
-              gfx::Insets().set_top(1),
-              cp->GetColor(kColorBraveOmniboxResultViewSeparator)),
-          gfx::Insets().set_top(kLeoMatchPadding)));
-    }
-  } else {
     ClearProperty(views::kMarginsKey);
     SetBorder(nullptr);
-  }
 }
 
 void BraveOmniboxResultView::OnPaintBackground(gfx::Canvas* canvas) {
   gfx::ScopedCanvas scoped_canvas(canvas);
-  if (LeoProvider::IsMatchFromLeoProvider(match_)) {
-    // Clip upper padding
-    canvas->ClipRect(GetContentsBounds());
-  }
 
   OmniboxResultView::OnPaintBackground(canvas);
 }

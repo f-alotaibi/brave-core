@@ -61,8 +61,6 @@ class SpeedreaderToolbarDataHandlerImpl
 
   void ViewOriginal() override;
 
-  void AiChat() override;
-
   void GetPlaybackState(GetPlaybackStateCallback callback) override;
   void Rewind() override;
   void Play() override;

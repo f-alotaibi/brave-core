@@ -17,7 +17,6 @@
 #include "brave/browser/ui/color/brave_color_id.h"
 #include "brave/browser/ui/sidebar/sidebar_service_factory.h"
 #include "brave/browser/ui/toolbar/brave_app_menu_model.h"
-#include "brave/components/ai_chat/core/browser/ai_chat_metrics.h"
 #include "brave/components/brave_vpn/common/buildflags/buildflags.h"
 #include "brave/components/misc_metrics/menu_metrics.h"
 #include "brave/components/sidebar/browser/sidebar_service.h"
@@ -228,13 +227,6 @@ void BraveAppMenu::OnMenuClosed(views::MenuItemView* menu) {
 void BraveAppMenu::RecordMenuUsage(int command_id) {
   misc_metrics::MenuGroup group;
 
-  if (command_id == IDC_TOGGLE_AI_CHAT) {
-    ai_chat::AIChatMetrics* metrics =
-        g_brave_browser_process->process_misc_metrics()->ai_chat_metrics();
-    CHECK(metrics);
-    metrics->HandleOpenViaEntryPoint(ai_chat::EntryPoint::kMenuItem);
-  }
-
   switch (command_id) {
     case IDC_NEW_WINDOW:
     case IDC_NEW_TAB:
@@ -244,7 +236,6 @@ void BraveAppMenu::RecordMenuUsage(int command_id) {
       group = misc_metrics::MenuGroup::kTabWindow;
       break;
     case IDC_SHOW_BRAVE_WALLET:
-    case IDC_TOGGLE_AI_CHAT:
     case IDC_OPEN_FULL_PAGE_CHAT:
     case IDC_SHOW_BRAVE_SYNC:
     case IDC_SHOW_BRAVE_REWARDS:

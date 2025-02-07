@@ -12,7 +12,6 @@
 
 #include "base/gtest_prod_util.h"
 #include "base/memory/weak_ptr.h"
-#include "brave/components/ai_chat/core/common/mojom/ai_chat.mojom.h"
 #include "brave/components/brave_vpn/common/buildflags/buildflags.h"
 #include "content/public/renderer/render_frame.h"
 #include "content/public/renderer/render_frame_observer.h"
@@ -73,7 +72,6 @@ class SubscriptionRenderFrameObserver : public content::RenderFrameObserver {
 #if BUILDFLAG(ENABLE_BRAVE_VPN)
   mojo::Remote<brave_vpn::mojom::ServiceHandler> vpn_service_;
 #endif
-  mojo::Remote<ai_chat::mojom::IAPSubscription> ai_chat_subscription_;
   base::WeakPtrFactory<SubscriptionRenderFrameObserver> weak_factory_{this};
 };
 

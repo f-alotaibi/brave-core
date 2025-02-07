@@ -11,7 +11,6 @@
 #include "base/memory/scoped_refptr.h"
 #include "base/ranges/algorithm.h"
 #include "base/strings/string_util.h"
-#include "brave/components/ai_chat/core/browser/utils.h"
 #include "brave/components/brave_search_conversion/utils.h"
 #include "brave/components/commander/common/buildflags/buildflags.h"
 #include "brave/components/omnibox/browser/brave_bookmark_provider.h"
@@ -20,7 +19,6 @@
 #include "brave/components/omnibox/browser/brave_local_history_zero_suggest_provider.h"
 #include "brave/components/omnibox/browser/brave_search_provider.h"
 #include "brave/components/omnibox/browser/brave_shortcuts_provider.h"
-#include "brave/components/omnibox/browser/leo_provider.h"
 #include "brave/components/omnibox/browser/promotion_provider.h"
 #include "brave/components/omnibox/browser/promotion_utils.h"
 #include "brave/components/omnibox/browser/topsites_provider.h"
@@ -69,21 +67,10 @@ void MaybeAddCommanderProvider(AutocompleteController::Providers& providers,
 
 void MaybeAddLeoProvider(AutocompleteController::Providers& providers,
                          AutocompleteController* controller) {
-  auto* provider_client = controller->autocomplete_provider_client();
-  // TestOmniboxClient has null prefs getter
-  auto* prefs = provider_client->GetPrefs();
-  if (prefs && ai_chat::IsAIChatEnabled(prefs) &&
-      !provider_client->IsOffTheRecord()) {
-    providers.push_back(base::MakeRefCounted<LeoProvider>(provider_client));
-  }
 }
 
 void MaybeShowLeoMatch(AutocompleteResult* result) {
   DCHECK(result);
-
-  // Regardless of the relevance score, we want to show the Leo match at the
-  // bottom. But could be followed by Brave Search promotion.
-  result->MoveMatchToBeLast(&LeoProvider::IsMatchFromLeoProvider);
 }
 
 }  // namespace

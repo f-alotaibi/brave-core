@@ -31,12 +31,9 @@
 #include "brave/browser/ui/webui/settings/brave_appearance_handler.h"
 #include "brave/browser/ui/webui/settings/brave_default_extensions_handler.h"
 #include "brave/browser/ui/webui/settings/brave_privacy_handler.h"
-#include "brave/browser/ui/webui/settings/brave_settings_leo_assistant_handler.h"
 #include "brave/browser/ui/webui/settings/brave_sync_handler.h"
 #include "brave/browser/ui/webui/settings/brave_wallet_handler.h"
 #include "brave/browser/ui/webui/settings/default_brave_shields_handler.h"
-#include "brave/components/ai_chat/core/browser/utils.h"
-#include "brave/components/ai_chat/core/common/features.h"
 #include "brave/components/brave_vpn/common/buildflags/buildflags.h"
 #include "brave/components/brave_vpn/common/features.h"
 #include "brave/components/brave_wallet/common/features.h"
@@ -194,11 +191,6 @@ void BraveSettingsUI::AddResources(content::WebUIDataSource* html_source,
   html_source->AddBoolean("extensionsManifestV2Feature",
                           base::FeatureList::IsEnabled(kExtensionsManifestV2));
 
-  html_source->AddBoolean("isLeoAssistantAllowed",
-                          ai_chat::IsAIChatEnabled(profile->GetPrefs()));
-  html_source->AddBoolean("isLeoAssistantHistoryAllowed",
-                          ai_chat::features::IsAIChatHistoryEnabled());
-
 #if BUILDFLAG(ENABLE_PLAYLIST)
   html_source->AddBoolean(
       "isPlaylistAllowed",
@@ -225,14 +217,4 @@ void BraveSettingsUI::BindInterface(
   commands::AcceleratorServiceFactory::GetForContext(
       web_ui()->GetWebContents()->GetBrowserContext())
       ->BindInterface(std::move(pending_receiver));
-}
-
-void BraveSettingsUI::BindInterface(
-    mojo::PendingReceiver<ai_chat::mojom::AIChatSettingsHelper>
-        pending_receiver) {
-  auto assistant_handler = std::make_unique<settings::BraveLeoAssistantHandler>(
-      std::make_unique<ai_chat::AIChatSettingsHelper>(
-          web_ui()->GetWebContents()->GetBrowserContext()));
-  assistant_handler->BindInterface(std::move(pending_receiver));
-  web_ui()->AddMessageHandler(std::move(assistant_handler));
 }

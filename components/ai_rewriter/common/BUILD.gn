@@ -20,7 +20,6 @@ component("common") {
   public_deps = [ "//brave/components/ai_rewriter/common/mojom" ]
 
   deps = [
-    "//brave/components/ai_chat/core/common",
     "//brave/components/ai_rewriter/common/buildflags",
   ]
 }

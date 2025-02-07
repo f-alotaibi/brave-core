@@ -5,7 +5,6 @@
 
 #include "brave/browser/ui/brave_browser_actions.h"
 
-#include "brave/components/ai_chat/core/browser/utils.h"
 #include "brave/components/playlist/common/buildflags/buildflags.h"
 #include "brave/components/vector_icons/vector_icons.h"
 #include "chrome/browser/profiles/profile.h"
@@ -63,12 +62,4 @@ void BraveBrowserActions::InitializeBrowserActions() {
   }
 #endif
 
-  Profile* profile = browser_->profile();
-  if (ai_chat::IsAIChatEnabled(profile->GetPrefs())) {
-    root_action_item_->AddChild(
-        SidePanelAction(SidePanelEntryId::kChatUI, IDS_CHAT_UI_TITLE,
-                        IDS_CHAT_UI_TITLE, kLeoProductBraveLeoIcon,
-                        kActionSidePanelShowChatUI, browser, false)
-            .Build());
-  }
 }

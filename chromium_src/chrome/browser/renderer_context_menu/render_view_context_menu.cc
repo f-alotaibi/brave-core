@@ -43,18 +43,10 @@
 #endif
 
 #include "base/feature_list.h"
-#include "brave/browser/ai_chat/ai_chat_service_factory.h"
 #include "brave/browser/brave_browser_process.h"
 #include "brave/browser/misc_metrics/process_misc_metrics.h"
 #include "brave/browser/ui/brave_browser.h"
 #include "brave/browser/ui/sidebar/sidebar_controller.h"
-#include "brave/components/ai_chat/content/browser/ai_chat_tab_helper.h"
-#include "brave/components/ai_chat/core/browser/ai_chat_metrics.h"
-#include "brave/components/ai_chat/core/browser/ai_chat_service.h"
-#include "brave/components/ai_chat/core/browser/utils.h"
-#include "brave/components/ai_chat/core/common/features.h"
-#include "brave/components/ai_chat/core/common/mojom/ai_chat.mojom.h"
-#include "brave/components/ai_chat/core/common/pref_names.h"
 #include "brave/components/brave_shields/core/common/features.h"
 #include "components/grit/brave_components_strings.h"
 
@@ -189,155 +181,6 @@ void OnGetImageForTextCopy(base::WeakPtr<content::WebContents> web_contents,
 }
 #endif
 
-constexpr char kAIChatRewriteDataKey[] = "ai_chat_rewrite_data";
-
-struct AIChatRewriteData : public base::SupportsUserData::Data {
-  bool has_data_received = false;
-};
-
-bool IsRewriteCommand(int command) {
-  static constexpr auto kRewriteCommands = base::MakeFixedFlatSet<int>(
-      {IDC_AI_CHAT_CONTEXT_PARAPHRASE, IDC_AI_CHAT_CONTEXT_IMPROVE,
-       IDC_AI_CHAT_CONTEXT_ACADEMICIZE, IDC_AI_CHAT_CONTEXT_PROFESSIONALIZE,
-       IDC_AI_CHAT_CONTEXT_PERSUASIVE_TONE, IDC_AI_CHAT_CONTEXT_CASUALIZE,
-       IDC_AI_CHAT_CONTEXT_FUNNY_TONE, IDC_AI_CHAT_CONTEXT_SHORTEN,
-       IDC_AI_CHAT_CONTEXT_EXPAND});
-
-  return kRewriteCommands.contains(command);
-}
-
-std::pair<ai_chat::mojom::ActionType, ai_chat::ContextMenuAction>
-GetActionTypeAndP3A(int command) {
-  static constexpr auto kActionTypeMap = base::MakeFixedFlatMap<
-      int, std::pair<ai_chat::mojom::ActionType, ai_chat::ContextMenuAction>>(
-      {{IDC_AI_CHAT_CONTEXT_SUMMARIZE_TEXT,
-        {ai_chat::mojom::ActionType::SUMMARIZE_SELECTED_TEXT,
-         ai_chat::ContextMenuAction::kSummarize}},
-       {IDC_AI_CHAT_CONTEXT_EXPLAIN,
-        {ai_chat::mojom::ActionType::EXPLAIN,
-         ai_chat::ContextMenuAction::kExplain}},
-       {IDC_AI_CHAT_CONTEXT_PARAPHRASE,
-        {ai_chat::mojom::ActionType::PARAPHRASE,
-         ai_chat::ContextMenuAction::kParaphrase}},
-       {IDC_AI_CHAT_CONTEXT_CREATE_TAGLINE,
-        {ai_chat::mojom::ActionType::CREATE_TAGLINE,
-         ai_chat::ContextMenuAction::kCreateTagline}},
-       {IDC_AI_CHAT_CONTEXT_CREATE_SOCIAL_MEDIA_COMMENT_SHORT,
-        {ai_chat::mojom::ActionType::CREATE_SOCIAL_MEDIA_COMMENT_SHORT,
-         ai_chat::ContextMenuAction::kCreateSocialMedia}},
-       {IDC_AI_CHAT_CONTEXT_CREATE_SOCIAL_MEDIA_COMMENT_LONG,
-        {ai_chat::mojom::ActionType::CREATE_SOCIAL_MEDIA_COMMENT_LONG,
-         ai_chat::ContextMenuAction::kCreateSocialMedia}},
-       {IDC_AI_CHAT_CONTEXT_IMPROVE,
-        {ai_chat::mojom::ActionType::IMPROVE,
-         ai_chat::ContextMenuAction::kImprove}},
-       {IDC_AI_CHAT_CONTEXT_ACADEMICIZE,
-        {ai_chat::mojom::ActionType::ACADEMICIZE,
-         ai_chat::ContextMenuAction::kChangeTone}},
-       {IDC_AI_CHAT_CONTEXT_PROFESSIONALIZE,
-        {ai_chat::mojom::ActionType::PROFESSIONALIZE,
-         ai_chat::ContextMenuAction::kChangeTone}},
-       {IDC_AI_CHAT_CONTEXT_PERSUASIVE_TONE,
-        {ai_chat::mojom::ActionType::PERSUASIVE_TONE,
-         ai_chat::ContextMenuAction::kChangeTone}},
-       {IDC_AI_CHAT_CONTEXT_CASUALIZE,
-        {ai_chat::mojom::ActionType::CASUALIZE,
-         ai_chat::ContextMenuAction::kChangeTone}},
-       {IDC_AI_CHAT_CONTEXT_FUNNY_TONE,
-        {ai_chat::mojom::ActionType::FUNNY_TONE,
-         ai_chat::ContextMenuAction::kChangeTone}},
-       {IDC_AI_CHAT_CONTEXT_SHORTEN,
-        {ai_chat::mojom::ActionType::SHORTEN,
-         ai_chat::ContextMenuAction::kChangeLength}},
-       {IDC_AI_CHAT_CONTEXT_EXPAND,
-        {ai_chat::mojom::ActionType::EXPAND,
-         ai_chat::ContextMenuAction::kChangeLength}}});
-  CHECK(kActionTypeMap.contains(command));
-  return kActionTypeMap.at(command);
-}
-
-void OnRewriteSuggestionDataReceived(
-    base::WeakPtr<content::WebContents> web_contents,
-    const std::string& suggestion) {
-  if (!web_contents) {
-    return;
-  }
-
-  auto* rewrite_data = static_cast<AIChatRewriteData*>(
-      web_contents->GetUserData(kAIChatRewriteDataKey));
-  if (!rewrite_data) {
-    return;
-  }
-
-  if (rewrite_data->has_data_received) {
-    // Subsequent data received, undo previous streaming result.
-    web_contents->Undo();
-  } else {
-    rewrite_data->has_data_received = true;
-  }
-
-  web_contents->Replace(base::UTF8ToUTF16(suggestion));
-}
-
-void OnRewriteSuggestionCompleted(
-    base::WeakPtr<content::WebContents> web_contents,
-    const std::string& selected_text,
-    ai_chat::mojom::ActionType action_type,
-    base::expected<std::string, ai_chat::mojom::APIError> result) {
-  if (!web_contents) {
-    return;
-  }
-
-  if (!result.has_value()) {
-    // If the content has been rewritten by previous streaming result, undo to
-    // get back to original text.
-    auto* rewrite_data = static_cast<AIChatRewriteData*>(
-        web_contents->GetUserData(kAIChatRewriteDataKey));
-    if (!rewrite_data) {
-      return;
-    }
-
-    if (rewrite_data->has_data_received) {
-      web_contents->Undo();
-    }
-
-    // Show the error in Leo side panel UI.
-    Browser* browser = chrome::FindBrowserWithTab(web_contents.get());
-    if (!browser) {
-      return;
-    }
-    ai_chat::AIChatService* ai_chat_service =
-        ai_chat::AIChatServiceFactory::GetForBrowserContext(
-            web_contents.get()->GetBrowserContext());
-    if (!ai_chat_service) {
-      return;
-    }
-    ai_chat::AIChatTabHelper* helper =
-        ai_chat::AIChatTabHelper::FromWebContents(web_contents.get());
-    if (!helper) {
-      return;
-    }
-    ai_chat::ConversationHandler* conversation =
-        ai_chat_service->GetOrCreateConversationHandlerForContent(
-            helper->GetContentId(), helper->GetWeakPtr());
-    if (!conversation) {
-      return;
-    }
-    conversation->MaybeUnlinkAssociatedContent();
-
-    auto* sidebar_controller =
-        static_cast<BraveBrowser*>(browser)->sidebar_controller();
-    CHECK(sidebar_controller);
-    sidebar_controller->ActivatePanelItem(
-        sidebar::SidebarItem::BuiltInItemType::kChatUI);
-
-    conversation->AddSubmitSelectedTextError(selected_text, action_type,
-                                             result.error());
-  }
-
-  web_contents->RemoveUserData(kAIChatRewriteDataKey);
-}
-
 bool CanOpenSplitViewForWebContents(
     base::WeakPtr<content::WebContents> web_contents) {
   if (!base::FeatureList::IsEnabled(tabs::features::kBraveSplitView)) {
@@ -368,11 +211,7 @@ void OpenLinkInSplitView(base::WeakPtr<content::WebContents> web_contents,
 BraveRenderViewContextMenu::BraveRenderViewContextMenu(
     content::RenderFrameHost& render_frame_host,
     const content::ContextMenuParams& params)
-    : RenderViewContextMenu_Chromium(render_frame_host, params),
-      ai_chat_submenu_model_(this),
-      ai_chat_change_tone_submenu_model_(this),
-      ai_chat_change_length_submenu_model_(this),
-      ai_chat_social_media_post_submenu_model_(this) {}
+    : RenderViewContextMenu_Chromium(render_frame_host, params) {}
 
 BraveRenderViewContextMenu::~BraveRenderViewContextMenu() = default;
 
@@ -402,25 +241,6 @@ bool BraveRenderViewContextMenu::IsCommandIdEnabled(int id) const {
 #else
       return false;
 #endif
-    case IDC_AI_CHAT_CONTEXT_SUMMARIZE_TEXT:
-    case IDC_AI_CHAT_CONTEXT_LEO_TOOLS:
-    case IDC_AI_CHAT_CONTEXT_EXPLAIN:
-    case IDC_AI_CHAT_CONTEXT_PARAPHRASE:
-    case IDC_AI_CHAT_CONTEXT_CREATE_TAGLINE:
-    case IDC_AI_CHAT_CONTEXT_CREATE_SOCIAL_MEDIA_COMMENT_SHORT:
-    case IDC_AI_CHAT_CONTEXT_CREATE_SOCIAL_MEDIA_COMMENT_LONG:
-    case IDC_AI_CHAT_CONTEXT_IMPROVE:
-    case IDC_AI_CHAT_CONTEXT_CHANGE_TONE:
-    case IDC_AI_CHAT_CONTEXT_ACADEMICIZE:
-    case IDC_AI_CHAT_CONTEXT_PROFESSIONALIZE:
-    case IDC_AI_CHAT_CONTEXT_PERSUASIVE_TONE:
-    case IDC_AI_CHAT_CONTEXT_CASUALIZE:
-    case IDC_AI_CHAT_CONTEXT_FUNNY_TONE:
-    case IDC_AI_CHAT_CONTEXT_SHORTEN:
-    case IDC_AI_CHAT_CONTEXT_EXPAND:
-    case IDC_AI_CHAT_CONTEXT_CHANGE_LENGTH:
-    case IDC_AI_CHAT_CONTEXT_CREATE_SOCIAL_MEDIA_POST:
-      return IsAIChatEnabled();
 #if BUILDFLAG(ENABLE_AI_REWRITER)
     case IDC_AI_CHAT_CONTEXT_REWRITE:
       return ai_rewriter::features::IsAIRewriterEnabled();
@@ -472,22 +292,6 @@ void BraveRenderViewContextMenu::ExecuteCommand(int id, int event_flags) {
       CopyTextFromImage();
       break;
 #endif
-    case IDC_AI_CHAT_CONTEXT_SUMMARIZE_TEXT:
-    case IDC_AI_CHAT_CONTEXT_EXPLAIN:
-    case IDC_AI_CHAT_CONTEXT_PARAPHRASE:
-    case IDC_AI_CHAT_CONTEXT_CREATE_TAGLINE:
-    case IDC_AI_CHAT_CONTEXT_CREATE_SOCIAL_MEDIA_COMMENT_SHORT:
-    case IDC_AI_CHAT_CONTEXT_CREATE_SOCIAL_MEDIA_COMMENT_LONG:
-    case IDC_AI_CHAT_CONTEXT_IMPROVE:
-    case IDC_AI_CHAT_CONTEXT_ACADEMICIZE:
-    case IDC_AI_CHAT_CONTEXT_PROFESSIONALIZE:
-    case IDC_AI_CHAT_CONTEXT_PERSUASIVE_TONE:
-    case IDC_AI_CHAT_CONTEXT_CASUALIZE:
-    case IDC_AI_CHAT_CONTEXT_FUNNY_TONE:
-    case IDC_AI_CHAT_CONTEXT_SHORTEN:
-    case IDC_AI_CHAT_CONTEXT_EXPAND:
-      ExecuteAIChatCommand(id);
-      break;
 #if BUILDFLAG(ENABLE_AI_REWRITER)
     case IDC_AI_CHAT_CONTEXT_REWRITE:
       ai_rewriter::AIRewriterDialogDelegate::Show(
@@ -516,165 +320,6 @@ void BraveRenderViewContextMenu::CopyTextFromImage() {
   }
 }
 #endif
-
-bool BraveRenderViewContextMenu::IsAIChatEnabled() const {
-  return !params_.selection_text.empty() &&
-         ai_chat::IsAIChatEnabled(GetProfile()->GetPrefs()) &&
-         GetProfile()->IsRegularProfile() &&
-         GetProfile()->GetPrefs()->GetBoolean(
-             ai_chat::prefs::kBraveAIChatContextMenuEnabled) &&
-         !IsInProgressiveWebApp();
-}
-
-void BraveRenderViewContextMenu::ExecuteAIChatCommand(int command) {
-  // To do rewrite in-place, the following conditions must be met:
-  // 1) Selected content is editable.
-  // 2) User has opted in to Leo.
-  // 3) Context menu rewrite in place feature is enabled.
-  // 4) SSE is enabled, it is required otherwise the UI update will be too slow.
-  // 5) The command is a rewrite command.
-  // 6) There's no in-progress in-place rewrite.
-  bool rewrite_in_place =
-      params_.is_editable &&
-      ai_chat::HasUserOptedIn(GetProfile()->GetPrefs()) &&
-      ai_chat::features::IsContextMenuRewriteInPlaceEnabled() &&
-      ai_chat::features::kAIChatSSE.Get() && IsRewriteCommand(command) &&
-      !source_web_contents_->GetUserData(kAIChatRewriteDataKey);
-
-  auto [action_type, p3a_action] = GetActionTypeAndP3A(command);
-  auto selected_text = base::UTF16ToUTF8(params_.selection_text);
-
-  if (rewrite_in_place) {
-    source_web_contents_->SetUserData(kAIChatRewriteDataKey,
-                                      std::make_unique<AIChatRewriteData>());
-    if (!ai_engine_) {
-      ai_engine_ = ai_chat::AIChatServiceFactory::GetForBrowserContext(
-                       source_web_contents_->GetBrowserContext())
-                       ->GetDefaultAIEngine();
-    }
-    ai_engine_->GenerateRewriteSuggestion(
-        selected_text, ai_chat::GetActionTypeQuestion(action_type),
-        /*selected_language*/ "",
-        ai_chat::BindParseRewriteReceivedData(
-            base::BindRepeating(&OnRewriteSuggestionDataReceived,
-                                source_web_contents_->GetWeakPtr())),
-        base::BindOnce(&OnRewriteSuggestionCompleted,
-                       source_web_contents_->GetWeakPtr(), selected_text,
-                       action_type));
-  } else {
-    auto* browser = GetBrowser();
-    if (!browser) {
-      VLOG(1) << "Can't get browser";
-      return;
-    }
-
-    ai_chat::AIChatTabHelper* helper =
-        ai_chat::AIChatTabHelper::FromWebContents(source_web_contents_);
-    if (!helper) {
-      VLOG(1) << "Can't get AI chat tab helper";
-      return;
-    }
-
-    ai_chat::ConversationHandler* conversation =
-        ai_chat::AIChatServiceFactory::GetForBrowserContext(
-            source_web_contents_->GetBrowserContext())
-            ->GetOrCreateConversationHandlerForContent(helper->GetContentId(),
-                                                       helper->GetWeakPtr());
-    // Before trying to activate the panel, unlink page content if needed.
-    // This needs to be called before activating the panel to check against the
-    // current state.
-    conversation->MaybeUnlinkAssociatedContent();
-
-    // Active the panel.
-    auto* sidebar_controller =
-        static_cast<BraveBrowser*>(browser)->sidebar_controller();
-    CHECK(sidebar_controller);
-    sidebar_controller->ActivatePanelItem(
-        sidebar::SidebarItem::BuiltInItemType::kChatUI);
-    conversation->SubmitSelectedText(selected_text, action_type);
-  }
-
-  g_brave_browser_process->process_misc_metrics()
-      ->ai_chat_metrics()
-      ->RecordContextMenuUsage(p3a_action);
-}
-
-void BraveRenderViewContextMenu::BuildAIChatMenu() {
-  if (!IsAIChatEnabled()) {
-    return;
-  }
-  std::optional<size_t> print_index =
-      menu_model_.GetIndexOfCommandId(IDC_PRINT);
-  if (!print_index.has_value()) {
-    return;
-  }
-
-  ai_chat_submenu_model_.AddTitleWithStringId(
-      IDS_AI_CHAT_CONTEXT_QUICK_ACTIONS);
-
-#if BUILDFLAG(ENABLE_AI_REWRITER)
-  if (ai_rewriter::features::IsAIRewriterEnabled()) {
-    ai_chat_submenu_model_.AddItemWithStringId(IDC_AI_CHAT_CONTEXT_REWRITE,
-                                               IDS_AI_CHAT_CONTEXT_REWRITE);
-  }
-#endif
-
-  ai_chat_submenu_model_.AddItemWithStringId(
-      IDC_AI_CHAT_CONTEXT_SUMMARIZE_TEXT, IDS_AI_CHAT_CONTEXT_SUMMARIZE_TEXT);
-  ai_chat_submenu_model_.AddItemWithStringId(IDC_AI_CHAT_CONTEXT_EXPLAIN,
-                                             IDS_AI_CHAT_CONTEXT_EXPLAIN);
-  ai_chat_submenu_model_.AddSeparator(ui::NORMAL_SEPARATOR);
-
-  ai_chat_submenu_model_.AddTitleWithStringId(IDS_AI_CHAT_CONTEXT_REWRITE);
-  ai_chat_submenu_model_.AddItemWithStringId(IDC_AI_CHAT_CONTEXT_PARAPHRASE,
-                                             IDS_AI_CHAT_CONTEXT_PARAPHRASE);
-  ai_chat_submenu_model_.AddItemWithStringId(IDC_AI_CHAT_CONTEXT_IMPROVE,
-                                             IDS_AI_CHAT_CONTEXT_IMPROVE);
-
-  ai_chat_change_tone_submenu_model_.AddItemWithStringId(
-      IDC_AI_CHAT_CONTEXT_ACADEMICIZE, IDS_AI_CHAT_CONTEXT_ACADEMICIZE);
-  ai_chat_change_tone_submenu_model_.AddItemWithStringId(
-      IDC_AI_CHAT_CONTEXT_PROFESSIONALIZE, IDS_AI_CHAT_CONTEXT_PROFESSIONALIZE);
-  ai_chat_change_tone_submenu_model_.AddItemWithStringId(
-      IDC_AI_CHAT_CONTEXT_PERSUASIVE_TONE, IDS_AI_CHAT_CONTEXT_PERSUASIVE_TONE);
-  ai_chat_change_tone_submenu_model_.AddItemWithStringId(
-      IDC_AI_CHAT_CONTEXT_CASUALIZE, IDS_AI_CHAT_CONTEXT_CASUALIZE);
-  ai_chat_change_tone_submenu_model_.AddItemWithStringId(
-      IDC_AI_CHAT_CONTEXT_FUNNY_TONE, IDS_AI_CHAT_CONTEXT_FUNNY_TONE);
-
-  ai_chat_submenu_model_.AddSubMenuWithStringId(
-      IDC_AI_CHAT_CONTEXT_CHANGE_TONE, IDS_AI_CHAT_CONTEXT_CHANGE_TONE,
-      &ai_chat_change_tone_submenu_model_);
-
-  ai_chat_change_length_submenu_model_.AddItemWithStringId(
-      IDC_AI_CHAT_CONTEXT_SHORTEN, IDS_AI_CHAT_CONTEXT_SHORTEN);
-  ai_chat_change_length_submenu_model_.AddItemWithStringId(
-      IDC_AI_CHAT_CONTEXT_EXPAND, IDS_AI_CHAT_CONTEXT_EXPAND);
-  ai_chat_submenu_model_.AddSubMenuWithStringId(
-      IDC_AI_CHAT_CONTEXT_CHANGE_LENGTH, IDS_AI_CHAT_CONTEXT_CHANGE_LENGTH,
-      &ai_chat_change_length_submenu_model_);
-
-  ai_chat_submenu_model_.AddSeparator(ui::NORMAL_SEPARATOR);
-
-  ai_chat_submenu_model_.AddTitleWithStringId(IDS_AI_CHAT_CONTEXT_CREATE);
-  ai_chat_submenu_model_.AddItemWithStringId(
-      IDC_AI_CHAT_CONTEXT_CREATE_TAGLINE, IDS_AI_CHAT_CONTEXT_CREATE_TAGLINE);
-
-  ai_chat_social_media_post_submenu_model_.AddItemWithStringId(
-      IDC_AI_CHAT_CONTEXT_CREATE_SOCIAL_MEDIA_COMMENT_SHORT,
-      IDS_AI_CHAT_CONTEXT_CREATE_SOCIAL_MEDIA_COMMENT_SHORT);
-  ai_chat_social_media_post_submenu_model_.AddItemWithStringId(
-      IDC_AI_CHAT_CONTEXT_CREATE_SOCIAL_MEDIA_COMMENT_LONG,
-      IDS_AI_CHAT_CONTEXT_CREATE_SOCIAL_MEDIA_COMMENT_LONG);
-  ai_chat_submenu_model_.AddSubMenuWithStringId(
-      IDC_AI_CHAT_CONTEXT_CREATE_SOCIAL_MEDIA_POST,
-      IDS_AI_CHAT_CONTEXT_CREATE_SOCIAL_MEDIA_POST,
-      &ai_chat_social_media_post_submenu_model_);
-
-  menu_model_.InsertSubMenuWithStringIdAt(
-      *print_index, IDC_AI_CHAT_CONTEXT_LEO_TOOLS,
-      IDS_AI_CHAT_CONTEXT_LEO_TOOLS, &ai_chat_submenu_model_);
-}
 
 void BraveRenderViewContextMenu::AddSpellCheckServiceItem(bool is_checked) {
   // Call our implementation, not the one in the base class.
@@ -729,11 +374,6 @@ void BraveRenderViewContextMenu::AppendDeveloperItems() {
                                       IDS_ADBLOCK_CONTEXT_BLOCK_ELEMENTS);
     }
   }
-}
-
-void BraveRenderViewContextMenu::SetAIEngineForTesting(
-    std::unique_ptr<ai_chat::EngineConsumer> ai_engine) {
-  ai_engine_ = std::move(ai_engine);
 }
 
 void BraveRenderViewContextMenu::InitMenu() {
@@ -794,8 +434,6 @@ void BraveRenderViewContextMenu::InitMenu() {
           copy_index.value() + 1, IDC_COPY_CLEAN_LINK, IDS_COPY_CLEAN_LINK);
     }
   }
-
-  BuildAIChatMenu();
 
   // Add Open Link in Split View
   if (CanOpenSplitViewForWebContents(source_web_contents_->GetWeakPtr()) &&

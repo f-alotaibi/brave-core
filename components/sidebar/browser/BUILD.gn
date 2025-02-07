@@ -22,8 +22,7 @@ static_library("browser") {
 
   deps = [
     "//base",
-    "//brave/components/ai_chat/core/browser",
-    "//brave/components/ai_chat/core/common",
+
     "//brave/components/brave_wallet/common",
     "//brave/components/constants:constants",
     "//brave/components/l10n/common",
@@ -35,7 +34,7 @@ static_library("browser") {
     "//ui/base",
     "//url",
   ]
-
+  
   if (enable_playlist) {
     deps += [ "//brave/components/playlist/common" ]
   }
@@ -48,7 +47,7 @@ source_set("unit_tests") {
   deps = [
     "//base",
     "//base/test:test_support",
-    "//brave/components/ai_chat/core/common",
+
     "//brave/components/sidebar/browser",
     "//components/prefs",
     "//components/prefs:test_support",

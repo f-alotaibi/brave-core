@@ -20,8 +20,6 @@ import '../brave_web3_domains_page/brave_web3_domains_page.js'
 import '../default_brave_shields_page/default_brave_shields_page.js'
 import '../getting_started_page/getting_started.js'
 import '../social_blocking_page/social_blocking_page.js'
-import '../brave_leo_assistant_page/brave_leo_assistant_page.js'
-import '../brave_leo_assistant_page/model_list_section.js'
 
 import {
   html,
@@ -285,33 +283,6 @@ RegisterPolymerTemplateModifications({
           prefs: '{{prefs}}'
         }
       ))
-      const sectionLeoAssist = document.createElement('template')
-      sectionLeoAssist.setAttribute('is', 'dom-if')
-      sectionLeoAssist.setAttribute('restamp', 'true')
-      sectionLeoAssist
-        .setAttribute('if', '[[showPage_(pageVisibility.leoAssistant)]]')
-      sectionLeoAssist.content.appendChild(createSectionElement(
-        'leoAssistant',
-        'leoAssistant',
-        'settings-brave-leo-assistant-page',
-        {
-          prefs: '{{prefs}}'
-        }
-      ))
-      const sectionLeoCustomModels = document.createElement('template')
-      sectionLeoCustomModels.setAttribute('is', 'dom-if')
-      sectionLeoCustomModels.setAttribute('restamp', 'true')
-      sectionLeoCustomModels
-        .setAttribute('if', '[[showPage_(pageVisibility.leoAssistant)]]')
-      sectionLeoCustomModels.content.appendChild(createNestedSectionElement(
-        'leoAssistant',
-        'leoAssistant',
-        'braveLeoAssistantByomLabel',
-        'model-list-section',
-        {
-          prefs: '{{prefs}}'
-        }
-      ))
 
       const sectionContent = document.createElement('template')
       sectionContent.setAttribute('is', 'dom-if')
@@ -421,10 +392,6 @@ RegisterPolymerTemplateModifications({
       last = last.insertAdjacentElement('afterend', sectionTor)
       // Insert Data collection
       last = last.insertAdjacentElement('afterend', sectionDataCollection)
-      // Insert Leo Assistant
-      last = last.insertAdjacentElement('afterend', sectionLeoAssist)
-      // Insert Custom Models List
-      last.insertAdjacentElement('afterend', sectionLeoCustomModels)
 
       // Advanced
       const advancedTemplate = templateContent.querySelector('template[if="[[showAdvancedSettings_(pageVisibility.advancedSettings)]]"]')

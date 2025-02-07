@@ -12,16 +12,12 @@
 #include "base/feature_list.h"
 #include "base/types/to_address.h"
 #include "brave/app/brave_command_ids.h"
-#include "brave/browser/ai_chat/ai_chat_utils.h"
 #include "brave/browser/profiles/profile_util.h"
 #include "brave/browser/ui/brave_pages.h"
 #include "brave/browser/ui/browser_commands.h"
 #include "brave/browser/ui/sidebar/sidebar_utils.h"
 #include "brave/browser/ui/tabs/features.h"
 #include "brave/browser/ui/tabs/split_view_browser_data.h"
-#include "brave/components/ai_chat/core/browser/utils.h"
-#include "brave/components/ai_chat/core/common/features.h"
-#include "brave/components/ai_chat/core/common/pref_names.h"
 #include "brave/components/brave_rewards/core/rewards_util.h"
 #include "brave/components/brave_vpn/common/buildflags/buildflags.h"
 #include "brave/components/brave_wallet/common/common_utils.h"
@@ -232,15 +228,6 @@ void BraveBrowserCommandController::InitBraveCommandState() {
   UpdateCommandForWaybackMachine();
   pref_change_registrar_.Init(browser_->profile()->GetPrefs());
 
-  UpdateCommandForAIChat();
-  if (ai_chat::IsAllowedForContext(browser_->profile(), false)) {
-    pref_change_registrar_.Add(
-        ai_chat::prefs::kEnabledByPolicy,
-        base::BindRepeating(
-            &BraveBrowserCommandController::UpdateCommandForAIChat,
-            base::Unretained(this)));
-  }
-
 #if BUILDFLAG(ENABLE_BRAVE_VPN)
   if (brave_vpn::IsAllowedForContext(browser_->profile())) {
     pref_change_registrar_.Add(
@@ -349,16 +336,6 @@ void BraveBrowserCommandController::UpdateCommandForSidebar() {
     UpdateCommandEnabled(IDC_SIDEBAR_TOGGLE_POSITION, true);
     UpdateCommandEnabled(IDC_TOGGLE_SIDEBAR, true);
   }
-}
-
-void BraveBrowserCommandController::UpdateCommandForAIChat() {
-  // AI Chat command implementation needs sidebar
-  bool allowed_for_context = ai_chat::IsAllowedForContext(browser_->profile());
-  UpdateCommandEnabled(IDC_TOGGLE_AI_CHAT, sidebar::CanUseSidebar(&*browser_) &&
-                                               allowed_for_context);
-  UpdateCommandEnabled(
-      IDC_OPEN_FULL_PAGE_CHAT,
-      ai_chat::features::IsAIChatHistoryEnabled() && allowed_for_context);
 }
 
 void BraveBrowserCommandController::UpdateCommandForBraveVPN() {
@@ -536,12 +513,6 @@ bool BraveBrowserCommandController::ExecuteBraveCommandWithDisposition(
       break;
     case IDC_SHOW_BRAVE_WALLET:
       brave::ShowBraveWallet(&*browser_);
-      break;
-    case IDC_TOGGLE_AI_CHAT:
-      brave::ToggleAIChat(&*browser_);
-      break;
-    case IDC_OPEN_FULL_PAGE_CHAT:
-      brave::ShowFullpageChat(&*browser_);
       break;
     case IDC_SPEEDREADER_ICON_ONCLICK:
       brave::MaybeDistillAndShowSpeedreaderBubble(&*browser_);

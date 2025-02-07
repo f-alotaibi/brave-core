@@ -7,7 +7,6 @@
 #include "brave/browser/android/background_video/features.h"
 #include "brave/browser/android/safe_browsing/features.h"
 #include "brave/browser/brave_browser_features.h"
-#include "brave/components/ai_chat/core/common/features.h"
 #include "brave/components/brave_news/common/features.h"
 #include "brave/components/brave_rewards/core/features.h"
 #include "brave/components/brave_search_conversion/features.h"
@@ -23,9 +22,6 @@
 #include "brave/components/webcompat/core/common/features.h"
 #include "net/base/features.h"
 #include "third_party/blink/public/common/features.h"
-
-#define BRAVE_AI_CHAT_FLAGS \
-  &ai_chat::features::kAIChat, &ai_chat::features::kAIChatHistory,
 
 #if BUILDFLAG(ENABLE_WEB_DISCOVERY_NATIVE)
 #include "brave/components/web_discovery/common/features.h"

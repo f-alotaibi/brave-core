@@ -16,13 +16,7 @@
   virtual commander::CommanderFrontendDelegate* GetCommanderDelegate
 #endif  // BUILDFLAG(ENABLE_COMMANDER)
 
-#define NewIncognitoWindow                               \
-  NewIncognitoWindow() = 0;                              \
-  virtual void OpenLeo(const std::u16string& query) = 0; \
-  virtual bool IsLeoProviderEnabled
-
 #include "src/components/omnibox/browser/actions/omnibox_action.h"  // IWYU pragma: export
-#undef NewIncognitoWindow
 #undef OpenSharingHub
 
 #endif  // BRAVE_CHROMIUM_SRC_COMPONENTS_OMNIBOX_BROWSER_ACTIONS_OMNIBOX_ACTION_H_

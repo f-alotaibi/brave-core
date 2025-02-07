@@ -10,7 +10,6 @@
 #include "brave/browser/misc_metrics/uptime_monitor.h"
 #include "brave/browser/themes/brave_dark_mode_utils.h"
 #include "brave/browser/translate/brave_translate_prefs_migration.h"
-#include "brave/components/ai_chat/core/browser/model_service.h"
 #include "brave/components/brave_adaptive_captcha/prefs_util.h"
 #include "brave/components/brave_ads/core/public/prefs/obsolete_pref_util.h"
 #include "brave/components/brave_news/browser/brave_news_p3a.h"
@@ -175,9 +174,6 @@ void MigrateObsoleteProfilePrefs(PrefService* profile_prefs,
   // Added 2024-01
   brave_tabs::MigrateBraveProfilePrefs(profile_prefs);
 #endif  // !BUILDFLAG(IS_ANDROID)
-
-  // Added 2024-04
-  ai_chat::ModelService::MigrateProfilePrefs(profile_prefs);
 
   // Added 2024-05
   ipfs::ClearDeprecatedIpfsPrefs(profile_prefs);

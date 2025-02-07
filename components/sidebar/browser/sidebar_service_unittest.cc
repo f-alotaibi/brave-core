@@ -16,7 +16,6 @@
 #include "base/test/metrics/histogram_tester.h"
 #include "base/test/scoped_feature_list.h"
 #include "base/test/values_test_util.h"
-#include "brave/components/ai_chat/core/common/features.h"
 #include "brave/components/playlist/common/buildflags/buildflags.h"
 #include "brave/components/sidebar/browser/constants.h"
 #include "brave/components/sidebar/browser/pref_names.h"
@@ -130,44 +129,6 @@ constexpr char sidebar_builtin_wallet_hidden_json[] = R"({
          } ],
          "sidebar_show_option": 0
       })";
-constexpr char sidebar_builtin_ai_chat_not_listed_json[] = R"({
-         "hidden_built_in_items": [ ],
-         "item_added_feedback_bubble_shown_count": 3,
-         "side_panel_width": 320,
-         "sidebar_alignment_changed_for_vertical_tabs": false,
-         "sidebar_items": [ {
-            "built_in_item_type": 1,
-            "type": 0
-         }, {
-            "built_in_item_type": 3,
-            "type": 0
-         }, {
-            "built_in_item_type": 4,
-            "type": 0
-         }, {
-            "built_in_item_type": 2,
-            "type": 0
-         }, {
-            "built_in_item_type": 0,
-            "open_in_panel": false,
-            "title": "chrome.org",
-            "type": 1,
-            "url": "https://chrome.org/"
-         }, {
-            "built_in_item_type": 0,
-            "open_in_panel": false,
-            "title": "Artificial intelligence - Wikipedia",
-            "type": 1,
-            "url": "https://en.wikipedia.org/wiki/Artificial_intelligence"
-         }, {
-            "built_in_item_type": 0,
-            "open_in_panel": false,
-            "title": "Google Chrome",
-            "type": 1,
-            "url": "https://www.google.com/chrome/"
-         } ],
-         "sidebar_show_option": 0
-      })";
 }  // namespace
 
 namespace sidebar {
@@ -234,10 +195,6 @@ class SidebarServiceTest : public testing::Test {
       item_count -= 1;
     }
 #endif
-
-    if (!ai_chat::features::IsAIChatEnabled()) {
-      item_count -= 1;
-    }
 
     return item_count;
   }
@@ -508,10 +465,7 @@ TEST_F(SidebarServiceTest, NewDefaultItemAdded) {
           return false;
         }
 
-        if (!ai_chat::features::IsAIChatEnabled() &&
-            built_in_type == SidebarItem::BuiltInItemType::kChatUI) {
           return false;
-        }
 
 #if BUILDFLAG(ENABLE_PLAYLIST)
         if (!base::FeatureList::IsEnabled(playlist::features::kPlaylist) &&
@@ -818,10 +772,6 @@ TEST_F(SidebarServiceTest, BuiltInItemUpdateTestWithBuiltInItemTypeKey) {
   }
 #endif
 
-  if (ai_chat::features::IsAIChatEnabled()) {
-    expected_count += 1;
-  }
-
   // Check service has updated built-in item. Previously url was deprecated.xxx.
   EXPECT_EQ(expected_count, service_->items().size());
   EXPECT_EQ(GURL(kBraveTalkURL), service_->items()[0].url);
@@ -963,7 +913,6 @@ class SidebarServiceOrderingTest : public SidebarServiceTest {
 
   void SetUp() override {
     SidebarServiceTest::SetUp();
-    scoped_feature_list_.InitAndEnableFeature(ai_chat::features::kAIChat);
   }
 
   bool ValidateBuiltInTypesOrdering(
@@ -1074,8 +1023,6 @@ TEST_F(SidebarServiceOrderingTest, LoadFromPrefsWalletBuiltInHidden) {
 }
 
 TEST_F(SidebarServiceOrderingTest, LoadFromPrefsAIChatBuiltInNotListed) {
-  base::Value::Dict sidebar =
-      base::test::ParseJsonDict(sidebar_builtin_ai_chat_not_listed_json);
 
   const auto* sidebar_items = sidebar.FindList("sidebar_items");
   CHECK(sidebar_items);

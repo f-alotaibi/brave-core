@@ -20,7 +20,6 @@ source_set("browser_tests") {
   deps = [
     "//base",
     "//brave/app:command_ids",
-    "//brave/components/ai_chat/core/common",
     "//brave/components/playlist/common",
     "//brave/components/sidebar/browser",
     "//brave/components/sidebar/common",
@@ -37,6 +36,7 @@ source_set("browser_tests") {
     "//ui/events",
     "//ui/gfx",
   ]
+
 }
 
 source_set("unit_tests") {

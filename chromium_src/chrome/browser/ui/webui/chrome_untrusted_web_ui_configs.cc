@@ -6,13 +6,11 @@
 #include "chrome/browser/ui/webui/chrome_untrusted_web_ui_configs.h"
 
 #include "base/feature_list.h"
-#include "brave/browser/ui/webui/ai_chat/ai_chat_untrusted_conversation_ui.h"
 #include "brave/browser/ui/webui/brave_wallet/ledger/ledger_ui.h"
 #include "brave/browser/ui/webui/brave_wallet/line_chart/line_chart_ui.h"
 #include "brave/browser/ui/webui/brave_wallet/market/market_ui.h"
 #include "brave/browser/ui/webui/brave_wallet/nft/nft_ui.h"
 #include "brave/browser/ui/webui/brave_wallet/trezor/trezor_ui.h"
-#include "brave/components/ai_chat/core/common/features.h"
 #include "brave/components/brave_vpn/common/buildflags/buildflags.h"
 #include "brave/components/playlist/common/buildflags/buildflags.h"
 #include "build/build_config.h"
@@ -66,8 +64,4 @@ void RegisterChromeUntrustedWebUIConfigs() {
 #endif  // BUILDFLAG(ENABLE_PLAYLIST_WEBUI)
 #endif  // !BUILDFLAG(IS_ANDROID)
 
-  if (ai_chat::features::IsAIChatEnabled()) {
-    content::WebUIConfigMap::GetInstance().AddUntrustedWebUIConfig(
-        std::make_unique<AIChatUntrustedConversationUIConfig>());
-  }
 }

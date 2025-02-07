@@ -10,7 +10,6 @@
 #include "base/containers/span.h"
 #include "base/strings/cstring_view.h"
 #include "brave/browser/ui/bookmark/brave_bookmark_prefs.h"
-#include "brave/components/ai_chat/core/common/pref_names.h"
 #include "brave/components/brave_wallet/browser/pref_names.h"
 #include "brave/components/constants/pref_names.h"
 #include "build/build_config.h"
@@ -45,8 +44,6 @@ base::span<const base::cstring_view> GetBravePersistentPrefNames() {
 #if defined(TOOLKIT_VIEWS)
       sidebar::kSidePanelWidth,
 #endif
-      ai_chat::prefs::kLastAcceptedDisclaimer,
-      ai_chat::prefs::kBraveChatAutocompleteProviderEnabled,
       brave::bookmarks::prefs::kShowAllBookmarksButton,
   });
 

@@ -6,7 +6,6 @@
 #include "brave/components/brave_mobile_subscription/renderer/android/subscription_render_frame_observer.h"
 
 #include "base/test/scoped_feature_list.h"
-#include "brave/components/ai_chat/core/common/features.h"
 #include "brave/components/brave_vpn/common/buildflags/buildflags.h"
 #include "brave/components/brave_vpn/common/features.h"
 #include "brave/components/skus/common/features.h"
@@ -22,8 +21,7 @@ class SubscriptionRenderFrameObserverBrowserTest
  public:
   SubscriptionRenderFrameObserverBrowserTest() {
     scoped_feature_list_.InitWithFeatures(
-        {skus::features::kSkusFeature, brave_vpn::features::kBraveVPN,
-         ai_chat::features::kAIChat},
+        {skus::features::kSkusFeature, brave_vpn::features::kBraveVPN},
         {});
   }
   ~SubscriptionRenderFrameObserverBrowserTest() override = default;

@@ -16,11 +16,6 @@
   commander::CommanderFrontendDelegate* GetCommanderDelegate
 #endif  // BUILDFLAG(ENABLE_COMMANDER)
 
-#define GetInMemoryDatabase                           \
-  GetInMemoryDatabase() override;                     \
-  void OpenLeo(const std::u16string& query) override; \
-  bool IsLeoProviderEnabled
-
 #define GetAcceptLanguages             \
   GetAcceptLanguages() const override; \
   std::u16string GetClipboardText

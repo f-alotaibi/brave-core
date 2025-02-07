@@ -8,11 +8,7 @@
 #include <memory>
 #include <utility>
 
-#include "brave/browser/ai_chat/ai_chat_service_factory.h"
 #include "brave/browser/brave_news/brave_news_controller_factory.h"
-#include "brave/components/ai_chat/core/browser/ai_chat_service.h"
-#include "brave/components/ai_chat/core/browser/utils.h"
-#include "brave/components/ai_chat/core/common/features.h"
 #include "brave/components/brave_news/browser/brave_news_controller.h"
 #include "brave/components/content_settings/core/browser/brave_content_settings_pref_provider.h"
 #include "brave/components/content_settings/core/browser/brave_content_settings_utils.h"
@@ -59,16 +55,6 @@ void BraveBrowsingDataRemoverDelegate::RemoveEmbedderData(
                 profile_)) {
       brave_news_controller->ClearHistory();
     }
-    // AI Chat history but only associated content, not neccessary if we
-    // are also deleting entire AI Chat history.
-    if (!(remove_mask &
-          chrome_browsing_data_remover::DATA_TYPE_BRAVE_LEO_HISTORY)) {
-      ai_chat::AIChatService* ai_chat_service =
-          ai_chat::AIChatServiceFactory::GetForBrowserContext(profile_);
-      if (ai_chat_service) {
-        ai_chat_service->DeleteAssociatedWebContent(delete_begin, delete_end);
-      }
-    }
   }
 
   // That code executes on desktop only. Android part is done inside
@@ -76,13 +62,6 @@ void BraveBrowsingDataRemoverDelegate::RemoveEmbedderData(
   // that way to avoid extensive patching in java files by adding extra
   // types inside ClearBrowsingDataFragment.DialogOption and surrounding
   // functions
-  if (remove_mask & chrome_browsing_data_remover::DATA_TYPE_BRAVE_LEO_HISTORY) {
-    ai_chat::AIChatService* ai_chat_service =
-        ai_chat::AIChatServiceFactory::GetForBrowserContext(profile_);
-    if (ai_chat_service) {
-      ai_chat_service->DeleteConversations(delete_begin, delete_end);
-    }
-  }
 
   if ((remove_mask & content::BrowsingDataRemover::DATA_TYPE_COOKIES) ||
       (remove_mask & chrome_browsing_data_remover::DATA_TYPE_HISTORY)) {

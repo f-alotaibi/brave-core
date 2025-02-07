@@ -10,7 +10,6 @@ source_set("unit_tests") {
   deps = [
     "//base",
     "//brave/app:command_ids",
-    "//brave/components/ai_chat/core/common",
     "//chrome/browser",
     "//chrome/browser/search_engines",
     "//chrome/test:test_support",
@@ -22,4 +21,5 @@ source_set("unit_tests") {
     "//testing/gtest",
     "//third_party/abseil-cpp:absl",
   ]
+
 }

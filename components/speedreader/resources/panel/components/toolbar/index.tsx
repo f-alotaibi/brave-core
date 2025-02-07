@@ -117,18 +117,11 @@ function Toolbar() {
     getToolbarAPI().dataHandler.setTtsSettings(settings)
   }
 
-  const handleAiChat = () => {
-    getToolbarAPI().dataHandler.aiChat()
-  }
-
   const handleTune = (show: boolean) => {
     getToolbarAPI().dataHandler.showTuneBubble(show)
   }
 
   const handleMainButtonClick = (button: MainButtonType) => {
-    if (button === MainButtonType.AI) {
-      handleAiChat()
-    } else {
       if (activeButton !== button) {
         setActiveButton(button)
       } else {
@@ -137,7 +130,6 @@ function Toolbar() {
       if (button === MainButtonType.Tune) {
         handleTune(activeButton !== button)
       }
-    }
   }
 
   return (

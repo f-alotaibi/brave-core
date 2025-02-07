@@ -11,7 +11,6 @@
 #include "brave/browser/brave_browser_process.h"
 #include "brave/browser/misc_metrics/process_misc_metrics.h"
 #include "brave/browser/search_engines/search_engine_tracker.h"
-#include "brave/components/ai_chat/core/browser/ai_chat_metrics.h"
 #include "brave/components/brave_search_conversion/p3a.h"
 #include "brave/components/brave_search_conversion/utils.h"
 #include "brave/components/constants/pref_names.h"
@@ -69,12 +68,7 @@ BraveOmniboxClientImpl::BraveOmniboxClientImpl(LocationBar* location_bar,
       search_storage_(profile_->GetPrefs(), kSearchCountPrefName) {
   // Record initial search count p3a value.
   RecordSearchEventP3A(search_storage_.GetWeeklySum());
-
-  if (g_brave_browser_process->process_misc_metrics()) {
-    ai_chat_metrics_ =
-        g_brave_browser_process->process_misc_metrics()->ai_chat_metrics();
-    CHECK(ai_chat_metrics_);
-  } else {
+  if (!g_brave_browser_process->process_misc_metrics()) {
     CHECK_IS_TEST();
   }
 }
@@ -120,9 +114,6 @@ void BraveOmniboxClientImpl::OnAutocompleteAccept(
     RecordSearchEventP3A(search_storage_.GetWeeklySum());
     if (search_engine_tracker_ != nullptr) {
       search_engine_tracker_->RecordLocationBarQuery();
-    }
-    if (ai_chat_metrics_) {
-      ai_chat_metrics_->RecordOmniboxSearchQuery();
     }
   }
   ChromeOmniboxClient::OnAutocompleteAccept(

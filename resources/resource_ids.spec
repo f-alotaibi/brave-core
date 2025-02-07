@@ -200,10 +200,6 @@
     "META": {"sizes": {"includes": [20]}},
     "includes": [34580]
   },
-  "<(SHARED_INTERMEDIATE_DIR)/brave/web-ui-ai_chat_ui/ai_chat_ui.grd": {
-    "META": {"sizes": {"includes": [10]}},
-    "includes": [34600],
-  },
   "<(SHARED_INTERMEDIATE_DIR)/brave/web-ui-skus_internals/skus_internals.grd": {
     "META": {"sizes": {"includes": [10]}},
     "includes": [34610],

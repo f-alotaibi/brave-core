@@ -15,9 +15,6 @@ group("ui") {
 
   if (toolkit_views) {
     deps += [
-      "//brave/components/ai_chat/content/browser",
-      "//brave/components/ai_chat/core/browser",
-      "//brave/components/ai_chat/core/common",
       "//brave/components/sidebar/browser",
     ]
   }

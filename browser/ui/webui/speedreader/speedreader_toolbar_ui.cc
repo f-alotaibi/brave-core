@@ -8,7 +8,6 @@
 #include <utility>
 
 #include "brave/browser/ui/webui/brave_webui_source.h"
-#include "brave/components/ai_chat/core/browser/utils.h"
 #include "brave/components/constants/webui_url_constants.h"
 #include "brave/components/l10n/common/localization_util.h"
 #include "brave/components/speedreader/common/constants.h"
@@ -42,10 +41,6 @@ SpeedreaderToolbarUI::SpeedreaderToolbarUI(content::WebUI* web_ui)
         brave_l10n::GetLocalizedResourceUTF16String(str.id);
     source->AddString(str.name, l10n_str);
   }
-
-  source->AddBoolean("aiChatFeatureEnabled",
-                     ai_chat::IsAIChatEnabled(profile_->GetPrefs()) &&
-                         profile_->IsRegularProfile());
 
   source->AddBoolean("ttsEnabled",
                      speedreader::features::IsSpeedreaderEnabled() &&

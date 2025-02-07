@@ -13,7 +13,6 @@ brave_browser_misc_metrics_sources = [
 brave_browser_misc_metrics_deps = [
   "//brave/browser:browser_process",
   "//brave/browser/profiles:util",
-  "//brave/components/ai_chat/core/browser",
   "//brave/components/misc_metrics",
   "//chrome/browser:browser_process",
   "//chrome/browser/profiles:profiles",

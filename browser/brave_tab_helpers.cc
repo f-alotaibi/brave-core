@@ -10,8 +10,6 @@
 #include "base/command_line.h"
 #include "base/feature_list.h"
 #include "base/functional/callback_helpers.h"
-#include "brave/browser/ai_chat/ai_chat_service_factory.h"
-#include "brave/browser/ai_chat/ai_chat_utils.h"
 #include "brave/browser/brave_ads/creatives/search_result_ad/creative_search_result_ad_tab_helper.h"
 #include "brave/browser/brave_ads/tabs/ads_tab_helper.h"
 #include "brave/browser/brave_browser_process.h"
@@ -25,7 +23,6 @@
 #include "brave/browser/ntp_background/ntp_tab_helper.h"
 #include "brave/browser/ui/bookmark/brave_bookmark_tab_helper.h"
 #include "brave/browser/ui/brave_ui_features.h"
-#include "brave/components/ai_chat/content/browser/ai_chat_tab_helper.h"
 #include "brave/components/brave_perf_predictor/browser/perf_predictor_tab_helper.h"
 #include "brave/components/brave_wayback_machine/buildflags/buildflags.h"
 #include "brave/components/playlist/common/buildflags/buildflags.h"
@@ -59,10 +56,6 @@
 #if BUILDFLAG(IS_WIN)
 #include "brave/browser/new_tab/background_color_tab_helper.h"
 #endif
-
-#if BUILDFLAG(ENABLE_PRINT_PREVIEW)
-#include "brave/browser/ui/ai_chat/print_preview_extractor.h"
-#endif  // BUILDFLAG(ENABLE_PRINT_PREVIEW)
 
 #if BUILDFLAG(ENABLE_WIDEVINE)
 #include "brave/browser/brave_drm_tab_helper.h"
@@ -123,18 +116,6 @@ void AttachTabHelpers(content::WebContents* web_contents) {
 #endif
 
   brave_rewards::RewardsTabHelper::CreateForWebContents(web_contents);
-
-  content::BrowserContext* context = web_contents->GetBrowserContext();
-  if (ai_chat::IsAllowedForContext(context)) {
-    ai_chat::AIChatTabHelper::CreateForWebContents(
-        web_contents,
-#if BUILDFLAG(ENABLE_PRINT_PREVIEW)
-        std::make_unique<ai_chat::PrintPreviewExtractor>(web_contents)
-#else
-        nullptr
-#endif
-    );
-  }
 
 #if BUILDFLAG(ENABLE_WIDEVINE)
   BraveDrmTabHelper::CreateForWebContents(web_contents);

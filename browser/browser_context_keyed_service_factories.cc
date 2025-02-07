@@ -6,7 +6,6 @@
 #include "brave/browser/browser_context_keyed_service_factories.h"
 
 #include "base/feature_list.h"
-#include "brave/browser/ai_chat/ai_chat_service_factory.h"
 #include "brave/browser/brave_adaptive_captcha/brave_adaptive_captcha_service_factory.h"
 #include "brave/browser/brave_ads/ads_service_factory.h"
 #include "brave/browser/brave_federated/brave_federated_service_factory.h"
@@ -35,7 +34,6 @@
 #include "brave/browser/sync/brave_sync_alerts_service_factory.h"
 #include "brave/browser/url_sanitizer/url_sanitizer_service_factory.h"
 #include "brave/browser/webcompat_reporter/webcompat_reporter_service_factory.h"
-#include "brave/components/ai_chat/content/browser/model_service_factory.h"
 #include "brave/components/brave_perf_predictor/browser/named_third_party_registry_factory.h"
 #include "brave/components/brave_vpn/common/buildflags/buildflags.h"
 #include "brave/components/brave_wallet/common/common_utils.h"
@@ -185,9 +183,6 @@ void EnsureBrowserContextKeyedServiceFactoriesBuilt() {
 #if BUILDFLAG(ENABLE_SPEEDREADER)
   speedreader::SpeedreaderServiceFactory::GetInstance();
 #endif
-
-  ai_chat::AIChatServiceFactory::GetInstance();
-  ai_chat::ModelServiceFactory::GetInstance();
 
   brave_search::BackupResultsServiceFactory::GetInstance();
 

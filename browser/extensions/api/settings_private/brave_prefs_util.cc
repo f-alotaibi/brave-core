@@ -6,7 +6,6 @@
 #include "brave/browser/extensions/api/settings_private/brave_prefs_util.h"
 
 #include "brave/browser/ui/tabs/brave_tab_prefs.h"
-#include "brave/components/ai_chat/core/common/pref_names.h"
 #include "brave/components/brave_news/common/pref_names.h"
 #include "brave/components/brave_rewards/core/pref_names.h"
 #include "brave/components/brave_shields/core/common/pref_names.h"
@@ -245,16 +244,6 @@ const PrefsUtil::TypedPrefMap& BravePrefsUtil::GetAllowlistedKeys() {
   (*s_brave_allowlist)[kBraveWalletNftDiscoveryEnabled] =
       settings_api::PrefType::kBoolean;
   (*s_brave_allowlist)[kBraveWalletPrivateWindowsEnabled] =
-      settings_api::PrefType::kBoolean;
-
-  // Leo Assistant pref
-  (*s_brave_allowlist)[ai_chat::prefs::kBraveChatStorageEnabled] =
-      settings_api::PrefType::kBoolean;
-  (*s_brave_allowlist)[ai_chat::prefs::kBraveChatAutocompleteProviderEnabled] =
-      settings_api::PrefType::kBoolean;
-  (*s_brave_allowlist)[ai_chat::prefs::kBraveAIChatContextMenuEnabled] =
-      settings_api::PrefType::kBoolean;
-  (*s_brave_allowlist)[ai_chat::prefs::kBraveAIChatShowToolbarButton] =
       settings_api::PrefType::kBoolean;
 
 #if !BUILDFLAG(USE_GCM_FROM_PLATFORM)

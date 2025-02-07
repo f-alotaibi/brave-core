@@ -10,7 +10,6 @@
 #include "brave/components/brave_search_conversion/features.h"
 #include "brave/components/brave_search_conversion/pref_names.h"
 #include "brave/components/brave_search_conversion/utils.h"
-#include "brave/components/omnibox/browser/leo_provider.h"
 #include "brave/components/omnibox/browser/promotion_utils.h"
 #include "brave/components/search_engines/brave_prepopulated_engines.h"
 #include "chrome/browser/image_fetcher/image_fetcher_service_factory.h"
@@ -140,7 +139,6 @@ bool PromotionButtonController::ShouldShowSearchPromotionButton() {
 
   const AutocompleteMatch match = omnibox_view_->model()->CurrentMatch(nullptr);
   return !IsBraveSearchPromotionMatch(match) &&
-         !LeoProvider::IsMatchFromLeoProvider(match) &&
          AutocompleteMatch::IsSearchType(match.type);
 }
 

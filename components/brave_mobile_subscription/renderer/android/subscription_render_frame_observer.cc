@@ -13,7 +13,6 @@
 #include "base/no_destructor.h"
 #include "base/strings/strcat.h"
 #include "base/strings/utf_string_conversions.h"
-#include "brave/components/ai_chat/core/common/features.h"
 #include "brave/components/skus/renderer/skus_utils.h"
 #include "build/build_config.h"
 #include "content/public/renderer/render_frame.h"
@@ -59,13 +58,6 @@ bool SubscriptionRenderFrameObserver::EnsureConnected() {
   }
 #endif
 
-  if (ai_chat::features::IsAIChatEnabled() && product_ == Product::kLeo) {
-    if (!ai_chat_subscription_.is_bound()) {
-      render_frame()->GetBrowserInterfaceBroker().GetInterface(
-          ai_chat_subscription_.BindNewPipeAndPassReceiver());
-    }
-    bound |= ai_chat_subscription_.is_bound();
-  }
   return bound;
 }
 
@@ -98,12 +90,6 @@ void SubscriptionRenderFrameObserver::DidCreateScriptContext(
                          weak_factory_.GetWeakPtr()));
     }
 #endif
-  } else if (product_ == Product::kLeo) {
-    if (ai_chat_subscription_.is_bound()) {
-      ai_chat_subscription_->GetPurchaseTokenOrderId(base::BindOnce(
-          &SubscriptionRenderFrameObserver::OnGetPurchaseTokenOrderId,
-          weak_factory_.GetWeakPtr()));
-    }
   }
 }
 

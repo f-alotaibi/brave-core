@@ -13,7 +13,6 @@
 #include "base/test/scoped_feature_list.h"
 #include "brave/app/brave_command_ids.h"
 #include "brave/browser/ui/browser_commands.h"
-#include "brave/components/ai_chat/core/browser/utils.h"
 #include "brave/components/brave_vpn/common/buildflags/buildflags.h"
 #include "brave/components/skus/common/features.h"
 #include "brave/components/tor/buildflags/buildflags.h"
@@ -74,16 +73,6 @@ class BraveBrowserCommandControllerTest : public InProcessBrowserTest {
         /*is_initialization_complete_return=*/true,
         /*is_first_policy_load_complete_return=*/true);
     policy::BrowserPolicyConnector::SetPolicyProviderForTesting(&provider_);
-  }
-
-  void BlockAIChatByPolicy(bool value) {
-    policy::PolicyMap policies;
-    policies.Set(policy::key::kBraveAIChatEnabled,
-                 policy::POLICY_LEVEL_MANDATORY, policy::POLICY_SCOPE_MACHINE,
-                 policy::POLICY_SOURCE_PLATFORM, base::Value(!value), nullptr);
-    provider_.UpdateChromePolicy(policies);
-    EXPECT_EQ(ai_chat::IsAIChatEnabled(browser()->profile()->GetPrefs()),
-              !value);
   }
 
 #if BUILDFLAG(ENABLE_BRAVE_VPN)
@@ -337,7 +326,6 @@ IN_PROC_BROWSER_TEST_F(BraveBrowserCommandControllerTest,
                        ToggleAIChat_ControlledByPolicy) {
   auto* command_controller = browser()->command_controller();
   // Sanity check policy is enabled by default
-  EXPECT_TRUE(ai_chat::IsAIChatEnabled(browser()->profile()->GetPrefs()));
   EXPECT_TRUE(command_controller->IsCommandEnabled(IDC_TOGGLE_AI_CHAT));
   // When AI Chat is blocked by policy, the commands should not be available
   BlockAIChatByPolicy(true);

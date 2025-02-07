@@ -7,7 +7,6 @@
 
 #include "brave/browser/misc_metrics/doh_metrics.h"
 #include "brave/browser/misc_metrics/uptime_monitor.h"
-#include "brave/components/ai_chat/core/browser/ai_chat_metrics.h"
 #include "components/prefs/pref_registry_simple.h"
 #include "components/prefs/pref_service.h"
 #if !BUILDFLAG(IS_ANDROID)
@@ -31,7 +30,6 @@ ProcessMiscMetrics::ProcessMiscMetrics(PrefService* local_state) {
       std::make_unique<misc_metrics::PrivacyHubMetrics>(local_state);
   tab_metrics_ = std::make_unique<misc_metrics::TabMetrics>(local_state);
 #endif
-  ai_chat_metrics_ = std::make_unique<ai_chat::AIChatMetrics>(local_state);
   doh_metrics_ = std::make_unique<misc_metrics::DohMetrics>(local_state);
   uptime_monitor_ = std::make_unique<misc_metrics::UptimeMonitor>(local_state);
 }
@@ -64,10 +62,6 @@ UptimeMonitor* ProcessMiscMetrics::uptime_monitor() {
   return uptime_monitor_.get();
 }
 
-ai_chat::AIChatMetrics* ProcessMiscMetrics::ai_chat_metrics() {
-  return ai_chat_metrics_.get();
-}
-
 void ProcessMiscMetrics::RegisterPrefs(PrefRegistrySimple* registry) {
 #if !BUILDFLAG(IS_ANDROID)
   MenuMetrics::RegisterPrefs(registry);
@@ -77,7 +71,6 @@ void ProcessMiscMetrics::RegisterPrefs(PrefRegistrySimple* registry) {
   PrivacyHubMetrics::RegisterPrefs(registry);
   TabMetrics::RegisterPrefs(registry);
 #endif
-  ai_chat::AIChatMetrics::RegisterPrefs(registry);
   DohMetrics::RegisterPrefs(registry);
   UptimeMonitor::RegisterPrefs(registry);
 }

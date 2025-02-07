@@ -20,7 +20,7 @@
 #include "base/ranges/algorithm.h"
 #include "base/strings/utf_string_conversions.h"
 #include "base/values.h"
-#include "brave/components/ai_chat/core/browser/utils.h"
+
 #include "brave/components/brave_wallet/common/common_utils.h"
 #include "brave/components/constants/webui_url_constants.h"
 #include "brave/components/l10n/common/locale_util.h"
@@ -651,17 +651,10 @@ SidebarItem SidebarService::GetBuiltInItemForType(
 
       return SidebarItem();
     }
+
     case SidebarItem::BuiltInItemType::kChatUI: {
-      if (ai_chat::IsAIChatEnabled(prefs_)) {
-        return SidebarItem::Create(
-            brave_l10n::GetLocalizedResourceUTF16String(IDS_CHAT_UI_TITLE),
-            SidebarItem::Type::kTypeBuiltIn,
-            SidebarItem::BuiltInItemType::kChatUI,
-            /* open_in_panel = */ true);
-      } else {
-        return SidebarItem();
-      }
-    }
+    	return SidebarItem();
+	}
     case SidebarItem::BuiltInItemType::kNone:
       break;
   }

@@ -15,8 +15,6 @@ source_set("android") {
 
   deps = [
     "//base",
-    "//brave/components/ai_chat/core/common",
-    "//brave/components/ai_chat/core/common/mojom",
     "//brave/components/brave_vpn/common/buildflags",
     "//brave/components/skus/renderer",
     "//content/public/renderer",
@@ -44,7 +42,6 @@ source_set("browser_tests") {
   defines = [ "HAS_OUT_OF_PROC_TEST_RUNNER" ]
 
   deps = [
-    "//brave/components/ai_chat/core/common",
     "//brave/components/brave_mobile_subscription/renderer/android",
     "//brave/components/brave_vpn/common",
     "//brave/components/brave_vpn/common/buildflags:buildflags",

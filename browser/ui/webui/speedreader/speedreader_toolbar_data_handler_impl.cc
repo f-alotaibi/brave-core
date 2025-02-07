@@ -15,7 +15,6 @@
 #include "brave/browser/ui/brave_browser.h"
 #include "brave/browser/ui/brave_browser_window.h"
 #include "brave/browser/ui/color/brave_color_id.h"
-#include "brave/components/ai_chat/core/browser/utils.h"
 #include "brave/components/speedreader/tts_player.h"
 #include "build/build_config.h"
 #include "chrome/browser/profiles/profile.h"
@@ -139,24 +138,6 @@ void SpeedreaderToolbarDataHandlerImpl::HideToolbar() {
 void SpeedreaderToolbarDataHandlerImpl::ViewOriginal() {
   if (active_tab_helper_) {
     active_tab_helper_->OnShowOriginalPage();
-  }
-}
-
-void SpeedreaderToolbarDataHandlerImpl::AiChat() {
-  if (!browser_ || !ai_chat::IsAIChatEnabled(browser_->profile()->GetPrefs()) ||
-      !browser_->profile()->IsRegularProfile()) {
-    return;
-  }
-  auto* side_panel = browser_->GetFeatures().side_panel_ui();
-  if (!side_panel) {
-    return;
-  }
-
-  if (auto entry = side_panel->GetCurrentEntryId();
-      entry == SidePanelEntryId::kChatUI) {
-    side_panel->Close();
-  } else {
-    side_panel->Show(SidePanelEntryId::kChatUI);
   }
 }
 

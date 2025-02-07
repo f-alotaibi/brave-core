@@ -139,7 +139,6 @@ source_set("extensions") {
     "//brave/browser/ui:brave_tab_prefs",
     "//brave/common",
     "//brave/common/extensions/api",
-    "//brave/components/ai_chat/core/common",
     "//brave/components/brave_adaptive_captcha",
     "//brave/components/brave_ads/browser",
     "//brave/components/brave_ads/core/public:headers",

@@ -8,7 +8,6 @@
 #include "brave/browser/ui/webui/brave_browser_command/brave_browser_command_handler.h"
 
 #include "base/containers/contains.h"
-#include "brave/browser/ai_chat/ai_chat_service_factory.h"
 #include "brave/browser/brave_rewards/rewards_service_factory.h"
 #include "brave/browser/brave_wallet/brave_wallet_service_factory.h"
 #include "brave/components/brave_education/education_urls.h"
@@ -38,11 +37,6 @@ bool CanShowVPNBubble(Profile* profile) {
 #else
   return false;
 #endif
-}
-
-bool CanShowAIChat(Profile* profile) {
-  return ai_chat::AIChatServiceFactory::GetForBrowserContext(profile) !=
-         nullptr;
 }
 
 }  // namespace
@@ -81,7 +75,7 @@ void BraveBrowserCommandHandler::CanExecuteCommand(
       can_execute = CanShowVPNBubble(profile_);
       break;
     case brave_browser_command::mojom::Command::kOpenAIChat:
-      can_execute = CanShowAIChat(profile_);
+      can_execute = false;
       break;
   }
   std::move(callback).Run(can_execute);

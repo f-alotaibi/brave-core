@@ -16,7 +16,7 @@ source_set("brave_browser_command") {
 
   deps = [
     "//base:base",
-    "//brave/browser/ai_chat",
+
     "//brave/browser/brave_rewards",
     "//brave/browser/brave_wallet",
     "//brave/components/brave_education",
@@ -32,4 +32,5 @@ source_set("brave_browser_command") {
   if (enable_brave_vpn) {
     deps += [ "//brave/browser/brave_vpn" ]
   }
+
 }

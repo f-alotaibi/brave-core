@@ -5,8 +5,6 @@
 
 #include "chrome/browser/ui/webui/chrome_web_ui_configs.h"
 
-#include "brave/browser/ui/webui/ai_chat/ai_chat_ui.h"
-#include "brave/components/ai_chat/core/common/features.h"
 #include "brave/components/brave_education/buildflags.h"
 #include "content/public/browser/webui_config_map.h"
 
@@ -88,10 +86,6 @@ void RegisterChromeWebUIConfigs() {
 #endif  // !BUILDFLAG(IS_ANDROID)
   map.AddWebUIConfig(std::make_unique<BraveAdblockUIConfig>());
   map.AddWebUIConfig(std::make_unique<BraveAdblockInternalsUIConfig>());
-
-  if (ai_chat::features::IsAIChatEnabled()) {
-    map.AddWebUIConfig(std::make_unique<AIChatUIConfig>());
-  }
 
 #if BUILDFLAG(ENABLE_BRAVE_EDUCATION)
   map.AddWebUIConfig(std::make_unique<BraveEducationPageUIConfig>());

@@ -3,7 +3,6 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at http://mozilla.org/MPL/2.0/.
 
-import("//brave/browser/ai_chat/android/sources.gni")
 import("//brave/browser/autocomplete/sources.gni")
 import("//brave/browser/brave_news/sources.gni")
 import("//brave/browser/brave_referrals/sources.gni")
@@ -116,7 +115,7 @@ brave_chrome_browser_deps = [
   "//brave/app:brave_generated_resources_grit",
   "//brave/browser:browser_process",
   "//brave/browser:sparkle_buildflags",
-  "//brave/browser/ai_chat",
+
   "//brave/browser/brave_adaptive_captcha",
   "//brave/browser/brave_adaptive_captcha:impl",
   "//brave/browser/brave_ads",
@@ -143,10 +142,7 @@ brave_chrome_browser_deps = [
   "//brave/browser/ui/webui/ads_internals",
   "//brave/common",
   "//brave/common:mojo_bindings",
-  "//brave/components/ai_chat/content/browser",
-  "//brave/components/ai_chat/core/browser",
-  "//brave/components/ai_chat/core/common",
-  "//brave/components/ai_chat/core/common/mojom",
+  
   "//brave/components/ai_rewriter/common/buildflags",
   "//brave/components/body_sniffer",
   "//brave/components/brave_adaptive_captcha",
@@ -292,7 +288,7 @@ if (!is_android) {
   ]
 
   brave_chrome_browser_deps += [
-    "//brave/browser/ui/ai_chat",
+
     "//brave/browser/ui/tabs:impl",
     "//brave/browser/ui/webui/brave_news_internals",
     "//brave/browser/user_education:features",
@@ -304,11 +300,6 @@ if (!is_android) {
 
 if (enable_brave_education) {
   brave_chrome_browser_deps += [ "//brave/browser/ui/webui/brave_education" ]
-}
-
-if (is_android) {
-  brave_chrome_browser_sources += brave_browser_ai_chat_android_sources
-  brave_chrome_browser_deps += brave_browser_ai_chat_android_deps
 }
 
 if (enable_commander) {

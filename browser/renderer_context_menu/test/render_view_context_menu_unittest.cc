@@ -8,7 +8,6 @@
 #include <optional>
 
 #include "brave/app/brave_command_ids.h"
-#include "brave/components/ai_chat/core/common/pref_names.h"
 #include "chrome/browser/autocomplete/autocomplete_classifier_factory.h"
 #include "chrome/browser/autocomplete/chrome_autocomplete_provider_client.h"
 #include "chrome/browser/custom_handlers/protocol_handler_registry_factory.h"
@@ -177,33 +176,4 @@ TEST_F(BraveRenderViewContextMenuTest, MenuForLink) {
       context_menu->menu_model().GetIndexOfCommandId(IDC_COPY_CLEAN_LINK);
   EXPECT_TRUE(clean_link_index.has_value());
   EXPECT_TRUE(context_menu->IsCommandIdEnabled(IDC_COPY_CLEAN_LINK));
-}
-
-TEST_F(BraveRenderViewContextMenuTest, MenuForAIChat) {
-  content::ContextMenuParams params = CreateSelectedTextParams(u"hello");
-
-  for (auto enabled : {true, false}) {
-    GetPrefs()->SetBoolean(ai_chat::prefs::kBraveAIChatContextMenuEnabled,
-                           enabled);
-    auto context_menu = CreateContextMenu(GetWebContents(), params);
-    EXPECT_TRUE(context_menu);
-    std::optional<size_t> ai_chat_index =
-        context_menu->menu_model().GetIndexOfCommandId(
-            IDC_AI_CHAT_CONTEXT_LEO_TOOLS);
-    EXPECT_EQ(ai_chat_index.has_value(), enabled);
-    EXPECT_EQ(context_menu->IsCommandIdEnabled(IDC_AI_CHAT_CONTEXT_LEO_TOOLS),
-              enabled);
-  }
-}
-
-TEST_F(BraveRenderViewContextMenuTest, MenuForAIChat_PWA) {
-  content::ContextMenuParams params = CreateSelectedTextParams(u"hello");
-
-  GetPrefs()->SetBoolean(ai_chat::prefs::kBraveAIChatContextMenuEnabled, true);
-  auto context_menu = CreateContextMenu(GetWebContents(), params, true);
-  EXPECT_TRUE(context_menu);
-  std::optional<size_t> ai_chat_index =
-      context_menu->menu_model().GetIndexOfCommandId(
-          IDC_AI_CHAT_CONTEXT_LEO_TOOLS);
-  EXPECT_FALSE(ai_chat_index.has_value());
 }

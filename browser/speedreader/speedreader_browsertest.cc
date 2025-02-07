@@ -22,7 +22,6 @@
 #include "brave/browser/ui/page_action/brave_page_action_icon_type.h"
 #include "brave/browser/ui/views/frame/brave_browser_view.h"
 #include "brave/browser/ui/webui/speedreader/speedreader_toolbar_data_handler_impl.h"
-#include "brave/components/ai_chat/core/common/features.h"
 #include "brave/components/brave_wallet/browser/brave_wallet_utils.h"
 #include "brave/components/constants/brave_paths.h"
 #include "brave/components/speedreader/common/constants.h"
@@ -92,8 +91,7 @@ class SpeedReaderBrowserTest : public InProcessBrowserTest {
       : https_server_(net::EmbeddedTestServer::TYPE_HTTPS) {
     feature_list_.InitWithFeaturesAndParameters(
         {{speedreader::kSpeedreaderFeature,
-          {{speedreader::kSpeedreaderTTS.name, "true"}}},
-         {ai_chat::features::kAIChat, {{}}}},
+          {{speedreader::kSpeedreaderTTS.name, "true"}}}},
         {});
   }
 

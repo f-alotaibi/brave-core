@@ -5,7 +5,6 @@
 module ai_rewriter.mojom;
 
 import "ui/gfx/geometry/mojom/geometry.mojom";
-import "brave/components/ai_chat/core/common/mojom/ai_chat.mojom";
 
 interface AIRewriterAgent {
   GetFocusBounds() => (gfx.mojom.RectF rect);
@@ -22,10 +21,6 @@ interface AIRewriterPageHandler {
   Close();
   OpenSettings();
   GetInitialText() => (string initial_text);
-
-  // Note: Rewritten text is streamed via AIRewriterPage::OnUpdatedGeneratedText
-  RewriteText(string text, ai_chat.mojom.ActionType action, string instructions) => ();
-  GetActionMenuList() => (array<ai_chat.mojom.ActionGroup> action_list);
 
   InsertTextAndClose(string text) => ();
 };
