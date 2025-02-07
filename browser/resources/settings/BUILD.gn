@@ -16,6 +16,8 @@ import("//tools/grit/preprocess_if_expr.gni")
 import("//ui/webui/resources/tools/generate_grd.gni")
 import("sources.gni")
 
+import("//brave/components/brave_webtorrent\browser\buildflags\buildflags.gni")
+
 preprocess_folder = "preprocessed"
 
 # grit (and generate the GRD for) brave's own static resources, they don't need
@@ -79,6 +81,7 @@ preprocess_if_expr("preprocess") {
     "enable_extensions=$enable_extensions",
     "enable_pin_shortcut=$enable_pin_shortcut",
     "enable_web_discovery_native=$enable_web_discovery_native",
+    "enable_brave_webtorrent=$enable_brave_webtorrent",
   ]
   out_folder =
       "$root_gen_dir/chrome/browser/resources/settings/$preprocess_folder"
