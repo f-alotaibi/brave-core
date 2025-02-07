@@ -14,7 +14,9 @@ import '../brave_default_extensions_page/brave_default_extensions_page.js'
 import '../brave_new_tab_page/brave_new_tab_page.js'
 import '../brave_search_engines_page/brave_search_engines_page.js'
 import '../brave_sync_page/brave_sync_page.js'
+// <if expr="enable_tor">
 import '../brave_tor_page/brave_tor_subpage.js'
+// </if>
 import '../brave_wallet_page/brave_wallet_page.js'
 import '../brave_web3_domains_page/brave_web3_domains_page.js'
 import '../default_brave_shields_page/default_brave_shields_page.js'
@@ -190,6 +192,7 @@ RegisterPolymerTemplateModifications({
           prefs: '{{prefs}}'
         }
       ))
+// <if expr="enable_tor">
       const sectionTor = document.createElement('template')
       sectionTor.setAttribute('is', 'dom-if')
       sectionTor.setAttribute('restamp', 'true')
@@ -203,6 +206,7 @@ RegisterPolymerTemplateModifications({
           prefs: '{{prefs}}'
         }
       ))
+// </if>
       const sectionDataCollection = document.createElement('template')
       sectionDataCollection.setAttribute('is', 'dom-if')
       sectionDataCollection.setAttribute('restamp', 'true')
@@ -388,8 +392,10 @@ RegisterPolymerTemplateModifications({
       }
       // Insert Web3 Domains
       last = last.insertAdjacentElement('afterend', sectionWeb3Domains)
+// <if expr="enable_tor">
       // Insert Tor
       last = last.insertAdjacentElement('afterend', sectionTor)
+// </if>
       // Insert Data collection
       last = last.insertAdjacentElement('afterend', sectionDataCollection)
 

@@ -208,11 +208,14 @@ class BookmarksExportListener : public ui::SelectFileDialog::Listener {
 };
 
 void NewOffTheRecordWindowTor(Browser* browser) {
+#if BUILDFLAG(ENABLE_TOR)
   CHECK(browser);
   NewOffTheRecordWindowTor(browser->profile());
+#endif
 }
 
 void NewOffTheRecordWindowTor(Profile* profile) {
+#if BUILDFLAG(ENABLE_TOR)
   CHECK(profile);
   if (profile->IsTor()) {
     chrome::OpenEmptyWindow(profile);
@@ -220,6 +223,7 @@ void NewOffTheRecordWindowTor(Profile* profile) {
   }
 
   TorProfileManager::SwitchToTorProfile(profile);
+#endif
 }
 
 void NewTorConnectionForSite(Browser* browser) {
