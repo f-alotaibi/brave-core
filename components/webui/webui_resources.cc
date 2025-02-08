@@ -432,14 +432,6 @@ base::span<const webui::LocalizedString> GetWebUILocalizedStrings(
                {"braveVpnCTA", IDS_BRAVE_VPN_WIDGET_CTA},
                {"braveVpnPurchased", IDS_BRAVE_VPN_HAS_PURCHASED},
 #endif
-
-               // Brave Talk  Widget
-               {"braveTalkWidgetTitle", IDS_BRAVE_TALK_WIDGET_TITLE},
-               {"braveTalkWidgetWelcomeTitle",
-                IDS_BRAVE_TALK_WIDGET_WELCOME_TITLE},
-               {"braveTalkWidgetStartButton",
-                IDS_BRAVE_TALK_WIDGET_START_BUTTON},
-               {"braveTalkWidgetAboutData", IDS_BRAVE_TALK_WIDGET_ABOUT_DATA},
            }},
           {"wallet",
            {{"cryptoWalletsWelcome", IDS_BRAVE_WALLET_WELCOME},

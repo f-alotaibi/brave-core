@@ -41,10 +41,6 @@ void ShowShortcutsPage(Browser* browser) {
   ShowSingletonTabOverwritingNTP(browser, GURL(kShortcutsURL));
 }
 
-void ShowBraveTalk(Browser* browser) {
-  ShowSingletonTabOverwritingNTP(browser, GURL(sidebar::kBraveTalkURL));
-}
-
 void ShowWebcompatReporter(Browser* browser) {
   content::WebContents* web_contents =
       browser->tab_strip_model()->GetActiveWebContents();

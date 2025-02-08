@@ -10,7 +10,7 @@ import getNTPBrowserAPI from '../../api/background'
 import { addNewTopSite, editTopSite } from '../../api/topSites'
 import { brandedWallpaperLogoClicked } from '../../api/wallpaper'
 import {
-  BraveTalkWidget as BraveTalk, Clock, EditTopSite, OverrideReadabilityColor, RewardsWidget as Rewards, SearchPromotion, VPNWidget
+ Clock, EditTopSite, OverrideReadabilityColor, RewardsWidget as Rewards, SearchPromotion, VPNWidget
 } from '../../components/default'
 import BrandedWallpaperLogo from '../../components/default/brandedWallpaper/logo'
 import BraveNews, { GetDisplayAdContent } from '../../components/default/braveNews'
@@ -59,7 +59,6 @@ interface Props {
   getBraveNewsDisplayAd: GetDisplayAdContent
   saveShowBackgroundImage: (value: boolean) => void
   saveShowRewards: (value: boolean) => void
-  saveShowBraveTalk: (value: boolean) => void
   saveBrandedWallpaperOptIn: (value: boolean) => void
   saveSetAllStackWidgets: (value: boolean) => void
   chooseNewCustomBackgroundImage: () => void
@@ -313,10 +312,6 @@ class NewTabPage extends React.Component<Props, State> {
     this.props.saveShowRewards(!this.props.newTabData.showRewards)
   }
 
-  toggleShowBraveTalk = () => {
-    this.props.saveShowBraveTalk(!this.props.newTabData.showBraveTalk)
-  }
-
   disableBrandedWallpaper = () => {
     this.props.saveBrandedWallpaperOptIn(false)
   }
@@ -405,9 +400,7 @@ class NewTabPage extends React.Component<Props, State> {
     const {
       widgetStackOrder,
       braveRewardsSupported,
-      braveTalkSupported,
       showRewards,
-      showBraveTalk,
       showBraveVPN,
     } = this.props.newTabData
 
@@ -419,10 +412,6 @@ class NewTabPage extends React.Component<Props, State> {
       'braveVPN': {
         display: this.braveVPNSupported && showBraveVPN,
         render: this.renderBraveVPNWidget
-      },
-      'braveTalk': {
-        display: braveTalkSupported && showBraveTalk,
-        render: this.renderBraveTalkWidget.bind(this)
       }
     }
 
@@ -451,15 +440,12 @@ class NewTabPage extends React.Component<Props, State> {
   allWidgetsHidden = () => {
     const {
       braveRewardsSupported,
-      braveTalkSupported,
       showRewards,
-      showBraveTalk,
       showBraveVPN,
       hideAllWidgets
     } = this.props.newTabData
     return hideAllWidgets || [
       braveRewardsSupported && showRewards,
-      braveTalkSupported && showBraveTalk,
       this.braveVPNSupported && showBraveVPN,
     ].every((widget: boolean) => !widget)
   }
@@ -562,30 +548,6 @@ class NewTabPage extends React.Component<Props, State> {
         customMenuItems={customMenuItems}
         onSelfCustodyInviteDismissed={onSelfCustodyInviteDismissed}
         onTermsOfServiceUpdateAccepted={onTosUpdateAccepted}
-      />
-    )
-  }
-
-  renderBraveTalkWidget (showContent: boolean, position: number) {
-    const { newTabData } = this.props
-    const { showBraveTalk, textDirection, braveTalkSupported } = newTabData
-
-    if (!showBraveTalk || !braveTalkSupported) {
-      return null
-    }
-
-    return (
-      <BraveTalk
-        isCardWidget
-        paddingType={'none'}
-        menuPosition={'left'}
-        widgetTitle={getLocale('braveTalkWidgetTitle')}
-        isForeground={showContent}
-        stackPosition={position}
-        textDirection={textDirection}
-        hideWidget={this.toggleShowBraveTalk}
-        showContent={showContent}
-        onShowContent={this.setForegroundStackWidget.bind(this, 'braveTalk')}
       />
     )
   }
@@ -794,9 +756,6 @@ class NewTabPage extends React.Component<Props, State> {
           brandedWallpaperOptIn={newTabData.brandedWallpaperOptIn}
           allowBackgroundCustomization={allowBackgroundCustomization}
           toggleShowRewards={this.toggleShowRewards}
-          braveTalkSupported={newTabData.braveTalkSupported}
-          toggleShowBraveTalk={this.toggleShowBraveTalk}
-          showBraveTalk={newTabData.showBraveTalk}
           cardsHidden={this.allWidgetsHidden()}
           toggleCards={this.props.saveSetAllStackWidgets}
           newTabData={this.props.newTabData}

@@ -42,10 +42,8 @@ function shouldShowBrandedWallpaperData(shouldShow: boolean): NewTab.BrandedWall
 
 function getWidgetStackOrder(firstWidget: string): NewTab.StackWidget[] {
   switch (firstWidget) {
-    case 'braveTalk':
-      return ['rewards', 'braveTalk']
     default:
-      return ['braveTalk', 'rewards']
+      return ['rewards']
   }
 }
 
@@ -94,11 +92,9 @@ export const useNewTabData = (state: NewTab.State = defaultState) => {
     showTopSites: boolean('Show top sites?', true),
     braveRewardsSupported: boolean('Brave Rewards supported?', true),
     showRewards: boolean('Show rewards?', true),
-    showBraveTalk: boolean('Show Brave Talk?', true),
     showSearchBox: boolean('Show search box', true),
     promptEnableSearchSuggestions: boolean('Prompt to enable search suggestions', true),
     searchSuggestionsEnabled: boolean('Search suggestions enabled', false),
-    braveTalkSupported: boolean('Brave Talk supported?', true),
     hideAllWidgets: boolean('Hide all widgets?', false),
     isBraveNewsOptedIn: boolean('Brave News opted-in?', false),
     textDirection: select('Text direction', { ltr: 'ltr', rtl: 'rtl' }, 'ltr'),
@@ -108,7 +104,7 @@ export const useNewTabData = (state: NewTab.State = defaultState) => {
       httpsUpgradesStat: number('Number of HTTPS upgrades', 1337)
     },
     initialDataLoaded: true,
-    widgetStackOrder: getWidgetStackOrder(select('First widget', ['braveTalk', 'rewards'], 'rewards'))
+    widgetStackOrder: getWidgetStackOrder(select('First widget', ['rewards'], 'rewards'))
   }
 
   // On all updates, notify that the prefs might've changed. Listeners are

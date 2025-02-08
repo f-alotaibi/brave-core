@@ -178,10 +178,6 @@ declare namespace chrome.braveRewards {
   const updateScheduledCaptchaResult: (result: boolean) => void
 }
 
-declare namespace chrome.braveTalk {
-  const isSupported: (callback: (supported: boolean) => void) => {}
-}
-
 declare namespace chrome.rewardsNotifications {
   const addNotification: (type: number, args: string[], id: string) => {}
   const deleteNotification: (id: string) => {}

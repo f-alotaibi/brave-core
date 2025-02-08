@@ -19,7 +19,6 @@ import {
   ToggleCardsSwitch,
   ToggleCardsText
 } from '../../../components/default'
-import braveTalkBanner from './assets/brave-talk.png'
 import braveVPNBanner from './assets/brave-vpn.png'
 import rewardsBanner from './assets/braverewards.png'
 import Toggle from '@brave/leo/react/toggle'
@@ -42,9 +41,6 @@ const StyledButton = styled(Button) <{ float: boolean }>`
 `
 
 interface Props {
-  toggleShowBraveTalk: () => void
-  showBraveTalk: boolean
-  braveTalkSupported: boolean
   toggleShowRewards: () => void
   showRewards: boolean
   braveRewardsSupported: boolean
@@ -61,22 +57,10 @@ const ToggleButton = ({ on, toggleFunc, float }: { on: boolean, toggleFunc: any,
   </StyledButton>
 }
 
-function CardSettings({ toggleShowBraveTalk, showBraveTalk, braveTalkSupported, toggleShowRewards, showRewards, braveRewardsSupported, toggleCards, cardsHidden }: Props) {
+function CardSettings({ toggleShowRewards, showRewards, braveRewardsSupported, toggleCards, cardsHidden }: Props) {
   const [showBraveVPN, saveShowBraveVPN] = useNewTabPref('showBraveVPN')
 
   return <StyledWidgetSettings>
-    {braveTalkSupported && <FeaturedSettingsWidget>
-      <StyledBannerImage src={braveTalkBanner} />
-      <StyledSettingsInfo>
-        <StyledSettingsTitle>
-          {getLocale('braveTalkWidgetTitle')}
-        </StyledSettingsTitle>
-        <StyledSettingsCopy>
-          {getLocale('braveTalkWidgetWelcomeTitle')}
-        </StyledSettingsCopy>
-      </StyledSettingsInfo>
-      <ToggleButton on={showBraveTalk} toggleFunc={toggleShowBraveTalk} float />
-    </FeaturedSettingsWidget>}
     {braveRewardsSupported && <SettingsWidget>
       <StyledBannerImage src={rewardsBanner} />
       <StyledSettingsInfo>

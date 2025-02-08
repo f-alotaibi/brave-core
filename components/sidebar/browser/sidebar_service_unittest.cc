@@ -42,7 +42,6 @@ namespace {
 
 constexpr sidebar::SidebarItem::BuiltInItemType
     kDefaultBuiltInItemTypesForTest[] = {
-        sidebar::SidebarItem::BuiltInItemType::kBraveTalk,
         sidebar::SidebarItem::BuiltInItemType::kWallet,
         sidebar::SidebarItem::BuiltInItemType::kChatUI,
         sidebar::SidebarItem::BuiltInItemType::kBookmarks,
@@ -513,8 +512,6 @@ TEST_F(SidebarServiceTest, MigratePrefSidebarBuiltInItemsSomeHidden) {
     dict.Set(sidebar::kSidebarItemTitleKey, "Anything");
     dict.Set(sidebar::kSidebarItemTypeKey,
              static_cast<int>(SidebarItem::Type::kTypeBuiltIn));
-    dict.Set(sidebar::kSidebarItemBuiltInItemTypeKey,
-             static_cast<int>(SidebarItem::BuiltInItemType::kBraveTalk));
     dict.Set(sidebar::kSidebarItemOpenInPanelKey, true);
 
     base::Value::List list;
@@ -536,18 +533,6 @@ TEST_F(SidebarServiceTest, MigratePrefSidebarBuiltInItemsSomeHidden) {
       << "Migration resulted in hiding the expected number of items";
   // Verify expected items
   EXPECT_EQ(GetDefaultItemCount() - 2UL, service_->items().size());
-  auto items = service_->items();
-  auto talk_iter =
-      base::ranges::find(items, SidebarItem::BuiltInItemType::kBraveTalk,
-                         &SidebarItem::built_in_item_type);
-  EXPECT_NE(talk_iter, items.end());
-  EXPECT_TRUE(base::Contains(items, SidebarItem::BuiltInItemType::kReadingList,
-                             &SidebarItem::built_in_item_type));
-  // Check service has updated built-in item. Previously url was incorrect. This
-  // check is to make sure that we don't re-introduce code which stores the URL
-  // for built-in items.
-  auto talk_item = *talk_iter;
-  EXPECT_EQ(talk_item.url, kBraveTalkURL);
 }
 
 TEST_F(SidebarServiceTest, MigratePrefSidebarBuiltInItemsNoneHidden) {
@@ -557,7 +542,6 @@ TEST_F(SidebarServiceTest, MigratePrefSidebarBuiltInItemsNoneHidden) {
   // Also add a custom item so that the main items pref is not default value.
   {
     std::vector<SidebarItem::BuiltInItemType> hideable_types{
-        SidebarItem::BuiltInItemType::kBraveTalk,
         SidebarItem::BuiltInItemType::kWallet,
         SidebarItem::BuiltInItemType::kBookmarks,
     };
@@ -588,16 +572,7 @@ TEST_F(SidebarServiceTest, MigratePrefSidebarBuiltInItemsNoneHidden) {
 
   InitService();
 
-  // Verify service has migrated the "include" of kBraveTalk to be the exclude
-  // of all other built-in items that were known prior to this migration and are
-  // still available.
-  auto* preference = prefs_.FindPreference(kSidebarItems);
-  auto* hidden_preference = prefs_.FindPreference(kSidebarHiddenBuiltInItems);
-  EXPECT_EQ(4UL, preference->GetValue()->GetList().size())
-      << "Migration still contains built-in items, for ordering purposes";
-  EXPECT_EQ(0UL, hidden_preference->GetValue()->GetList().size())
-      << "Migration did not result in hiding any built-in items";
-  // kSidebarHiddenBuiltInItems being non-default is how we know migration is
+ // kSidebarHiddenBuiltInItems being non-default is how we know migration is
   // already done.
   EXPECT_FALSE(hidden_preference->IsDefaultValue());
   // kSidebarItems should still have custom item
@@ -611,7 +586,7 @@ TEST_F(SidebarServiceTest, MigratePrefSidebarBuiltInItemsNoneHidden) {
   ResetService();
   InitService();
   // Prefs still haven't been re-serialized, so don't contain new items
-  EXPECT_EQ(4UL, preference->GetValue()->GetList().size());
+  EXPECT_EQ(3UL, preference->GetValue()->GetList().size());
   EXPECT_EQ(0UL, hidden_preference->GetValue()->GetList().size());
   EXPECT_FALSE(hidden_preference->IsDefaultValue());
   EXPECT_FALSE(preference->IsDefaultValue());
@@ -637,7 +612,7 @@ TEST_F(SidebarServiceTest, MigratePrefSidebarBuiltInItemsNoneHidden) {
       base::ranges::find(items, SidebarItem::BuiltInItemType::kReadingList,
                          &SidebarItem::built_in_item_type);
   auto index = iter - items.begin();
-  EXPECT_EQ(4, index);
+  EXPECT_EQ(3, index);
 }
 
 // Verify service has migrated the previous pref format where built-in items
@@ -754,8 +729,6 @@ TEST_F(SidebarServiceTest, BuiltInItemUpdateTestWithBuiltInItemTypeKey) {
     dict.Set(sidebar::kSidebarItemTitleKey, "Brave together");
     dict.Set(sidebar::kSidebarItemTypeKey,
              static_cast<int>(SidebarItem::Type::kTypeBuiltIn));
-    dict.Set(sidebar::kSidebarItemBuiltInItemTypeKey,
-             static_cast<int>(SidebarItem::BuiltInItemType::kBraveTalk));
     dict.Set(sidebar::kSidebarItemOpenInPanelKey, true);
     base::Value::List list;
     list.Append(std::move(dict));
@@ -765,7 +738,7 @@ TEST_F(SidebarServiceTest, BuiltInItemUpdateTestWithBuiltInItemTypeKey) {
   InitService();
 
   // Brave Talk and Reading list.
-  auto expected_count = 2UL;
+  auto expected_count = 1UL;
 #if BUILDFLAG(ENABLE_PLAYLIST)
   if (base::FeatureList::IsEnabled(playlist::features::kPlaylist)) {
     expected_count += 1;
@@ -774,7 +747,6 @@ TEST_F(SidebarServiceTest, BuiltInItemUpdateTestWithBuiltInItemTypeKey) {
 
   // Check service has updated built-in item. Previously url was deprecated.xxx.
   EXPECT_EQ(expected_count, service_->items().size());
-  EXPECT_EQ(GURL(kBraveTalkURL), service_->items()[0].url);
 
   // Simulate re-launch and check service has still updated items.
   ResetService();
@@ -783,7 +755,6 @@ TEST_F(SidebarServiceTest, BuiltInItemUpdateTestWithBuiltInItemTypeKey) {
 
   // Check service has updated built-in item. Previously url was deprecated.xxx.
   EXPECT_EQ(expected_count, service_->items().size());
-  EXPECT_EQ(GURL(kBraveTalkURL), service_->items()[0].url);
 }
 
 TEST_F(SidebarServiceTest, BuiltInItemDoesntHaveHistoryItem) {
@@ -962,8 +933,7 @@ TEST_F(SidebarServiceOrderingTest, BuiltInItemsDefaultOrder) {
   EXPECT_EQ(0UL, service_->GetHiddenDefaultSidebarItems().size());
 
   EXPECT_TRUE(
-      ValidateBuiltInTypesOrdering({SidebarItem::BuiltInItemType::kBraveTalk,
-                                    SidebarItem::BuiltInItemType::kWallet,
+      ValidateBuiltInTypesOrdering({SidebarItem::BuiltInItemType::kWallet,
                                     SidebarItem::BuiltInItemType::kChatUI,
                                     SidebarItem::BuiltInItemType::kBookmarks,
                                     SidebarItem::BuiltInItemType::kReadingList,
@@ -983,7 +953,6 @@ TEST_F(SidebarServiceOrderingTest, LoadFromPrefsAllBuiltInVisible) {
       SidebarItem::BuiltInItemType::kWallet,
       SidebarItem::BuiltInItemType::kReadingList,
       SidebarItem::BuiltInItemType::kBookmarks,
-      SidebarItem::BuiltInItemType::kBraveTalk,
   };
 
   auto expected_count = sidebar_items->size();
@@ -1003,7 +972,6 @@ TEST_F(SidebarServiceOrderingTest, LoadFromPrefsWalletBuiltInHidden) {
   CHECK(sidebar_items);
 
   std::vector items = {
-      SidebarItem::BuiltInItemType::kBraveTalk,
       SidebarItem::BuiltInItemType::kBookmarks,
       SidebarItem::BuiltInItemType::kReadingList,
       SidebarItem::BuiltInItemType::kChatUI,
@@ -1028,7 +996,6 @@ TEST_F(SidebarServiceOrderingTest, LoadFromPrefsAIChatBuiltInNotListed) {
   CHECK(sidebar_items);
 
   std::vector items = {
-      SidebarItem::BuiltInItemType::kBraveTalk,
       SidebarItem::BuiltInItemType::kBookmarks,
       SidebarItem::BuiltInItemType::kChatUI,
       SidebarItem::BuiltInItemType::kReadingList,

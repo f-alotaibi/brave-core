@@ -18,12 +18,12 @@ describe('stackWidgetReducer', () => {
       }, {
         type: types.SET_FOREGROUND_STACK_WIDGET,
         payload: {
-          widget: 'braveTalk'
+          widget: 'rewards'
         }
       })
       const expectedState = {
         ...storage.defaultState,
-        widgetStackOrder: ['rewards', 'braveTalk']
+        widgetStackOrder: ['rewards']
       }
       expect(assertion).toEqual(expectedState)
     })
@@ -31,24 +31,7 @@ describe('stackWidgetReducer', () => {
     it('sets a widget to the foreground if it is in the stack', () => {
       const assertion = stackWidgetReducer({
         ...storage.defaultState,
-        widgetStackOrder: ['braveTalk', 'rewards']
-      }, {
-        type: types.SET_FOREGROUND_STACK_WIDGET,
-        payload: {
-          widget: 'braveTalk'
-        }
-      })
-      const expectedState = {
-        ...storage.defaultState,
-        widgetStackOrder: ['rewards', 'braveTalk']
-      }
-      expect(assertion).toEqual(expectedState)
-    })
-
-    it('does not re-add a widget', () => {
-      const assertion = stackWidgetReducer({
-        ...storage.defaultState,
-        widgetStackOrder: ['braveTalk', 'rewards']
+        widgetStackOrder: ['rewards']
       }, {
         type: types.SET_FOREGROUND_STACK_WIDGET,
         payload: {
@@ -57,7 +40,24 @@ describe('stackWidgetReducer', () => {
       })
       const expectedState = {
         ...storage.defaultState,
-        widgetStackOrder: ['braveTalk', 'rewards']
+        widgetStackOrder: ['rewards']
+      }
+      expect(assertion).toEqual(expectedState)
+    })
+
+    it('does not re-add a widget', () => {
+      const assertion = stackWidgetReducer({
+        ...storage.defaultState,
+        widgetStackOrder: ['rewards']
+      }, {
+        type: types.SET_FOREGROUND_STACK_WIDGET,
+        payload: {
+          widget: 'rewards'
+        }
+      })
+      const expectedState = {
+        ...storage.defaultState,
+        widgetStackOrder: ['rewards']
       }
       expect(assertion).toEqual(expectedState)
     })
@@ -67,13 +67,13 @@ describe('stackWidgetReducer', () => {
     it('puts new widget at the top at first', () => {
       const state = {
         ...storage.defaultState,
-        widgetStackOrder: ['braveTalk', 'rewards']
+        widgetStackOrder: ['rewards']
       }
 
       // Last item in |widgetStackOrder| is top-most card.
       const expectedState = {
         ...storage.defaultState,
-        widgetStackOrder: ['braveTalk', 'rewards', 'braveVPN']
+        widgetStackOrder: ['rewards', 'braveVPN']
       }
 
       const assertion = storage.addNewStackWidget(state)
@@ -84,24 +84,19 @@ describe('stackWidgetReducer', () => {
   describe('handleWidgetPrefsChange', () => {
     it('puts a widget in the forgeround if it is being turned back on', () => {
       const oldState = {
-        ...storage.defaultState,
-        showBraveTalk: false
+        ...storage.defaultState
       }
       const newState = {
-        ...storage.defaultState,
-        showBraveTalk: true
+        ...storage.defaultState
       }
       const expectedState = {
         ...storage.defaultState,
-        showBraveTalk: true,
-        widgetStackOrder: ['rewards', 'braveVPN', 'braveTalk']
+        widgetStackOrder: ['rewards', 'braveVPN']
       }
       const assertion = handleWidgetPrefsChange(newState, oldState)
       expect(assertion).toEqual(expectedState)
 
       // Test again for vpn widget.
-      newState.showBraveTalk = false
-      expectedState.showBraveTalk = false;
       newState.showBraveVPN = true
       expectedState.showBraveVPN = true
       expectedState.widgetStackOrder = ['rewards', 'braveVPN']
@@ -111,17 +106,13 @@ describe('stackWidgetReducer', () => {
     })
     it('removes a widget from the stack if its being turned off', () => {
       const oldState = {
-        ...storage.defaultState,
-        showBraveTalk: true
+        ...storage.defaultState
       }
       const newState = {
-        ...storage.defaultState,
-        showBraveTalk: false
+        ...storage.defaultState
       }
       const expectedState = {
-        ...storage.defaultState,
-        showBraveTalk: false,
-        removedStackWidgets: ['braveTalk']
+        ...storage.defaultState
       }
       const assertion = handleWidgetPrefsChange(newState, oldState)
       expect(assertion).toEqual(expectedState)

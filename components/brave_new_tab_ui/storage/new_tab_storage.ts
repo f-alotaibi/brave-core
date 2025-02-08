@@ -27,7 +27,6 @@ export const defaultState: NewTab.State = {
   customLinksEnabled: false,
   customLinksNum: 0,
   showRewards: false,
-  showBraveTalk: false,
   showBraveVPN: false,
   showSearchBox: true,
   lastUsedNtpSearchEngine: braveSearchHost,
@@ -40,7 +39,6 @@ export const defaultState: NewTab.State = {
   isBraveNewsOptedIn: false,
   showEmptyPage: false,
   braveRewardsSupported: false,
-  braveTalkSupported: false,
   bitcoinDotComSupported: false,
   isIncognito: chrome.extension.inIncognitoContext,
   torCircuitEstablished: false,
@@ -112,16 +110,11 @@ export const addNewStackWidget = (state: NewTab.State) => {
 export const replaceStackWidgets = (state: NewTab.State) => {
   const {
     showRewards,
-    showBraveTalk,
     braveRewardsSupported,
-    braveTalkSupported
   } = state
   const displayLookup: { [p: string]: { display: boolean } } = {
     'rewards': {
       display: braveRewardsSupported && showRewards
-    },
-    'braveTalk': {
-      display: braveTalkSupported && showBraveTalk
     }
   }
   for (const key in displayLookup) {
@@ -194,7 +187,6 @@ export const debouncedSave = debounce<NewTab.State>((data: NewTab.State) => {
     // (or are obsolete).
     const dataToSave = {
       braveRewardsSupported: data.braveRewardsSupported,
-      braveTalkSupported: data.braveTalkSupported,
       bitcoinDotComSupported: data.bitcoinDotComSupported,
       rewardsState: data.rewardsState,
       removedStackWidgets: data.removedStackWidgets,

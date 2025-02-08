@@ -54,7 +54,6 @@ export interface Props {
   toggleShowTopSites: () => void
   setMostVisitedSettings: (show: boolean, customize: boolean) => void
   toggleShowRewards: () => void
-  toggleShowBraveTalk: () => void
   toggleBrandedWallpaperOptIn: () => void
   toggleCards: (show: boolean) => void
   chooseNewCustomImageBackground: () => void
@@ -69,9 +68,7 @@ export interface Props {
   brandedWallpaperOptIn: boolean
   allowBackgroundCustomization: boolean
   showRewards: boolean
-  showBraveTalk: boolean
   braveRewardsSupported: boolean
-  braveTalkSupported: boolean
   setActiveTab?: TabType
   cardsHidden: boolean
 }
@@ -181,9 +178,6 @@ export default function Settings(props: Props) {
           {activeTab === TabType.Cards && <CardsSettings
             toggleCards={props.toggleCards}
             cardsHidden={props.cardsHidden}
-            toggleShowBraveTalk={props.toggleShowBraveTalk}
-            showBraveTalk={props.showBraveTalk}
-            braveTalkSupported={props.braveTalkSupported}
             toggleShowRewards={props.toggleShowRewards}
             braveRewardsSupported={props.braveRewardsSupported}
             showRewards={props.showRewards}

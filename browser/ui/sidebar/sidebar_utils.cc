@@ -92,9 +92,6 @@ GURL ConvertURLToBuiltInItemURL(const GURL& url) {
   if (url == GURL(chrome::kChromeUIBookmarksURL))
     return GURL(chrome::kChromeUIBookmarksSidePanelURL);
 
-  if (url.host() == kBraveTalkHost)
-    return GURL(kBraveTalkURL);
-
   if (url.SchemeIs(content::kChromeUIScheme) && url.host() == kWalletPageHost) {
     return GURL(kBraveUIWalletPageURL);
   }
@@ -135,8 +132,6 @@ SidePanelEntryId SidePanelIdFromSideBarItemType(BuiltInItemType type) {
     case BuiltInItemType::kChatUI:
       return SidePanelEntryId::kChatUI;
     case BuiltInItemType::kWallet:
-      [[fallthrough]];
-    case BuiltInItemType::kBraveTalk:
       [[fallthrough]];
     case BuiltInItemType::kHistory:
       [[fallthrough]];

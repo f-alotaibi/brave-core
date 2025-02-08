@@ -171,22 +171,6 @@ TEST_F(SidebarModelTest, ItemsChangedTest) {
   EXPECT_THAT(model()->active_index(), Optional(3u));
 }
 
-TEST_F(SidebarModelTest, CanUseNotAddedBuiltInItemInsteadOfTest) {
-  GURL talk("https://talk.brave.com/1Ar1vHfLBWX2sAdi");
-  // False because builtin talk item is already added.
-  EXPECT_FALSE(HiddenDefaultSidebarItemsContains(service(), talk));
-
-  // Remove builtin talk item and check builtin talk item will be used
-  // instead of adding |talk| url.
-  const auto items = service()->items();
-  const auto talk_iter =
-      base::ranges::find(items, SidebarItem::BuiltInItemType::kBraveTalk,
-                         &SidebarItem::built_in_item_type);
-  ASSERT_NE(talk_iter, items.cend());
-  service()->RemoveItemAt(std::distance(items.cbegin(), talk_iter));
-  EXPECT_TRUE(HiddenDefaultSidebarItemsContains(service(), talk));
-}
-
 TEST_F(SidebarModelTest, ActiveIndexChangedAfterItemAdded) {
   model()->SetActiveIndex(1);
   EXPECT_THAT(model()->active_index(), Optional(1u));
@@ -225,12 +209,7 @@ TEST(SidebarUtilTest, SidebarShowOptionsDefaultTest) {
 }
 
 TEST(SidebarUtilTest, ConvertURLToBuiltInItemURLTest) {
-  EXPECT_EQ(GURL(kBraveTalkURL),
-            ConvertURLToBuiltInItemURL(GURL("https://talk.brave.com")));
-  EXPECT_EQ(GURL(kBraveTalkURL),
-            ConvertURLToBuiltInItemURL(
-                GURL("https://talk.brave.com/1Ar1vHfLBWX2sAdi")));
-  EXPECT_EQ(
+   EXPECT_EQ(
       GURL(kBraveUIWalletPageURL),
       ConvertURLToBuiltInItemURL(GURL("chrome://wallet/crypto/onboarding")));
 

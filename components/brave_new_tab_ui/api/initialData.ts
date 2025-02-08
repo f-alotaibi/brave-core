@@ -18,7 +18,6 @@ export type InitialData = {
   braveBackgrounds: NewTab.BraveBackground[]
   customImageBackgrounds: NewTab.ImageBackground[]
   braveRewardsSupported: boolean
-  braveTalkSupported: boolean
   searchPromotionEnabled: boolean
   purchasedState: BraveVPN.PurchasedState
 }
@@ -53,7 +52,6 @@ export async function getInitialData (): Promise<InitialData> {
       stats,
       wallpaperData,
       braveRewardsSupported,
-      braveTalkSupported,
       searchPromotionEnabled,
       braveBackgrounds,
       customImageBackgrounds,
@@ -64,16 +62,6 @@ export async function getInitialData (): Promise<InitialData> {
       !isIncognito ? wallpaper.getWallpaper() : Promise.resolve(undefined),
       new Promise((resolve) => {
         chrome.braveRewards.isSupported((supported: boolean) => {
-          resolve(supported)
-        })
-      }),
-      new Promise((resolve) => {
-        if (!('braveTalk' in chrome)) {
-          resolve(false)
-          return
-        }
-
-        chrome.braveTalk.isSupported((supported: boolean) => {
           resolve(supported)
         })
       }),
@@ -102,7 +90,6 @@ export async function getInitialData (): Promise<InitialData> {
       braveBackgrounds,
       customImageBackgrounds,
       braveRewardsSupported,
-      braveTalkSupported,
       searchPromotionEnabled,
       purchasedState
     } as InitialData

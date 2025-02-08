@@ -14,11 +14,6 @@ inline constexpr char kSidebarItemBuiltInItemTypeKey[] = "built_in_item_type";
 inline constexpr char kSidebarItemTitleKey[] = "title";
 inline constexpr char kSidebarItemOpenInPanelKey[] = "open_in_panel";
 inline constexpr int kDefaultSidePanelWidth = 320;
-
-// list is provided from chrome layer.
-inline constexpr char kBraveTalkURL[] = "https://talk.brave.com/widget";
-inline constexpr char kBraveTalkHost[] = "talk.brave.com";
-
 }  // namespace sidebar
 
 #endif  // BRAVE_COMPONENTS_SIDEBAR_BROWSER_CONSTANTS_H_
