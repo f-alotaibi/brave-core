@@ -24,15 +24,5 @@ std::unique_ptr<permissions::PermissionPrompt> CreatePermissionPrompt(
     return nullptr;
   }
 
-#if !BUILDFLAG(IS_ANDROID) && !BUILDFLAG(IS_IOS)
-  if (delegate->Requests()[0]->request_type() ==
-          permissions::RequestType::kBraveEthereum ||
-      delegate->Requests()[0]->request_type() ==
-          permissions::RequestType::kBraveSolana) {
-    return std::make_unique<BraveWalletPermissionPromptImpl>(
-        browser, web_contents, *delegate);
-  }
-#endif
-
   return CreatePermissionPrompt_ChromiumImpl(web_contents, delegate);
 }

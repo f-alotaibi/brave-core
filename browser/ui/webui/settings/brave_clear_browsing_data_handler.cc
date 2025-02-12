@@ -7,9 +7,6 @@
 
 #include "base/functional/bind.h"
 #include "base/functional/callback_helpers.h"
-#include "brave/browser/brave_ads/ads_service_factory.h"
-#include "brave/components/brave_ads/core/browser/service/ads_service.h"
-#include "brave/components/brave_rewards/core/pref_names.h"
 #include "chrome/browser/profiles/profile.h"
 #include "components/prefs/pref_service.h"
 
@@ -22,58 +19,12 @@ BraveClearBrowsingDataHandler::BraveClearBrowsingDataHandler(
   CHECK(profile_);
 
   pref_change_registrar_.Init(profile_->GetPrefs());
-  pref_change_registrar_.Add(
-      brave_rewards::prefs::kEnabled,
-      base::BindRepeating(
-          &BraveClearBrowsingDataHandler::OnRewardsEnabledPreferenceChanged,
-          base::Unretained(this)));
 }
 
 BraveClearBrowsingDataHandler::~BraveClearBrowsingDataHandler() = default;
 
 void BraveClearBrowsingDataHandler::RegisterMessages() {
   ClearBrowsingDataHandler::RegisterMessages();
-
-  web_ui()->RegisterMessageCallback(
-      "getBraveRewardsEnabled",
-      base::BindRepeating(
-          &BraveClearBrowsingDataHandler::HandleGetBraveRewardsEnabled,
-          base::Unretained(this)));
-  web_ui()->RegisterMessageCallback(
-      "clearBraveAdsData",
-      base::BindRepeating(
-          &BraveClearBrowsingDataHandler::HandleClearBraveAdsData,
-          base::Unretained(this)));
-}
-
-void BraveClearBrowsingDataHandler::HandleGetBraveRewardsEnabled(
-    const base::Value::List& args) {
-  CHECK_EQ(args.size(), 1U);
-
-  const bool rewards_enabled =
-      profile_->GetPrefs()->GetBoolean(brave_rewards::prefs::kEnabled);
-
-  AllowJavascript();
-  ResolveJavascriptCallback(args[0], rewards_enabled);
-}
-
-void BraveClearBrowsingDataHandler::HandleClearBraveAdsData(
-    const base::Value::List& /*args*/) {
-  if (auto* ads_service =
-          brave_ads::AdsServiceFactory::GetForProfile(profile_)) {
-    ads_service->ClearData(/*intentional*/ base::DoNothing());
-  }
-}
-
-void BraveClearBrowsingDataHandler::OnRewardsEnabledPreferenceChanged() {
-  if (!IsJavascriptAllowed()) {
-    return;
-  }
-
-  const bool rewards_enabled =
-      profile_->GetPrefs()->GetBoolean(brave_rewards::prefs::kEnabled);
-  FireWebUIListener("brave-rewards-enabled-changed",
-                    base::Value(rewards_enabled));
 }
 
 }  // namespace settings

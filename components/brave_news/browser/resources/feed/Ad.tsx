@@ -11,7 +11,6 @@ import { font, spacing } from '@brave/leo/tokens/css/variables';
 import { DisplayAd, FeedV2Ad } from 'gen/brave/components/brave_news/common/brave_news.mojom.m';
 import * as React from 'react';
 import styled from 'styled-components';
-import getBraveNewsController from '../shared/api';
 import { useUnpaddedImageUrl } from '../shared/useUnpaddedImageUrl';
 import { MetaInfoContainer } from './ArticleMetaRow';
 import Card, { LargeImage, Title, braveNewsCardClickHandler } from './Card';
@@ -83,7 +82,6 @@ export default function Advert(props: Props) {
     if (!advert) return
 
     console.debug(`Brave News: Viewed display ad: ${advert.uuid}`)
-    getBraveNewsController().onDisplayAdView(advert.uuid, advert.creativeInstanceId)
   }, [advert])
 
   const { setEl: setAdEl } = useVisibleFor(onDisplayAdViewed, 1000)
@@ -92,15 +90,13 @@ export default function Advert(props: Props) {
     if (!advert) return
 
     console.debug(`Brave News: Visited display ad: ${advert.uuid}`)
-    await getBraveNewsController().onDisplayAdVisit(advert.uuid, advert.creativeInstanceId)
     braveNewsCardClickHandler(advert.targetUrl.url, adTargetUrlAllowedSchemes)(e);
   }, [advert])
 
   const { setElementRef: setTriggerRef } = useOnVisibleCallback(async () => {
     console.debug(`Brave News: Fetching an advertisement`)
 
-    const advert = await getBraveNewsController().getDisplayAd().then(r => r.ad)
-    setAdvert(advert ?? null)
+    setAdvert(null)
   }, {
     // Trigger ad fetch when the ad unit is 1000px away from the viewport
     rootMargin: '0px 0px 1000px 0px'

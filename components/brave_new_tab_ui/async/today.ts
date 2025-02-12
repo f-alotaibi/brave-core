@@ -71,11 +71,7 @@ handler.on<Actions.ReadFeedItemPayload>(
         )
         return
       }
-      getBraveNewsController().onPromotedItemVisit(
-        payload.promotedUUID,
-        promotedArticle.creativeInstanceId
-      )
-    }
+   }
     const data =
       payload.item.article?.data ||
       payload.item.promotedArticle?.data ||
@@ -114,10 +110,6 @@ handler.on<Actions.PromotedItemViewedPayload>(
       )
       return
     }
-    getBraveNewsController().onPromotedItemView(
-      payload.uuid,
-      payload.item.promotedArticle.creativeInstanceId
-    )
   }
 )
 
@@ -192,10 +184,6 @@ handler.on<Actions.VisitDisplayAdPayload>(
   async function (store, payload) {
     const state = store.getState() as ApplicationState
     const todayPageIndex = state.today.currentPageIndex
-    getBraveNewsController().onDisplayAdVisit(
-      payload.ad.uuid,
-      payload.ad.creativeInstanceId
-    )
     const destinationUrl = payload.ad.targetUrl.url
     if (!payload.openInNewTab) {
       // Remember display ad location so we can scroll to it on "back" navigation
@@ -213,16 +201,6 @@ handler.on<Actions.VisitDisplayAdPayload>(
     } else {
       window.open(destinationUrl, '_blank', 'noreferrer')
     }
-  }
-)
-
-handler.on<Actions.DisplayAdViewedPayload>(
-  Actions.displayAdViewed.getType(),
-  async (store, item) => {
-    getBraveNewsController().onDisplayAdView(
-      item.ad.uuid,
-      item.ad.creativeInstanceId
-    )
   }
 )
 

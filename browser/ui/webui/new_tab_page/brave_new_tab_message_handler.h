@@ -8,7 +8,6 @@
 
 #include "base/memory/raw_ptr.h"
 #include "base/memory/weak_ptr.h"
-#include "brave/components/brave_ads/core/browser/service/ads_service.h"
 #include "components/prefs/pref_change_registrar.h"
 #include "content/public/browser/web_ui_message_handler.h"
 #include "mojo/public/cpp/bindings/receiver.h"
@@ -29,8 +28,7 @@ class PrefService;
 
 // TODO(simonhong): Migrate to brave_new_tab_page.mojom.
 // Handles messages to and from the New Tab Page javascript
-class BraveNewTabMessageHandler : public content::WebUIMessageHandler,
-                                  public bat_ads::mojom::BatAdsObserver {
+class BraveNewTabMessageHandler : public content::WebUIMessageHandler {
  public:
   BraveNewTabMessageHandler(Profile* profile, bool was_restored);
   BraveNewTabMessageHandler(const BraveNewTabMessageHandler&) = delete;
@@ -67,19 +65,9 @@ class BraveNewTabMessageHandler : public content::WebUIMessageHandler,
 
   base::Value::Dict GetAdsDataDictionary() const;
 
-  // bat_ads::mojom::BatAdsObserver:
-  void OnAdRewardsDidChange() override {}
-  void OnBrowserUpgradeRequiredToServeAds() override;
-  void OnIneligibleWalletToServeAds() override {}
-  void OnRemindUser(brave_ads::mojom::ReminderType type) override {}
-
   PrefChangeRegistrar pref_change_registrar_;
   // Weak pointer.
   raw_ptr<Profile> profile_ = nullptr;
-
-  raw_ptr<brave_ads::AdsService> ads_service_ = nullptr;
-  mojo::Receiver<bat_ads::mojom::BatAdsObserver> bat_ads_observer_receiver_{
-      this};
 
   bool was_restored_ = false;
 

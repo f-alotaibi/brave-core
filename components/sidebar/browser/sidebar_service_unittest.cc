@@ -42,7 +42,6 @@ namespace {
 
 constexpr sidebar::SidebarItem::BuiltInItemType
     kDefaultBuiltInItemTypesForTest[] = {
-        sidebar::SidebarItem::BuiltInItemType::kWallet,
         sidebar::SidebarItem::BuiltInItemType::kChatUI,
         sidebar::SidebarItem::BuiltInItemType::kBookmarks,
         sidebar::SidebarItem::BuiltInItemType::kReadingList,
@@ -542,7 +541,6 @@ TEST_F(SidebarServiceTest, MigratePrefSidebarBuiltInItemsNoneHidden) {
   // Also add a custom item so that the main items pref is not default value.
   {
     std::vector<SidebarItem::BuiltInItemType> hideable_types{
-        SidebarItem::BuiltInItemType::kWallet,
         SidebarItem::BuiltInItemType::kBookmarks,
     };
 
@@ -933,8 +931,7 @@ TEST_F(SidebarServiceOrderingTest, BuiltInItemsDefaultOrder) {
   EXPECT_EQ(0UL, service_->GetHiddenDefaultSidebarItems().size());
 
   EXPECT_TRUE(
-      ValidateBuiltInTypesOrdering({SidebarItem::BuiltInItemType::kWallet,
-                                    SidebarItem::BuiltInItemType::kChatUI,
+      ValidateBuiltInTypesOrdering({SidebarItem::BuiltInItemType::kChatUI,
                                     SidebarItem::BuiltInItemType::kBookmarks,
                                     SidebarItem::BuiltInItemType::kReadingList,
                                     SidebarItem::BuiltInItemType::kHistory,
@@ -950,7 +947,6 @@ TEST_F(SidebarServiceOrderingTest, LoadFromPrefsAllBuiltInVisible) {
 
   std::vector items = {
       SidebarItem::BuiltInItemType::kChatUI,
-      SidebarItem::BuiltInItemType::kWallet,
       SidebarItem::BuiltInItemType::kReadingList,
       SidebarItem::BuiltInItemType::kBookmarks,
   };
@@ -999,7 +995,6 @@ TEST_F(SidebarServiceOrderingTest, LoadFromPrefsAIChatBuiltInNotListed) {
       SidebarItem::BuiltInItemType::kBookmarks,
       SidebarItem::BuiltInItemType::kChatUI,
       SidebarItem::BuiltInItemType::kReadingList,
-      SidebarItem::BuiltInItemType::kWallet,
   };
 
   auto expected_count = sidebar_items->size() + 1;

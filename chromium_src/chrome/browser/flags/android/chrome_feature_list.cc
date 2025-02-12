@@ -8,7 +8,6 @@
 #include "brave/browser/android/safe_browsing/features.h"
 #include "brave/browser/brave_browser_features.h"
 #include "brave/components/brave_news/common/features.h"
-#include "brave/components/brave_rewards/core/features.h"
 #include "brave/components/brave_search_conversion/features.h"
 #include "brave/components/brave_shields/core/common/features.h"
 #include "brave/components/brave_vpn/common/features.h"
@@ -35,7 +34,6 @@
 #define kForceWebContentsDarkMode kForceWebContentsDarkMode,            \
     BRAVE_AI_CHAT_FLAGS                                                 \
     BRAVE_WEB_DISCOVERY_FLAG                                            \
-    &brave_rewards::features::kBraveRewards,                            \
     &brave_search_conversion::features::kOmniboxBanner,                 \
     &brave_vpn::features::kBraveVPNLinkSubscriptionAndroidUI,           \
     &brave_wallet::features::kNativeBraveWalletFeature,                 \

@@ -27,7 +27,6 @@
 
 #if !BUILDFLAG(IS_ANDROID)
 #include "brave/browser/ui/webui/navigation_bar_data_provider.h"
-#include "brave/components/brave_rewards/resources/grit/brave_rewards_resources.h"
 #include "chrome/browser/ui/browser_finder.h"
 #include "chrome/browser/ui/browser_window.h"
 #include "chrome/browser/ui/color/chrome_color_id.h"
@@ -44,7 +43,7 @@ void CustomizeWebUIHTMLSource(content::WebUI* web_ui,
                               const std::string& name,
                               content::WebUIDataSource* source) {
 #if !BUILDFLAG(IS_ANDROID)
-  if (name == "rewards" || name == "wallet") {
+  if (name == "wallet") {
     NavigationBarDataProvider::Initialize(source, Profile::FromWebUI(web_ui));
   }
 #endif

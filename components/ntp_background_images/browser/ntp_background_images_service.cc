@@ -33,11 +33,6 @@
 #include "components/prefs/pref_registry_simple.h"
 #include "components/prefs/pref_service.h"
 
-#if !BUILDFLAG(IS_IOS)
-#include "brave/components/brave_referrals/browser/brave_referrals_service.h"
-#include "brave/components/brave_referrals/common/pref_names.h"
-#endif
-
 namespace ntp_background_images {
 
 namespace {
@@ -279,12 +274,7 @@ void NTPBackgroundImagesService::CheckSuperReferralComponent() {
     // If referral code is non empty, that means browser is shutdown after
     // getting referal code. In this case, we should start downloading mapping
     // table.
-    const bool referral_checked =
-        local_pref_->GetBoolean(kReferralCheckedForPromoCodeFile) ||
-        local_pref_->GetBoolean(kReferralInitialization);
-
-    if (referral_checked &&
-        !local_pref_->GetBoolean(
+    if (!local_pref_->GetBoolean(
             prefs::kNewTabPageGetInitialSRComponentInProgress)) {
       MarkThisInstallIsNotSuperReferralForever();
       DVLOG(6) << "Cached Super Referral Info is clean and Referral Service is "
@@ -296,24 +286,17 @@ void NTPBackgroundImagesService::CheckSuperReferralComponent() {
     // If browser is crashed before fetching this install's promo code at fiirst
     // launch, it can be handled here also because code would be empty at this
     // time.
-    const std::string code = GetReferralPromoCode();
+    const std::string code = "";
     if (code.empty()) {
       local_pref_->SetBoolean(
           prefs::kNewTabPageGetInitialSRComponentInProgress,
           true);
-      MonitorReferralPromoCodeChange();
       return;
     }
 
     // This below code is for recover above abnormal situation - Shutdown
     // situation before getting map table or getting initial component.
-    if (brave::BraveReferralsService::IsDefaultReferralCode(code)) {
-      MarkThisInstallIsNotSuperReferralForever();
-    } else {
-      // If current code is not an default one, let's check it after fetching
-      // mapping table.
       DownloadSuperReferralMappingTable();
-    }
   }
 
   DVLOG(6) << "This has invalid component info. In this case, this install is "
@@ -322,29 +305,12 @@ void NTPBackgroundImagesService::CheckSuperReferralComponent() {
 #endif  // BUILDFLAG(IS_IOS)
 }
 
-void NTPBackgroundImagesService::MonitorReferralPromoCodeChange() {
-#if !BUILDFLAG(IS_IOS)
-  DVLOG(6) << "Monitor for referral promo code change";
-
-  pref_change_registrar_.Add(
-      kReferralPromoCode,
-      base::BindRepeating(&NTPBackgroundImagesService::OnPreferenceChanged,
-                          base::Unretained(this)));
-#endif
-}
-
 void NTPBackgroundImagesService::OnPreferenceChanged(
   const std::string& pref_name) {
 #if !BUILDFLAG(IS_IOS)
-  DCHECK_EQ(kReferralPromoCode, pref_name);
-  const std::string new_referral_code = GetReferralPromoCode();
+  const std::string new_referral_code = "";
   DVLOG(6) << "Got referral promo code: " << new_referral_code;
   DCHECK(!new_referral_code.empty());
-  if (brave::BraveReferralsService::IsDefaultReferralCode(new_referral_code)) {
-    DVLOG(6) << "This has default referral promo code.";
-    MarkThisInstallIsNotSuperReferralForever();
-    return;
-  }
 
   DVLOG(6) << "This has non default referral promo code. Let's check this code "
               "is super referral or not after downloading mapping table.";
@@ -433,16 +399,6 @@ void NTPBackgroundImagesService::OnGetMappingTableData(
   }
 
   DVLOG(6) << "Downloaded valid mapping table.";
-
-  if (base::Value::Dict* value =
-          mapping_table_value->GetDict().FindDict(GetReferralPromoCode())) {
-    DVLOG(6) << "This is super referral. Cache SR's referral code";
-    initial_sr_component_info_ = std::move(*value);
-    RegisterSuperReferralComponent();
-    local_pref_->SetString(prefs::kNewTabPageCachedSuperReferralCode,
-                           GetReferralPromoCode());
-    return;
-  }
 
   DVLOG(6) << "This is non super referral.";
   MarkThisInstallIsNotSuperReferralForever();
@@ -611,14 +567,6 @@ void NTPBackgroundImagesService::UnRegisterSuperReferralComponent() {
   const std::string sr_component_id = *value.FindString(kComponentIDKey);
   DVLOG(6) << "Unregister NTP Super Referral component";
   component_update_service_->UnregisterComponent(sr_component_id);
-}
-
-std::string NTPBackgroundImagesService::GetReferralPromoCode() const {
-#if BUILDFLAG(IS_IOS)
-  return "";
-#else
-  return local_pref_->GetString(kReferralPromoCode);
-#endif
 }
 
 bool NTPBackgroundImagesService::IsSuperReferral() const {

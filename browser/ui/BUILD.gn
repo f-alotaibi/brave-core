@@ -3,7 +3,6 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at https://mozilla.org/MPL/2.0/.
 
-import("//brave/browser/ethereum_remote_client/buildflags/buildflags.gni")
 import("//brave/browser/shell_integrations/buildflags/buildflags.gni")
 import("//brave/browser/ui/config.gni")
 import("//brave/build/config.gni")
@@ -33,7 +32,6 @@ group("ui_public_dependencies") {
     "//chrome/browser/ui:ui_public_dependencies",
   ]
   public_deps = [
-    ":brave_rewards_source",
     ":brave_tab_features",
     ":brave_tab_prefs",
     "//brave/components/brave_wayback_machine/buildflags",
@@ -51,9 +49,6 @@ source_set("ui") {
   ]
 
   deps = [
-    "//brave/browser/brave_adaptive_captcha",
-    "//brave/browser/brave_ads",
-    "//brave/browser/brave_rewards",
     "//brave/browser/skus",
     "//brave/components/brave_shields/core/browser",
     "//brave/components/webcompat/core/common",
@@ -77,24 +72,6 @@ source_set("ui") {
     "webui/brave_adblock_internals_ui.h",
     "webui/brave_adblock_ui.cc",
     "webui/brave_adblock_ui.h",
-    "webui/brave_rewards/rewards_page_data_source.cc",
-    "webui/brave_rewards/rewards_page_data_source.h",
-    "webui/brave_rewards/rewards_page_handler.cc",
-    "webui/brave_rewards/rewards_page_handler.h",
-    "webui/brave_rewards/rewards_page_ui.cc",
-    "webui/brave_rewards/rewards_page_ui.h",
-    "webui/brave_rewards/rewards_web_ui_utils.cc",
-    "webui/brave_rewards/rewards_web_ui_utils.h",
-    "webui/brave_rewards_internals_ui.cc",
-    "webui/brave_rewards_internals_ui.h",
-    "webui/brave_rewards_page_ui.cc",
-    "webui/brave_rewards_page_ui.h",
-    "webui/brave_wallet/line_chart/line_chart_ui.cc",
-    "webui/brave_wallet/line_chart/line_chart_ui.h",
-    "webui/brave_wallet/market/market_ui.cc",
-    "webui/brave_wallet/market/market_ui.h",
-    "webui/brave_wallet/nft/nft_ui.cc",
-    "webui/brave_wallet/nft/nft_ui.h",
     "webui/brave_web_ui_controller_factory.cc",
     "webui/brave_web_ui_controller_factory.h",
     "webui/brave_webui_source.cc",
@@ -244,16 +221,6 @@ source_set("ui") {
       "toolbar/brave_bookmark_sub_menu_model.cc",
       "toolbar/brave_bookmark_sub_menu_model.h",
       "toolbar/brave_recent_tabs_sub_menu_model.h",
-      "webui/brave_rewards/rewards_page_top_ui.cc",
-      "webui/brave_rewards/rewards_page_top_ui.h",
-      "webui/brave_rewards/rewards_panel_handler.cc",
-      "webui/brave_rewards/rewards_panel_handler.h",
-      "webui/brave_rewards/rewards_panel_ui.cc",
-      "webui/brave_rewards/rewards_panel_ui.h",
-      "webui/brave_rewards/tip_panel_handler.cc",
-      "webui/brave_rewards/tip_panel_handler.h",
-      "webui/brave_rewards/tip_panel_ui.cc",
-      "webui/brave_rewards/tip_panel_ui.h",
       "webui/brave_settings_ui.cc",
       "webui/brave_settings_ui.h",
       "webui/brave_shields/cookie_list_opt_in_page_handler.cc",
@@ -306,8 +273,6 @@ source_set("ui") {
       "webui/settings/brave_site_settings_handler.h",
       "webui/settings/brave_sync_handler.cc",
       "webui/settings/brave_sync_handler.h",
-      "webui/settings/brave_wallet_handler.cc",
-      "webui/settings/brave_wallet_handler.h",
       "webui/settings/default_brave_shields_handler.cc",
       "webui/settings/default_brave_shields_handler.h",
       "webui/side_panel/reading_list/brave_reading_list_page_handler.cc",
@@ -486,8 +451,6 @@ source_set("ui") {
       "views/brave_news/brave_news_feed_item_view.h",
       "views/brave_news/brave_news_feeds_container_view.cc",
       "views/brave_news/brave_news_feeds_container_view.h",
-      "views/brave_rewards/tip_panel_bubble_host.cc",
-      "views/brave_rewards/tip_panel_bubble_host.h",
       "views/brave_shields/cookie_list_opt_in_bubble_host.cc",
       "views/brave_shields/cookie_list_opt_in_bubble_host.h",
       "views/brave_tab_search_bubble_host.cc",
@@ -749,12 +712,9 @@ source_set("ui") {
     "//brave/app/vector_icons:vector_icons",
     "//brave/browser:browser_process",
     "//brave/browser:sparkle_buildflags",
-    "//brave/browser/brave_rewards:util",
-    "//brave/browser/ethereum_remote_client/buildflags",
     "//brave/browser/misc_metrics",
     "//brave/browser/shell_integrations/buildflags",
     "//brave/browser/themes",
-    "//brave/browser/ui/brave_ads",
     "//brave/browser/ui/brave_tooltips",
 
     # //chrome/browser/ui depends on //brave/browser/ui, add this target here
@@ -762,26 +722,13 @@ source_set("ui") {
     "//brave/chromium_src/chrome/browser/ui",
     "//brave/common",
     "//brave/components/ai_rewriter/common/buildflags",
-    "//brave/components/brave_adaptive_captcha",
     "//brave/components/brave_adblock_ui:generated_resources",
     "//brave/components/brave_adblock_ui/adblock_internals:generated_resources",
-    "//brave/components/brave_ads/browser",
-    "//brave/components/brave_ads/core",
     "//brave/components/brave_federated",
     "//brave/components/brave_federated/public/interfaces",
     "//brave/components/brave_news/browser",
     "//brave/components/brave_news/common",
     "//brave/components/brave_perf_predictor/common",
-    "//brave/components/brave_rewards/content",
-    "//brave/components/brave_rewards/core",
-    "//brave/components/brave_rewards/core:features",
-    "//brave/components/brave_rewards/core/engine:headers",
-    "//brave/components/brave_rewards/core/mojom",
-    "//brave/components/brave_rewards/core/mojom:webui",
-    "//brave/components/brave_rewards/resources",
-    "//brave/components/brave_rewards/resources:internals_generated_resources",
-    "//brave/components/brave_rewards/resources:page_generated_resources",
-    "//brave/components/brave_rewards/resources/rewards_page:rewards_page_generated",
     "//brave/components/brave_search/common",
     "//brave/components/brave_search_conversion",
     "//brave/components/brave_shields/content/browser",
@@ -791,14 +738,6 @@ source_set("ui") {
     "//brave/components/brave_sync:prefs",
     "//brave/components/brave_sync:time_limited_codes",
     "//brave/components/brave_vpn/common/buildflags",
-    "//brave/components/brave_wallet/browser",
-    "//brave/components/brave_wallet/browser:constants",
-    "//brave/components/brave_wallet/browser:pref_names",
-    "//brave/components/brave_wallet/browser:utils",
-    "//brave/components/brave_wallet_ui/line_chart:line_chart_display_generated",
-    "//brave/components/brave_wallet_ui/market:market_display_generated",
-    "//brave/components/brave_wallet_ui/nft:nft_display_generated",
-    "//brave/components/brave_wallet_ui/page:brave_wallet_page_generated",
     "//brave/components/constants",
     "//brave/components/cosmetic_filters/resources/data:generated_resources",
     "//brave/components/de_amp/common",
@@ -817,7 +756,6 @@ source_set("ui") {
     "//brave/components/p3a_utils",
     "//brave/components/query_filter",
     "//brave/components/resources:static_resources",
-    "//brave/components/services/bat_ads/public/interfaces",
     "//brave/components/skus/browser",
     "//brave/components/skus/browser/resources:generated_resources",
     "//brave/components/skus/common",
@@ -924,7 +862,6 @@ source_set("ui") {
     ]
 
     deps += [
-      "//brave/browser/ui/views/brave_ads",
       "//brave/browser/ui/views/brave_tooltips",
       "//ui/views/controls/webview",
     ]
@@ -1045,7 +982,6 @@ source_set("ui") {
   if (!is_android) {
     deps += [
       "//brave/app:brave_generated_resources_grit",
-      "//brave/browser/brave_wallet",
       "//brave/browser/resources/settings:resources",
       "//brave/common/importer",
       "//brave/components/brave_new_tab_ui:generated_resources",
@@ -1053,14 +989,10 @@ source_set("ui") {
       "//brave/components/brave_private_new_tab_ui/common",
       "//brave/components/brave_private_new_tab_ui/common:mojom",
       "//brave/components/brave_private_new_tab_ui/resources/page:generated_resources",
-      "//brave/components/brave_rewards/content",
-      "//brave/components/brave_rewards/resources/rewards_panel:brave_rewards_panel_generated",
-      "//brave/components/brave_rewards/resources/tip_panel:tip_panel_generated",
       "//brave/components/brave_shields/resources/cookie_list_opt_in:cookie_list_opt_in_generated",
       "//brave/components/brave_shields/resources/panel:brave_shields_panel_generated",
       "//brave/components/brave_sync",
       "//brave/components/brave_sync:sync_service_impl_helper",
-      "//brave/components/brave_wallet/common",
       "//brave/components/brave_welcome/common",
       "//brave/components/brave_welcome_ui:generated_resources",
       "//brave/components/commands/common",
@@ -1086,8 +1018,6 @@ source_set("ui") {
       "toolbar/brave_location_bar_model_delegate.h",
       "views/brave_actions/brave_actions_container.cc",
       "views/brave_actions/brave_actions_container.h",
-      "views/brave_actions/brave_rewards_action_view.cc",
-      "views/brave_actions/brave_rewards_action_view.h",
       "views/brave_actions/brave_shields_action_view.cc",
       "views/brave_actions/brave_shields_action_view.h",
       "views/brave_help_bubble/brave_help_bubble_delegate_view.cc",
@@ -1226,94 +1156,19 @@ source_set("ui") {
 
   if (!is_android) {
     sources += [
-      "brave_rewards/rewards_panel_coordinator.cc",
-      "brave_rewards/rewards_panel_coordinator.h",
-      "brave_rewards/tip_panel_coordinator.cc",
-      "brave_rewards/tip_panel_coordinator.h",
       "commands/accelerator_service.cc",
       "commands/accelerator_service.h",
       "commands/accelerator_service_factory.cc",
       "commands/accelerator_service_factory.h",
       "commands/default_accelerators.h",
-      "views/permission_bubble/brave_wallet_permission_prompt_impl.cc",
-      "views/permission_bubble/brave_wallet_permission_prompt_impl.h",
-      "views/toolbar/wallet_button.cc",
-      "views/toolbar/wallet_button.h",
-      "views/toolbar/wallet_button_notification_source.cc",
-      "views/toolbar/wallet_button_notification_source.h",
-      "views/wallet_bubble_focus_observer.cc",
-      "views/wallet_bubble_focus_observer.h",
-      "wallet_bubble_manager_delegate_impl.cc",
-      "wallet_bubble_manager_delegate_impl.h",
-      "webui/brave_wallet/ledger/ledger_ui.cc",
-      "webui/brave_wallet/ledger/ledger_ui.h",
-      "webui/brave_wallet/page_handler/wallet_page_handler.cc",
-      "webui/brave_wallet/page_handler/wallet_page_handler.h",
-      "webui/brave_wallet/panel_handler/wallet_panel_handler.cc",
-      "webui/brave_wallet/panel_handler/wallet_panel_handler.h",
-      "webui/brave_wallet/trezor/trezor_ui.cc",
-      "webui/brave_wallet/trezor/trezor_ui.h",
-      "webui/brave_wallet/wallet_common_ui.cc",
-      "webui/brave_wallet/wallet_common_ui.h",
-      "webui/brave_wallet/wallet_page_ui.cc",
-      "webui/brave_wallet/wallet_page_ui.h",
-      "webui/brave_wallet/wallet_panel_ui.cc",
-      "webui/brave_wallet/wallet_panel_ui.h",
     ]
     deps += [
-      "//brave/browser/brave_wallet:tab_helper",
       "//brave/browser/resources/settings/shortcuts_page:generated_resources",
-      "//brave/browser/ui/brave_wallet",
-      "//brave/browser/ui/webui/brave_wallet/common_handler",
-      "//brave/components/brave_wallet/browser:permission_utils",
-      "//brave/components/brave_wallet/common",
-      "//brave/components/brave_wallet/common:mojom",
-      "//brave/components/brave_wallet_ui:resources",
-      "//brave/components/brave_wallet_ui/ledger:ledger_bridge_generated",
-      "//brave/components/brave_wallet_ui/panel:brave_wallet_panel_generated",
-      "//brave/components/brave_wallet_ui/trezor:trezor_bridge_generated",
       "//brave/components/commands/browser",
       "//brave/components/resources:strings_grit",
       "//components/permissions",
       "//components/pref_registry",
       "//mojo/public/cpp/bindings",
-    ]
-  }
-  if (is_android) {
-    sources += [
-      "webui/brave_wallet/android/android_wallet_page_handler.cc",
-      "webui/brave_wallet/android/android_wallet_page_handler.h",
-      "webui/brave_wallet/android/android_wallet_page_ui.cc",
-      "webui/brave_wallet/android/android_wallet_page_ui.h",
-      "webui/brave_wallet/common_handler/wallet_handler.cc",
-      "webui/brave_wallet/common_handler/wallet_handler.h",
-      "webui/brave_wallet/page_handler/wallet_page_handler.cc",
-      "webui/brave_wallet/page_handler/wallet_page_handler.h",
-      "webui/brave_wallet/wallet_common_ui.cc",
-      "webui/brave_wallet/wallet_common_ui.h",
-    ]
-    deps += [
-      "//brave/browser/brave_wallet",
-      "//brave/browser/ui/webui/brave_wallet/common_handler",
-      "//brave/components/brave_wallet/browser:hd_keyring",
-      "//brave/components/brave_wallet/common",
-      "//brave/components/brave_wallet/common:mojom",
-      "//brave/components/brave_wallet_ui:resources",
-      "//brave/components/brave_wallet_ui/page/screens/android-buy/android:brave_wallet_fund_wallet_page_generated",
-      "//brave/components/brave_wallet_ui/page/screens/fund-wallet/android:brave_wallet_deposit_page_generated",
-      "//brave/components/brave_wallet_ui/page/screens/send/android:brave_wallet_send_page_generated",
-      "//brave/components/brave_wallet_ui/page/screens/swap/android:brave_wallet_swap_page_generated",
-    ]
-  }
-
-  if (ethereum_remote_client_enabled && !is_android) {
-    sources += [
-      "webui/ethereum_remote_client/ethereum_remote_client_ui.cc",
-      "webui/ethereum_remote_client/ethereum_remote_client_ui.h",
-    ]
-    deps += [
-      "//brave/browser/ethereum_remote_client",
-      "//brave/browser/ui/webui/ethereum_remote_client:ethereum_remote_client_page_generated",
     ]
   }
 
@@ -1392,23 +1247,6 @@ source_set("brave_tab_features") {
     "tabs/features.h",
   ]
   deps = [ "//base" ]
-}
-
-source_set("brave_rewards_source") {
-  sources = [
-    "webui/brave_rewards_source.cc",
-    "webui/brave_rewards_source.h",
-  ]
-
-  deps = [
-    "//base",
-    "//chrome/browser/bitmap_fetcher",
-    "//chrome/browser/profiles",
-    "//content/public/browser",
-    "//skia",
-    "//ui/gfx/codec",
-    "//url",
-  ]
 }
 
 source_set("unit_tests") {

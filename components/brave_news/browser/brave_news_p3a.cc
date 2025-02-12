@@ -15,7 +15,6 @@
 #include "brave/components/brave_news/browser/brave_news_pref_manager.h"
 #include "brave/components/brave_news/common/p3a_pref_names.h"
 #include "brave/components/brave_news/common/subscriptions_snapshot.h"
-#include "brave/components/brave_rewards/core/pref_names.h"
 #include "brave/components/p3a_utils/bucket.h"
 #include "brave/components/p3a_utils/feature_usage.h"
 #include "brave/components/time_period_storage/weekly_storage.h"
@@ -83,10 +82,6 @@ void NewsMetrics::RecordWeeklyDisplayAdsViewedCount(bool is_add) {
       prefs::kBraveNewsWeeklyDisplayAdViewedCount, is_add);
   const char* histogram_name = kNonRewardsAdsViewsHistogramName;
   const char* disabled_histogram_name = kRewardsAdsViewsHistogramName;
-  if (prefs_->GetBoolean(brave_rewards::prefs::kEnabled)) {
-    histogram_name = kRewardsAdsViewsHistogramName;
-    disabled_histogram_name = kNonRewardsAdsViewsHistogramName;
-  }
   p3a_utils::RecordToHistogramBucket(histogram_name, kBuckets, total);
   base::UmaHistogramExactLinear(disabled_histogram_name, INT_MAX - 1, 8);
 }

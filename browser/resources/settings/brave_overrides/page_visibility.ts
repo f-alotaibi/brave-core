@@ -37,9 +37,6 @@ function getPageVisibility () {
       braveSync: false,
       getStarted: false,
       newTab: false,
-      braveWallet: false,
-      braveWeb3: false,
-      leoAssistant: false,
       content: false,
       playlist: false,
       speedreader: false,
@@ -65,7 +62,6 @@ function getPageVisibility () {
     privacy: alwaysTrueProxy,
     // custom properties
     braveSync: !loadTimeData.getBoolean('isSyncDisabled'),
-    braveWallet: loadTimeData.getBoolean('isBraveWalletAllowed'),
     content: alwaysTrueProxy,
     playlist: loadTimeData.getBoolean('isPlaylistAllowed'),
     speedreader: loadTimeData.getBoolean('isSpeedreaderFeatureEnabled'),

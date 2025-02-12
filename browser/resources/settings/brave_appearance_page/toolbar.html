@@ -63,20 +63,6 @@
     label="$i18n{appearanceSettingsShowLeoButtonLabel}">
   </settings-toggle-button>
 </template>
-<template is="dom-if" if="[[isBraveRewardsSupported_()]]">
-  <settings-toggle-button
-    class="cr-row"
-    label="$i18n{braveRewardsShowBraveRewardsButtonLabel}"
-    pref="{{prefs.brave.rewards.show_brave_rewards_button_in_location_bar}}">
-  </settings-toggle-button>
-</template>
-<template is="dom-if" if="[[isNativeWalletEnabled_]]" restamp>
-  <settings-toggle-button id="showBraveWalletIconOnToolbar"
-    class="cr-row"
-    pref="{{prefs.brave.wallet.show_wallet_icon_on_toolbar}}"
-    label="$i18n{showBravewalletIconOnToolbar}">
-  </settings-toggle-button>
-</template>
 <settings-toggle-button
   class="cr-row"
   pref="{{prefs.brave.show_side_panel_button}}"

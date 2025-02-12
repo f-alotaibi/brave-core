@@ -10,8 +10,7 @@ import CardSmall from './cards/_articles/cardArticleMedium'
 import CategoryGroup from './cards/categoryGroup'
 import PublisherGroup from './cards/publisherGroup'
 import CardDeals from './cards/cardDeals'
-import CardDisplayAd from './cards/displayAd'
-import { attributeNameCardCount, GetDisplayAdContent, OnPromotedItemViewed, OnReadFeedItem, OnSetPublisherPref, OnViewedDisplayAd, OnVisitDisplayAd } from './'
+import { attributeNameCardCount, OnPromotedItemViewed, OnReadFeedItem, OnSetPublisherPref, OnViewedDisplayAd, OnVisitDisplayAd } from './'
 
 import CardType = BraveNews.CardType
 
@@ -30,7 +29,6 @@ type Props = {
   onPromotedItemViewed: OnPromotedItemViewed
   onVisitDisplayAd: OnVisitDisplayAd
   onViewedDisplayAd: OnViewedDisplayAd
-  getDisplayAdContent: GetDisplayAdContent
 }
 
 function getCard (props: Props, content: BraveNews.FeedPageItem) {
@@ -91,13 +89,6 @@ function getCard (props: Props, content: BraveNews.FeedPageItem) {
         content={content.items}
         onReadFeedItem={props.onReadFeedItem}
         articleToScrollTo={props.articleToScrollTo}
-      />
-    case CardType.DISPLAY_AD:
-      return <CardDisplayAd
-        shouldScrollIntoView={props.shouldScrollToDisplayAd}
-        onViewedDisplayAd={props.onViewedDisplayAd}
-        onVisitDisplayAd={props.onVisitDisplayAd}
-        getContent={props.getDisplayAdContent}
       />
   }
   console.error('Asked to create unknown card type', content.cardType)

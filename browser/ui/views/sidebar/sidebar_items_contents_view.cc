@@ -528,8 +528,6 @@ ui::ImageModel SidebarItemsContentsView::GetImageForBuiltInItems(
   };
 
   switch (type) {
-    case sidebar::SidebarItem::BuiltInItemType::kWallet:
-      return get_image_model(kLeoProductBraveWalletIcon, state);
     case sidebar::SidebarItem::BuiltInItemType::kBookmarks:
       return get_image_model(kLeoProductBookmarksIcon, state);
     case sidebar::SidebarItem::BuiltInItemType::kReadingList:

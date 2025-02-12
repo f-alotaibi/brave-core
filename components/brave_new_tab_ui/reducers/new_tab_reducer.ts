@@ -19,7 +19,6 @@ import { setMostVisitedSettings } from '../api/topSites'
 
 // Utils
 import { handleWidgetPrefsChange } from './stack_widget_reducer'
-import { NewTabAdsData } from '../api/newTabAdsData'
 import { Background, CustomBackground } from '../api/background'
 
 let sideEffectState: NewTab.State = storage.load()
@@ -41,7 +40,6 @@ export const newTabReducer: Reducer<NewTab.State | undefined> = (state: NewTab.S
         initialDataLoaded: true,
         ...initialDataPayload.preferences,
         stats: initialDataPayload.stats,
-        braveRewardsSupported: initialDataPayload.braveRewardsSupported,
         searchPromotionEnabled: initialDataPayload.searchPromotionEnabled,
         customImageBackgrounds: initialDataPayload.customImageBackgrounds
       }
@@ -69,7 +67,6 @@ export const newTabReducer: Reducer<NewTab.State | undefined> = (state: NewTab.S
         // Update feature flag if this is super referral wallpaper.
         state = {
           ...state,
-          featureFlagBraveNTPSponsoredImagesWallpaper: false
         }
       }
       // Set default if we can't get both.
@@ -162,8 +159,6 @@ export const newTabReducer: Reducer<NewTab.State | undefined> = (state: NewTab.S
       break
 
     case types.NEW_TAB_ADS_DATA_UPDATED:
-      const newTabAdsData = payload as NewTabAdsData
-      state.rewardsState.needsBrowserUpgradeToServeAds = newTabAdsData.needsBrowserUpgradeToServeAds
       break
 
     case types.NEW_TAB_DISMISS_BRANDED_WALLPAPER_NOTIFICATION:

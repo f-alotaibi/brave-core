@@ -27,7 +27,6 @@ export type OnSetPublisherPref = (publisherId: string, enabled: boolean) => any
 export type OnPromotedItemViewed = (args: TodayActions.PromotedItemViewedPayload) => any
 export type OnVisitDisplayAd = (args: TodayActions.VisitDisplayAdPayload) => any
 export type OnViewedDisplayAd = (args: TodayActions.DisplayAdViewedPayload) => any
-export type GetDisplayAdContent = BraveNews.BraveNewsControllerRemote['getDisplayAd']
 
 export type Props = {
   isFetching: boolean
@@ -49,7 +48,6 @@ export type Props = {
   onCustomizeBraveNews: () => any
   onRefresh: () => any
   onCheckForUpdate: () => any
-  getDisplayAd: GetDisplayAdContent
 }
 
 type PossibleInteractionObserver = IntersectionObserver | undefined

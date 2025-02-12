@@ -8,16 +8,11 @@
 #include <string>
 
 #include "brave/browser/brave_shields/brave_shields_web_contents_observer.h"
-#include "brave/browser/ethereum_remote_client/buildflags/buildflags.h"
 #include "brave/browser/new_tab/new_tab_shows_options.h"
 #include "brave/browser/themes/brave_dark_mode_utils.h"
 #include "brave/browser/translate/brave_translate_prefs_migration.h"
 #include "brave/browser/ui/bookmark/brave_bookmark_prefs.h"
 #include "brave/browser/ui/omnibox/brave_omnibox_client_impl.h"
-#include "brave/components/brave_adaptive_captcha/brave_adaptive_captcha_service.h"
-#include "brave/components/brave_ads/browser/analytics/p2a/p2a.h"
-#include "brave/components/brave_ads/core/public/prefs/obsolete_pref_util.h"
-#include "brave/components/brave_ads/core/public/prefs/pref_registry.h"
 #include "brave/components/brave_news/browser/brave_news_controller.h"
 #include "brave/components/brave_news/browser/brave_news_p3a.h"
 #include "brave/components/brave_news/browser/brave_news_pref_manager.h"
@@ -25,8 +20,6 @@
 #include "brave/components/brave_news/common/pref_names.h"
 #include "brave/components/brave_perf_predictor/browser/p3a_bandwidth_savings_tracker.h"
 #include "brave/components/brave_perf_predictor/browser/perf_predictor_tab_helper.h"
-#include "brave/components/brave_rewards/core/pref_names.h"
-#include "brave/components/brave_rewards/core/pref_registry.h"
 #include "brave/components/brave_search/browser/brave_search_default_host.h"
 #include "brave/components/brave_search/common/brave_search_utils.h"
 #include "brave/components/brave_search_conversion/utils.h"
@@ -35,7 +28,6 @@
 #include "brave/components/brave_shields/core/common/pref_names.h"
 #include "brave/components/brave_sync/brave_sync_prefs.h"
 #include "brave/components/brave_vpn/common/buildflags/buildflags.h"
-#include "brave/components/brave_wallet/browser/brave_wallet_prefs.h"
 #include "brave/components/brave_wayback_machine/buildflags/buildflags.h"
 #include "brave/components/brave_webtorrent/browser/buildflags/buildflags.h"
 #include "brave/components/constants/pref_names.h"
@@ -79,11 +71,6 @@
 
 #if BUILDFLAG(ENABLE_BRAVE_WAYBACK_MACHINE)
 #include "brave/components/brave_wayback_machine/pref_names.h"
-#endif
-
-#if BUILDFLAG(ETHEREUM_REMOTE_CLIENT_ENABLED)
-#include "brave/browser/ethereum_remote_client/ethereum_remote_client_constants.h"
-#include "brave/browser/ethereum_remote_client/pref_names.h"
 #endif
 
 #if !BUILDFLAG(USE_GCM_FROM_PLATFORM)
@@ -141,8 +128,6 @@ void RegisterProfilePrefsForMigration(
   // Added 10/2022
   registry->RegisterIntegerPref(kDefaultBrowserLaunchingCount, 0);
 #endif
-  brave_wallet::RegisterProfilePrefsForMigration(registry);
-
   // Restore "Other Bookmarks" migration
   registry->RegisterBooleanPref(kOtherBookmarksMigrated, false);
 
@@ -177,10 +162,6 @@ void RegisterProfilePrefsForMigration(
 #endif
 
   // Added Feb 2023
-  registry->RegisterBooleanPref(brave_rewards::prefs::kShowButton, true);
-
-  brave_rewards::RegisterProfilePrefsForMigration(registry);
-
   brave_news::p3a::prefs::RegisterProfileNewsMetricsPrefsForMigration(registry);
 
   // Added May 2023
@@ -195,9 +176,6 @@ void RegisterProfilePrefsForMigration(
 
   // Added 2023-11
   brave_sync::Prefs::RegisterProfilePrefsForMigration(registry);
-
-  // Added 2023-11
-  brave_ads::RegisterProfilePrefsForMigration(registry);
 
   // Added 2024-04
   brave_shields::RegisterShieldsP3AProfilePrefsForMigration(registry);
@@ -267,9 +245,6 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
 #if BUILDFLAG(ENABLE_BRAVE_WAYBACK_MACHINE)
   registry->RegisterBooleanPref(kBraveWaybackMachineEnabled, true);
 #endif
-
-  brave_adaptive_captcha::BraveAdaptiveCaptchaService::RegisterProfilePrefs(
-      registry);
 
 #if BUILDFLAG(IS_ANDROID)
   registry->RegisterBooleanPref(kDesktopModeEnabled, false);
@@ -381,16 +356,6 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
   NTPBackgroundPrefs::RegisterPref(registry);
 #endif
 
-#if BUILDFLAG(ETHEREUM_REMOTE_CLIENT_ENABLED)
-  registry->RegisterIntegerPref(kERCPrefVersion, 0);
-  registry->RegisterStringPref(kERCAES256GCMSivNonce, "");
-  registry->RegisterStringPref(kERCEncryptedSeed, "");
-  registry->RegisterBooleanPref(kERCOptedIntoCryptoWallets, false);
-#endif
-
-  // Brave Wallet
-  brave_wallet::RegisterProfilePrefs(registry);
-
   // Brave Search
   if (brave_search::IsDefaultAPIEnabled()) {
     brave_search::BraveSearchDefaultHost::RegisterProfilePrefs(registry);
@@ -443,7 +408,6 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
 
 #if !BUILDFLAG(IS_ANDROID)
   BraveOmniboxClientImpl::RegisterProfilePrefs(registry);
-  brave_ads::RegisterP2APrefs(registry);
 
   // Turn on most visited mode on NTP by default.
   // We can turn customization mode on when we have add-shortcut feature.
@@ -481,9 +445,6 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
 #if defined(TOOLKIT_VIEWS)
   bookmarks::prefs::RegisterProfilePrefs(registry);
 #endif
-
-  brave_ads::RegisterProfilePrefs(registry);
-  brave_rewards::RegisterProfilePrefs(registry);
 
   registry->SetDefaultPrefValue(prefs::kSearchSuggestEnabled,
                                 base::Value(false));

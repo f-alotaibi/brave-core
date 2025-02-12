@@ -7,7 +7,6 @@ export * from './settings'
 import { AddSiteTile, Tile, TileActionsContainer, TileAction, TileImageContainer, TileFavicon, TileMenu, TileMenuItem, TileTitle } from './gridSites'
 import { SiteRemovalNotification, SiteRemovalText, SiteRemovalAction } from './notification'
 import { Clock } from './clock'
-import { RewardsWidget } from './rewards'
 import { VPNWidget } from './vpn'
 import EditTopSite from './editTopSite'
 import SearchPromotion from './searchPromotion'
@@ -31,7 +30,6 @@ export {
   SiteRemovalText,
   SiteRemovalAction,
   Clock,
-  RewardsWidget,
   VPNWidget,
   createWidget,
   EditTopSite,

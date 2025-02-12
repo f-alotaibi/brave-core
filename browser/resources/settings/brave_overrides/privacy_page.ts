@@ -209,12 +209,6 @@ RegisterPolymerTemplateModifications({
         InsertLocalhostAccessSubpage(pages)
       }
       InsertAutoplaySubpage(pages)
-      const isNativeBraveWalletEnabled =
-        loadTimeData.getBoolean('isNativeBraveWalletFeatureEnabled')
-      if (isNativeBraveWalletEnabled) {
-        InsertEthereumSubpage(pages)
-        InsertSolanaSubpage(pages)
-      }
       InsertShieldsSubpage(pages)
       const permissionsLinkRow =
         templateContent.getElementById('permissionsLinkRow')

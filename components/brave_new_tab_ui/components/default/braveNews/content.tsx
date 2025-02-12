@@ -13,7 +13,6 @@ import CardLarge from './cards/_articles/cardArticleLarge'
 import CardError from './cards/cardError'
 import CardLoading from './cards/cardLoading'
 import CardNoContent from './cards/cardNoContent'
-import CardDisplayAd from './cards/displayAd'
 import CardsGroup from './cardsGroup'
 import Customize from './options/customize'
 import Refresh from './options/refresh'
@@ -200,12 +199,7 @@ export default function BraveNewsContent (props: Props) {
       {!isOnlyDisplayingPeekingCard &&
         <>
           <>
-            <CardDisplayAd
-              onVisitDisplayAd={props.onVisitDisplayAd}
-              onViewedDisplayAd={props.onViewedDisplayAd}
-              getContent={props.getDisplayAd}
-            />
-            <div {...{ [attributeNameCardCount]: introCount }} ref={registerCardCountTriggerElement} />
+           <div {...{ [attributeNameCardCount]: introCount }} ref={registerCardCountTriggerElement} />
           </>
           {
             /* Infinitely repeating collections of content. */
@@ -227,7 +221,6 @@ export default function BraveNewsContent (props: Props) {
                   onPromotedItemViewed={props.onPromotedItemViewed}
                   onVisitDisplayAd={props.onVisitDisplayAd}
                   onViewedDisplayAd={props.onViewedDisplayAd}
-                  getDisplayAdContent={props.getDisplayAd}
                 />
               )
             })

@@ -43,9 +43,7 @@ static_library("browser") {
 
   deps = [
     "//base",
-    "//brave/components/brave_ads/core",
     "//brave/components/brave_component_updater/browser",
-    "//brave/components/brave_rewards/core",
     "//brave/components/l10n/common",
     "//brave/components/ntp_background_images/buildflags",
     "//brave/components/ntp_background_images/common",
@@ -66,8 +64,6 @@ static_library("browser") {
     deps += [ "//brave/extensions:common" ]
   } else {
     deps += [
-      "//brave/components/brave_ads/browser",
-      "//brave/components/brave_referrals/browser",
       "//content/public/browser",
       "//content/public/common",
     ]

@@ -131,8 +131,6 @@ SidePanelEntryId SidePanelIdFromSideBarItemType(BuiltInItemType type) {
       return SidePanelEntryId::kPlaylist;
     case BuiltInItemType::kChatUI:
       return SidePanelEntryId::kChatUI;
-    case BuiltInItemType::kWallet:
-      [[fallthrough]];
     case BuiltInItemType::kHistory:
       [[fallthrough]];
     case BuiltInItemType::kNone:

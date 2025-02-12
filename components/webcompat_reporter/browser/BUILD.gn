@@ -40,7 +40,6 @@ static_library("browser") {
   if (!is_ios) {
     deps += [
       "//brave/common",
-      "//brave/components/brave_referrals/browser",
       "//brave/components/brave_shields/content/browser",
     ]
   }

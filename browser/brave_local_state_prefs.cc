@@ -8,7 +8,6 @@
 #include <string>
 
 #include "base/values.h"
-#include "brave/browser/brave_ads/analytics/p3a/brave_stats_helper.h"
 #include "brave/browser/brave_stats/brave_stats_updater.h"
 #include "brave/browser/metrics/buildflags/buildflags.h"
 #include "brave/browser/metrics/metrics_reporting_util.h"
@@ -18,12 +17,10 @@
 #include "brave/browser/playlist/playlist_service_factory.h"
 #include "brave/browser/search_engines/search_engine_tracker.h"
 #include "brave/browser/themes/brave_dark_mode_utils.h"
-#include "brave/components/brave_referrals/browser/brave_referrals_service.h"
 #include "brave/components/brave_search_conversion/p3a.h"
 #include "brave/components/brave_shields/content/browser/ad_block_service.h"
 #include "brave/components/brave_shields/content/browser/brave_shields_p3a.h"
 #include "brave/components/brave_vpn/common/buildflags/buildflags.h"
-#include "brave/components/brave_wallet/browser/brave_wallet_prefs.h"
 #include "brave/components/constants/pref_names.h"
 #include "brave/components/decentralized_dns/core/utils.h"
 #include "brave/components/l10n/common/prefs.h"
@@ -86,7 +83,6 @@ void RegisterLocalStatePrefsForMigration(PrefRegistrySimple* registry) {
 #endif
 
   misc_metrics::UptimeMonitor::RegisterPrefsForMigration(registry);
-  brave_wallet::RegisterLocalStatePrefsForMigration(registry);
   brave_search_conversion::p3a::RegisterLocalStatePrefsForMigration(registry);
   brave_stats::RegisterLocalStatePrefsForMigration(registry);
   p3a::StarRandomnessMeta::RegisterPrefsForMigration(registry);
@@ -98,7 +94,6 @@ void RegisterLocalStatePrefs(PrefRegistrySimple* registry) {
   ntp_background_images::NTPBackgroundImagesService::RegisterLocalStatePrefs(
       registry);
   ntp_background_images::ViewCounterService::RegisterLocalStatePrefs(registry);
-  RegisterPrefsForBraveReferralsService(registry);
   brave_l10n::RegisterL10nLocalStatePrefs(registry);
 #if BUILDFLAG(IS_MAC)
   // Turn off super annoying 'Hold to quit'
@@ -163,13 +158,8 @@ void RegisterLocalStatePrefs(PrefRegistrySimple* registry) {
 
   registry->RegisterStringPref(::prefs::kBraveVpnDnsConfig, std::string());
 
-  ntp_background_images::NTPP3AHelperImpl::RegisterLocalStatePrefs(registry);
-
-  brave_wallet::RegisterLocalStatePrefs(registry);
-
   misc_metrics::ProcessMiscMetrics::RegisterPrefs(registry);
   misc_metrics::PageMetrics::RegisterPrefs(registry);
-  brave_ads::BraveStatsHelper::RegisterLocalStatePrefs(registry);
   misc_metrics::GeneralBrowserUsage::RegisterPrefs(registry);
 
   playlist::PlaylistServiceFactory::RegisterLocalStatePrefs(registry);

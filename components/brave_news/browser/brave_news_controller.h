@@ -38,10 +38,6 @@
 
 class PrefService;
 
-namespace brave_ads {
-class AdsService;
-}  // namespace brave_ads
-
 namespace favicon {
 class FaviconService;
 }
@@ -66,7 +62,6 @@ class BraveNewsController
   BraveNewsController(
       PrefService* prefs,
       favicon::FaviconService* favicon_service,
-      brave_ads::AdsService* ads_service,
       history::HistoryService* history_service,
       scoped_refptr<network::SharedURLLoaderFactory> url_loader_factory,
       std::unique_ptr<DirectFeedFetcher::Delegate>
@@ -131,21 +126,11 @@ class BraveNewsController
                         SetConfigurationCallback callback) override;
   void AddConfigurationListener(
       mojo::PendingRemote<mojom::ConfigurationListener> listener) override;
-  void GetDisplayAd(GetDisplayAdCallback callback) override;
   void OnInteractionSessionStarted() override;
 
   void OnNewCardsViewed(uint16_t card_views) override;
   void OnCardVisited(uint32_t depth) override;
   void OnSidebarFilterUsage() override;
-
-  void OnPromotedItemView(const std::string& item_id,
-                          const std::string& creative_instance_id) override;
-  void OnPromotedItemVisit(const std::string& item_id,
-                           const std::string& creative_instance_id) override;
-  void OnDisplayAdVisit(const std::string& item_id,
-                        const std::string& creative_instance_id) override;
-  void OnDisplayAdView(const std::string& item_id,
-                       const std::string& creative_instance_id) override;
 
   // mojom::BraveNewsInternals
   void GetVisitedSites(GetVisitedSitesCallback callback) override;
@@ -179,7 +164,6 @@ class BraveNewsController
   BackgroundHistoryQuerier MakeHistoryQuerier();
 
   raw_ptr<favicon::FaviconService> favicon_service_ = nullptr;
-  raw_ptr<brave_ads::AdsService> ads_service_ = nullptr;
   api_request_helper::APIRequestHelper api_request_helper_;
   brave_private_cdn::PrivateCDNRequestHelper private_cdn_request_helper_;
   raw_ptr<history::HistoryService> history_service_;

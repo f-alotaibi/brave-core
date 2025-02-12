@@ -167,7 +167,6 @@ program
   .option('--user_data_dir_name [base_name]', 'set user data directory base name to [base_name]')
   .option('--no_sandbox', 'disable the sandbox')
   .option('--disable_brave_extension', 'disable loading the Brave extension')
-  .option('--disable_brave_rewards_extension', 'disable loading the Brave Rewards extension')
   .option('--disable_pdfjs_extension', 'disable loading the PDFJS extension')
   .option('--disable_webtorrent_extension', 'disable loading the WebTorrent extension')
   .option('--ui_mode <ui_mode>', 'which built-in ui appearance mode to use', /^(dark|light)$/i)
@@ -176,7 +175,6 @@ program
   .option('--channel <target_channel>', 'target channel to start', /^(beta|dev|nightly|release)$/i, 'release')
   .option('--official_build <official_build>', 'force official build settings')
   // See https://github.com/brave/brave-browser/wiki/Rewards#flags for more information
-  .option('--rewards [options]', 'options for rewards')
   .option('--brave_ads_testing', 'ads testing')
   .option('--brave_ads_production', 'ads production')
   .option('--brave_ads_staging', 'ads staging')

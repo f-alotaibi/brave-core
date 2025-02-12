@@ -6,7 +6,6 @@
 #include <string>
 
 #include "base/containers/contains.h"
-#include "brave/components/brave_wallet/browser/permission_utils.h"
 
 #define BRAVE_PERMISSION_REQUEST_MANAGER_GET_REQUESTING_ORIGIN \
   if (!ShouldBeGrouppedInRequests(request))
@@ -25,12 +24,6 @@ bool PermissionRequestManager::ShouldGroupRequests(PermissionRequest* a,
   if (a->request_type() == RequestType::kBraveEthereum ||
       a->request_type() == RequestType::kBraveSolana) {
     if (a->request_type() == b->request_type() &&
-        brave_wallet::ParseRequestingOriginFromSubRequest(
-            a->request_type(), url::Origin::Create(a->requesting_origin()),
-            &origin_a, nullptr) &&
-        brave_wallet::ParseRequestingOriginFromSubRequest(
-            b->request_type(), url::Origin::Create(b->requesting_origin()),
-            &origin_b, nullptr) &&
         origin_a == origin_b) {
       return true;
     }

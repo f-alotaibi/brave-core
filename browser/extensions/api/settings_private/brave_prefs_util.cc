@@ -7,10 +7,8 @@
 
 #include "brave/browser/ui/tabs/brave_tab_prefs.h"
 #include "brave/components/brave_news/common/pref_names.h"
-#include "brave/components/brave_rewards/core/pref_names.h"
 #include "brave/components/brave_shields/core/common/pref_names.h"
 #include "brave/components/brave_vpn/common/buildflags/buildflags.h"
-#include "brave/components/brave_wallet/browser/pref_names.h"
 #include "brave/components/brave_wayback_machine/buildflags/buildflags.h"
 #include "brave/components/constants/pref_names.h"
 #include "brave/components/de_amp/common/pref_names.h"
@@ -104,12 +102,6 @@ const PrefsUtil::TypedPrefMap& BravePrefsUtil::GetAllowlistedKeys() {
 
   // Webcompat Reporter
   (*s_brave_allowlist)[webcompat_reporter::prefs::kContactInfoSaveFlagPrefs] =
-      settings_api::PrefType::kBoolean;
-
-  // Rewards/Ads prefs
-  (*s_brave_allowlist)[brave_rewards::prefs::kEnabled] =
-      settings_api::PrefType::kBoolean;
-  (*s_brave_allowlist)[brave_rewards::prefs::kShowLocationBarButton] =
       settings_api::PrefType::kBoolean;
 
   // Search engine prefs
@@ -224,26 +216,6 @@ const PrefsUtil::TypedPrefMap& BravePrefsUtil::GetAllowlistedKeys() {
   (*s_brave_allowlist)[kEnableClosingLastTab] =
       settings_api::PrefType::kBoolean;
   (*s_brave_allowlist)[kShowFullscreenReminder] =
-      settings_api::PrefType::kBoolean;
-
-  // Brave Wallet pref
-  (*s_brave_allowlist)[kBraveWalletSelectedNetworks] =
-      settings_api::PrefType::kDictionary;
-  (*s_brave_allowlist)[kDefaultEthereumWallet] =
-      settings_api::PrefType::kNumber;
-  (*s_brave_allowlist)[kDefaultSolanaWallet] = settings_api::PrefType::kNumber;
-  (*s_brave_allowlist)[kDefaultBaseCurrency] = settings_api::PrefType::kString;
-  (*s_brave_allowlist)[kDefaultBaseCryptocurrency] =
-      settings_api::PrefType::kString;
-  (*s_brave_allowlist)[kShowWalletIconOnToolbar] =
-      settings_api::PrefType::kBoolean;
-  (*s_brave_allowlist)[kBraveWalletAutoLockMinutes] =
-      settings_api::PrefType::kNumber;
-  (*s_brave_allowlist)[kBraveWalletTransactionSimulationOptInStatus] =
-      settings_api::PrefType::kNumber;
-  (*s_brave_allowlist)[kBraveWalletNftDiscoveryEnabled] =
-      settings_api::PrefType::kBoolean;
-  (*s_brave_allowlist)[kBraveWalletPrivateWindowsEnabled] =
       settings_api::PrefType::kBoolean;
 
 #if !BUILDFLAG(USE_GCM_FROM_PLATFORM)

@@ -24,7 +24,6 @@ class BraveEducationPageDelegateDesktop
   ~BraveEducationPageDelegateDesktop() override;
 
   void OpenURL(const GURL& url, WindowOpenDisposition disposition) override;
-  void OpenRewardsPanel() override;
   void OpenVPNPanel() override;
   void OpenAIChat() override;
 

@@ -25,10 +25,6 @@
 #include "brave/components/version_info/version_info.h"
 #include "components/prefs/pref_service.h"
 
-#if !BUILDFLAG(IS_IOS)
-#include "brave/components/brave_referrals/common/pref_names.h"
-#endif  // !BUILDFLAG(IS_IOS)
-
 namespace p3a {
 
 namespace {
@@ -326,11 +322,6 @@ void MessageMetainfo::InitVersion() {
 
 void MessageMetainfo::InitRef() {
   std::string referral_code;
-#if !BUILDFLAG(IS_IOS)
-  if (local_state_ && local_state_->HasPrefPath(kReferralPromoCode)) {
-    referral_code = local_state_->GetString(kReferralPromoCode);
-  }
-#endif  // !BUILDFLAG(IS_IOS)
   if (referral_code.empty()) {
     ref_ = kRefNone;
   } else if (referral_code.starts_with(kOrganicRefPrefix)) {

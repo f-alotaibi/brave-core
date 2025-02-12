@@ -43,7 +43,7 @@ function shouldShowBrandedWallpaperData(shouldShow: boolean): NewTab.BrandedWall
 function getWidgetStackOrder(firstWidget: string): NewTab.StackWidget[] {
   switch (firstWidget) {
     default:
-      return ['rewards']
+      return []
   }
 }
 
@@ -78,7 +78,6 @@ export const useNewTabData = (state: NewTab.State = defaultState) => {
     ),
     readabilityThreshold: number('Readability threshold', ColorUtil.getThresholdForReadability(), { range: true, min: 0, max: 10, step: 0.1 }),
     customLinksEnabled: boolean('CustomLinks Enabled?', false),
-    featureFlagBraveNTPSponsoredImagesWallpaper: true,
     featureCustomBackgroundEnabled: true,
     featureFlagBraveNewsPromptEnabled: true,
     featureFlagBraveNewsFeedV2Enabled: false,
@@ -90,8 +89,6 @@ export const useNewTabData = (state: NewTab.State = defaultState) => {
     showClock: boolean('Show clock?', true),
     clockFormat: select('Clock format?', ['', '12', '24'], ''),
     showTopSites: boolean('Show top sites?', true),
-    braveRewardsSupported: boolean('Brave Rewards supported?', true),
-    showRewards: boolean('Show rewards?', true),
     showSearchBox: boolean('Show search box', true),
     promptEnableSearchSuggestions: boolean('Prompt to enable search suggestions', true),
     searchSuggestionsEnabled: boolean('Search suggestions enabled', false),
@@ -104,7 +101,7 @@ export const useNewTabData = (state: NewTab.State = defaultState) => {
       httpsUpgradesStat: number('Number of HTTPS upgrades', 1337)
     },
     initialDataLoaded: true,
-    widgetStackOrder: getWidgetStackOrder(select('First widget', ['rewards'], 'rewards'))
+    widgetStackOrder: getWidgetStackOrder(select('First widget', [], undefined))
   }
 
   // On all updates, notify that the prefs might've changed. Listeners are

@@ -52,48 +52,8 @@
     "includes": [30320],
   },
   # This file is generated during the build.
-  "<(SHARED_INTERMEDIATE_DIR)/brave/web-ui-brave_rewards_panel/brave_rewards_panel.grd": {
-    "META": {"sizes": {"includes": [20]}},
-    "includes": [30330],
-  },
-  "brave/components/brave_rewards/resources/brave_rewards_static_resources.grd": {
-    "includes": [30350],
-  },
-  # This file is generated during the build.
-  "<(SHARED_INTERMEDIATE_DIR)/brave/web-ui-brave_rewards_page/brave_rewards_page.grd": {
-    "META": {"sizes": {"includes": [20]}},
-    "includes": [30360],
-  },
-  # This file is generated during the build.
-  "<(SHARED_INTERMEDIATE_DIR)/brave/web-ui-brave_rewards_internals/brave_rewards_internals.grd": {
-    "META": {"sizes": {"includes": [10]}},
-    "includes": [30380],
-  },
-  # This file is generated during the build.
-  "<(SHARED_INTERMEDIATE_DIR)/brave/web-ui-brave_rewards_tip/brave_rewards_tip.grd": {
-    "META": {"sizes": {"includes": [20]}},
-    "includes": [30390],
-  },
   "brave/components/resources/brave_components_strings.grd": {
     "messages": [30410],
-  },
-  "brave/components/brave_ads/resources/bat_ads_resources.grd": {
-    "includes": [33500]
-  },
-  # This file is generated during the build.
-  "<(SHARED_INTERMEDIATE_DIR)/brave/web-ui-brave_wallet_page/brave_wallet_page.grd": {
-    "META": {"sizes": {"includes": [200]}},
-    "includes": [33510],
-  },
-  # This file is generated during the build.
-  "<(SHARED_INTERMEDIATE_DIR)/brave/web-ui-ethereum_remote_client_page/ethereum_remote_client_page.grd": {
-    "META": {"sizes": {"includes": [10]}},
-    "includes": [33710],
-  },
-  # This file is generated during the build.
-  "<(SHARED_INTERMEDIATE_DIR)/brave/web-ui-brave_wallet_panel/brave_wallet_panel.grd": {
-    "META": {"sizes": {"includes": [200]}},
-    "includes": [33720],
   },
   "brave/components/brave_extension/extension/resources.grd": {
     "includes": [33920],
@@ -216,10 +176,6 @@
   "<(SHARED_INTERMEDIATE_DIR)/brave/web-ui-ai_rewriter_ui/ai_rewriter_ui.grd": {
     "META": {"sizes": {"includes": [10]}},
     "includes": [34640],
-  },
-  "<(SHARED_INTERMEDIATE_DIR)/brave/web-ui-rewards_page/rewards_page.grd": {
-    "META": {"sizes": {"includes": [50]}},
-    "includes": [34650],
   },
   "<(SHARED_INTERMEDIATE_DIR)/brave/web-ui-creator_detection/creator_detection.grd": {
     "META": {"sizes": {"includes": [10]}},

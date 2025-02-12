@@ -258,29 +258,20 @@ RegisterPolymerTemplateModifications({
 
     // Add privacy item
     const privacyEl = getMenuElement(templateContent, '/privacy')
-    if (privacyEl && shieldsEl) {
+     if (privacyEl && shieldsEl) {
       shieldsEl.insertAdjacentElement('afterend', privacyEl)
     }
 
-    // Add web3 item
-    const web3El = createMenuElement(
-      loadTimeData.getString('braveWeb3'),
-      '/web3',
-      'product-brave-wallet',
-      'wallet',
-    )
-    if (privacyEl && web3El) {
-      privacyEl.insertAdjacentElement('afterend', web3El)
-    }
-
-    // Add Sync item
+   // Add Sync item
     const syncEl = createMenuElement(
       loadTimeData.getString('braveSync'),
       '/braveSync',
       'product-sync',
       'braveSync',
     )
-    web3El.insertAdjacentElement('afterend', syncEl)
+    if (privacyEl && syncEl) {
+      privacyEl.insertAdjacentElement('afterend', syncEl)
+    }
 
     // Add search item
     const searchEl = getMenuElement(templateContent, '/search')

@@ -60,7 +60,6 @@
   "default_files_to_skip": [
     "\\.storybook/",
     "ios/brave-ios/Sources/Brave/Frontend/UserContent/UserScripts/Scripts_Dynamic/Scripts/Sandboxed/DarkReaderScript.js",
-    "components/brave_wallet/resources/solana_web3_script\\.js",
     "third_party/rust/",
     "tools/crates/",
     "win_build_output/",
@@ -100,14 +99,11 @@
     "CheckUniquePtrOnUpload": [
       "components/brave_sync/qr_code_data\\.cc",
       "components/brave_news/browser/direct_feed_controller\\.cc",
-      "components/brave_wallet/browser/tx_service\\.cc",
-      "components/brave_wallet/common/eth_sign_typed_data_helper\\.cc",
       "components/tor/tor_profile_service_impl\\.cc",
     ],
     "_CheckAndroidCrLogUsage": [
       "android/java/org/chromium/base/BraveCommandLineInitUtil\\.java",
       "android/java/org/chromium/chrome/browser/BraveAdaptiveCaptchaUtils\\.java",
-      "android/java/org/chromium/chrome/browser/crypto_wallet/fragments/EditVisibleAssetsBottomSheetDialogFragment\\.java",
       "android/java/org/chromium/chrome/browser/help/BraveHelpAndFeedbackLauncher\\.java",
       "android/java/org/chromium/chrome/browser/search_engines/settings/BraveSearchEngineAdapter\\.java",
       "android/java/org/chromium/chrome/browser/settings/BravePreferenceDialogFragment\\.java",
@@ -115,13 +111,6 @@
     ],
     "_CheckAndroidToastUsage": [
       "android/java/org/chromium/chrome/browser/brave_news/BraveNewsBottomSheetDialogFragment\\.java",
-      "android/java/org/chromium/chrome/browser/crypto_wallet/activities/AccountPrivateKeyActivity\\.java",
-      "android/java/org/chromium/chrome/browser/crypto_wallet/activities/NetworkSelectorActivity\\.java",
-      "android/java/org/chromium/chrome/browser/crypto_wallet/fragments/PortfolioFragment\\.java",
-      "android/java/org/chromium/chrome/browser/crypto_wallet/fragments/onboarding_fragments/BackupWalletFragment\\.java",
-      "android/java/org/chromium/chrome/browser/crypto_wallet/fragments/onboarding_fragments/SecurePasswordFragment\\.java",
-      "android/java/org/chromium/chrome/browser/crypto_wallet/fragments/onboarding_fragments/UnlockWalletFragment\\.java",
-      "android/java/org/chromium/chrome/browser/crypto_wallet/modal/BraveWalletPanel\\.java",
       "android/java/org/chromium/chrome/browser/rate/RateDialogFragment\\.java",
       "android/java/org/chromium/chrome/browser/settings/BraveStatsPreferences\\.java",
       "android/java/org/chromium/chrome/browser/settings/BraveSyncScreensPreference\\.java",
@@ -141,7 +130,6 @@
       "components/brave_search/renderer/brave_search_default_js_handler\\.h",
       "components/brave_search/renderer/brave_search_fallback_js_handler\\.h",
       "components/brave_search/renderer/brave_search_service_worker_holder\\.h",
-      "components/brave_wallet/renderer/js_ethereum_provider\\.h",
       "components/content_settings/renderer/brave_content_settings_agent_impl_autoplay_browsertest\\.cc",
       "components/cosmetic_filters/renderer/cosmetic_filters_js_handler\\.h",
       "components/speedreader/renderer/speedreader_js_handler\\.h",
@@ -153,7 +141,6 @@
       "test/data/speedreader/",
     ],
     "CheckStableMojomChanges": [
-      "components/brave_rewards/common/mojom/.*\\.mojom",
       "components/services/bat_rewards/public/interfaces/rewards_engine_factory\\.mojom",
     ]
   },
@@ -181,8 +168,6 @@
       "ios/browser/api/net/certificate_utility\\.mm",
     ],
     "/\\bstd::sto(i|l|ul|ll|ull)\\b": [
-      "components/brave_wallet/browser/rlp_encode_unittest\\.cc",
-      "components/brave_wallet/common/eth_address\\.cc",
       "utility/importer/chrome_importer\\.cc",
     ],
     "/\\busing namespace ": [

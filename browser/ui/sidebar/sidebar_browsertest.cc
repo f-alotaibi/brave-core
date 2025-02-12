@@ -397,33 +397,11 @@ IN_PROC_BROWSER_TEST_F(SidebarBrowserTest, WebTypePanelTest) {
   EXPECT_EQ(0, tab_model()->active_index());
   EXPECT_EQ(tab_model()->GetWebContentsAt(0)->GetVisibleURL(), iter->url);
 
-  // Activate second sidebar item(wallet) and check it's loaded at current tab.
-  iter = base::ranges::find(items, SidebarItem::BuiltInItemType::kWallet,
-                            &SidebarItem::built_in_item_type);
-  EXPECT_NE(items.end(), iter);
-  controller()->ActivateItemAt(std::distance(items.begin(), iter));
-  EXPECT_EQ(0, tab_model()->active_index());
-  EXPECT_EQ(tab_model()->GetWebContentsAt(0)->GetVisibleURL(), iter->url);
   // New tab is not created.
   EXPECT_EQ(2, tab_model()->count());
 }
 
 IN_PROC_BROWSER_TEST_F(SidebarBrowserTest, IterateBuiltInWebTypeTest) {
-  // Click builtin wallet item and it's loaded at current active tab.
-  const auto items = model()->GetAllSidebarItems();
-  const auto wallet_item_iter =
-      base::ranges::find(items, SidebarItem::BuiltInItemType::kWallet,
-                         &SidebarItem::built_in_item_type);
-  ASSERT_NE(wallet_item_iter, items.cend());
-  const int wallet_item_index = std::distance(items.cbegin(), wallet_item_iter);
-  auto wallet_item = model()->GetAllSidebarItems()[wallet_item_index];
-  EXPECT_FALSE(controller()->DoesBrowserHaveOpenedTabForItem(wallet_item));
-  SimulateSidebarItemClickAt(wallet_item_index);
-  EXPECT_TRUE(controller()->DoesBrowserHaveOpenedTabForItem(wallet_item));
-  EXPECT_EQ(0, tab_model()->active_index());
-  EXPECT_EQ(tab_model()->GetWebContentsAt(0)->GetVisibleURL().host(),
-            wallet_item.url.host());
-
   // Create NTP and click wallet item. Then wallet tab(index 0) is activated.
   ASSERT_TRUE(ui_test_utils::NavigateToURLWithDisposition(
       browser(), GURL("brave://newtab/"),
@@ -844,14 +822,6 @@ IN_PROC_BROWSER_TEST_F(SidebarBrowserTest,
                        OpenUnManagedPanelAfterDeletingDefaultWebTypeItem) {
   auto* panel_ui = browser()->GetFeatures().side_panel_ui();
   const auto items = model()->GetAllSidebarItems();
-  const auto wallet_item_iter =
-      base::ranges::find(items, SidebarItem::BuiltInItemType::kWallet,
-                         &SidebarItem::built_in_item_type);
-  ASSERT_NE(wallet_item_iter, items.cend());
-  const int wallet_item_index = std::distance(items.cbegin(), wallet_item_iter);
-  SidebarServiceFactory::GetForProfile(browser()->profile())
-      ->RemoveItemAt(wallet_item_index);
-  EXPECT_FALSE(!!model()->GetIndexOf(SidebarItem::BuiltInItemType::kWallet));
 
   // Test with upstream's side panel that runs only with chrome://new-tab-page.
   ASSERT_TRUE(

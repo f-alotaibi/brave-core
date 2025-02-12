@@ -33,8 +33,7 @@ GURL GetFavIconURL(const std::vector<blink::mojom::FaviconURLPtr>& candidates) {
 BraveDappPermissionPromptDialogController::
     BraveDappPermissionPromptDialogController(
         Delegate* delegate,
-        content::WebContents* web_contents,
-        brave_wallet::mojom::CoinType coin_type)
+        content::WebContents* web_contents)
     : delegate_(delegate), web_contents_(web_contents), coin_type_(coin_type) {}
 
 BraveDappPermissionPromptDialogController::

@@ -8,8 +8,6 @@
 #include "brave/browser/ui/webui/brave_browser_command/brave_browser_command_handler.h"
 
 #include "base/containers/contains.h"
-#include "brave/browser/brave_rewards/rewards_service_factory.h"
-#include "brave/browser/brave_wallet/brave_wallet_service_factory.h"
 #include "brave/components/brave_education/education_urls.h"
 #include "brave/components/brave_vpn/common/buildflags/buildflags.h"
 #include "brave/components/constants/webui_url_constants.h"
@@ -20,16 +18,6 @@
 #endif
 
 namespace {
-
-bool CanShowWalletOnboarding(Profile* profile) {
-  return brave_wallet::BraveWalletServiceFactory::GetServiceForContext(
-             profile) != nullptr;
-}
-
-bool CanShowRewardsOnboarding(Profile* profile) {
-  return brave_rewards::RewardsServiceFactory::GetForProfile(profile) !=
-         nullptr;
-}
 
 bool CanShowVPNBubble(Profile* profile) {
 #if BUILDFLAG(ENABLE_BRAVE_VPN)
@@ -65,12 +53,6 @@ void BraveBrowserCommandHandler::CanExecuteCommand(
 
   bool can_execute = false;
   switch (command_id) {
-    case brave_browser_command::mojom::Command::kOpenWalletOnboarding:
-      can_execute = CanShowWalletOnboarding(profile_);
-      break;
-    case brave_browser_command::mojom::Command::kOpenRewardsOnboarding:
-      can_execute = CanShowRewardsOnboarding(profile_);
-      break;
     case brave_browser_command::mojom::Command::kOpenVPNOnboarding:
       can_execute = CanShowVPNBubble(profile_);
       break;
@@ -90,13 +72,6 @@ void BraveBrowserCommandHandler::ExecuteCommand(
   }
 
   switch (command_id) {
-    case brave_browser_command::mojom::Command::kOpenWalletOnboarding:
-      delegate_->OpenURL(GURL(kBraveUIWalletURL),
-                         WindowOpenDisposition::NEW_FOREGROUND_TAB);
-      break;
-    case brave_browser_command::mojom::Command::kOpenRewardsOnboarding:
-      delegate_->OpenRewardsPanel();
-      break;
     case brave_browser_command::mojom::Command::kOpenVPNOnboarding:
 #if BUILDFLAG(ENABLE_BRAVE_VPN)
       delegate_->OpenVPNPanel();

@@ -1,6 +1,5 @@
 include_rules = [
   "+brave/components/brave_news/common/features.h",
-  "+brave/components/brave_rewards/core/features.h",
   "+brave/components/brave_search_conversion/features.h",
   "+brave/components/brave_shields/core/common/features.h",
   "+brave/components/brave_vpn/common/features.h",

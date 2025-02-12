@@ -30,7 +30,6 @@ class BraveBrowserCommandHandler
     virtual ~Delegate() = default;
     virtual void OpenURL(const GURL& url,
                          WindowOpenDisposition disposition) = 0;
-    virtual void OpenRewardsPanel() = 0;
     virtual void OpenVPNPanel() = 0;
     virtual void OpenAIChat() = 0;
   };

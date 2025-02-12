@@ -12,7 +12,6 @@ brave_browser_permissions_sources = [
 
 brave_browser_permissions_deps = [
   "//base",
-  "//brave/components/brave_wallet/browser:permission_utils",
   "//components/keyed_service/content",
   "//components/permissions",
 ]

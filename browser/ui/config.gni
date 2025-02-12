@@ -5,8 +5,7 @@
 
 import("//build/config/ui.gni")
 
-brave_ui_allow_circular_includes_from =
-    [ "//brave/browser/ui/webui/ads_internals" ]
+brave_ui_allow_circular_includes_from = []
 if (!is_android) {
   brave_ui_allow_circular_includes_from += [
     "//brave/browser/ui/webui/brave_education",

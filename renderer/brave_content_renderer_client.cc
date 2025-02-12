@@ -14,7 +14,6 @@
 #include "brave/components/brave_search/renderer/brave_search_render_frame_observer.h"
 #include "brave/components/brave_shields/core/common/features.h"
 #include "brave/components/brave_vpn/common/buildflags/buildflags.h"
-#include "brave/components/brave_wallet/common/features.h"
 #include "brave/components/cosmetic_filters/renderer/cosmetic_filters_js_render_frame_observer.h"
 #include "brave/components/playlist/common/buildflags/buildflags.h"
 #include "brave/components/safe_builtins/renderer/safe_builtins.h"
@@ -25,7 +24,6 @@
 #include "brave/components/web_discovery/buildflags/buildflags.h"
 #include "brave/renderer/brave_render_frame_observer.h"
 #include "brave/renderer/brave_render_thread_observer.h"
-#include "brave/renderer/brave_wallet/brave_wallet_render_frame_observer.h"
 #include "chrome/common/chrome_isolated_world_ids.h"
 #include "chrome/renderer/chrome_render_thread_observer.h"
 #include "chrome/renderer/process_state.h"
@@ -158,13 +156,6 @@ void BraveContentRendererClient::RenderFrameCreated(
 
     new cosmetic_filters::CosmeticFiltersJsRenderFrameObserver(
         render_frame, ISOLATED_WORLD_ID_BRAVE_INTERNAL, dynamic_params_closure);
-  }
-
-  if (base::FeatureList::IsEnabled(
-          brave_wallet::features::kNativeBraveWalletFeature)) {
-    new brave_wallet::BraveWalletRenderFrameObserver(
-        render_frame,
-        base::BindRepeating(&BraveRenderThreadObserver::GetDynamicParams));
   }
 
   new script_injector::ScriptInjectorRenderFrameObserver(render_frame);

@@ -6,21 +6,13 @@
 #ifndef BRAVE_BROWSER_UI_BRAVE_PAGES_H_
 #define BRAVE_BROWSER_UI_BRAVE_PAGES_H_
 
-#include "brave/components/brave_wallet/common/brave_wallet.mojom-forward.h"
-
 class Browser;
 
 namespace brave {
 
 void ShowBraveAdblock(Browser* browser);
 void ShowWebcompatReporter(Browser* browser);
-void ShowBraveRewards(Browser* browser);
-void ShowBraveWallet(Browser* browser);
-void ShowBraveWalletOnboarding(Browser* browser);
-void ShowBraveWalletAccountCreation(Browser* browser,
-                                    brave_wallet::mojom::CoinType coin_type);
 void ShowExtensionSettings(Browser* browser);
-void ShowWalletSettings(Browser* browser);
 void ShowSync(Browser* browser);
 void ShowBraveNewsConfigure(Browser* browser);
 void ShowShortcutsPage(Browser* browser);

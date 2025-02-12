@@ -23,7 +23,6 @@ static_library("browser") {
   deps = [
     "//base",
 
-    "//brave/components/brave_wallet/common",
     "//brave/components/constants:constants",
     "//brave/components/l10n/common",
     "//brave/components/resources:strings",

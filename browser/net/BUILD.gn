@@ -84,12 +84,7 @@ source_set("unit_tests") {
 
   deps = [
     "//brave/browser/net:geolocation",
-    "//brave/components/brave_ads/browser",
-    "//brave/components/brave_ads/browser:test_support",
-    "//brave/components/brave_ads/core",
     "//brave/components/brave_component_updater/browser",
-    "//brave/components/brave_rewards/core",
-    "//brave/components/brave_rewards/core:features",
     "//brave/components/brave_shields/content/browser",
     "//brave/components/brave_shields/content/test:test_support",
     "//brave/components/l10n/common:test_support",
@@ -112,7 +107,6 @@ source_set("unit_tests") {
 
     deps += [
       "//brave/browser/extensions",
-      "//brave/components/brave_referrals/browser",
     ]
   }
 }

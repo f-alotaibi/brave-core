@@ -18,9 +18,7 @@
 #include "brave/browser/ui/sidebar/sidebar_utils.h"
 #include "brave/browser/ui/tabs/features.h"
 #include "brave/browser/ui/tabs/split_view_browser_data.h"
-#include "brave/components/brave_rewards/core/rewards_util.h"
 #include "brave/components/brave_vpn/common/buildflags/buildflags.h"
-#include "brave/components/brave_wallet/common/common_utils.h"
 #include "brave/components/brave_wayback_machine/buildflags/buildflags.h"
 #include "brave/components/commander/common/buildflags/buildflags.h"
 #include "brave/components/commands/common/features.h"
@@ -208,12 +206,6 @@ void BraveBrowserCommandController::InitBraveCommandState() {
   if (!is_guest_session) {
     // If Rewards is not supported due to OFAC sanctions we still want to show
     // the menu item.
-    if (brave_rewards::IsSupported(browser_->profile()->GetPrefs())) {
-      UpdateCommandForBraveRewards();
-    }
-    if (brave_wallet::IsAllowed(browser_->profile()->GetPrefs())) {
-      UpdateCommandForBraveWallet();
-    }
     if (syncer::IsSyncAllowedByFlag()) {
       UpdateCommandForBraveSync();
     }
@@ -495,9 +487,6 @@ bool BraveBrowserCommandController::ExecuteBraveCommandWithDisposition(
       }
       NewIncognitoWindow(browser_->profile()->GetOriginalProfile());
       break;
-    case IDC_SHOW_BRAVE_REWARDS:
-      brave::ShowBraveRewards(&*browser_);
-      break;
     case IDC_SHOW_BRAVE_WEBCOMPAT_REPORTER:
       brave::ShowWebcompatReporter(&*browser_);
       break;
@@ -510,17 +499,8 @@ bool BraveBrowserCommandController::ExecuteBraveCommandWithDisposition(
     case IDC_SHOW_BRAVE_SYNC:
       brave::ShowSync(&*browser_);
       break;
-    case IDC_SHOW_BRAVE_WALLET:
-      brave::ShowBraveWallet(&*browser_);
-      break;
     case IDC_SPEEDREADER_ICON_ONCLICK:
       brave::MaybeDistillAndShowSpeedreaderBubble(&*browser_);
-      break;
-    case IDC_SHOW_BRAVE_WALLET_PANEL:
-      brave::ShowWalletBubble(&*browser_);
-      break;
-    case IDC_CLOSE_BRAVE_WALLET_PANEL:
-      brave::CloseWalletBubble(&*browser_);
       break;
     case IDC_SHOW_BRAVE_VPN_PANEL:
       brave::ShowBraveVPNBubble(&*browser_);

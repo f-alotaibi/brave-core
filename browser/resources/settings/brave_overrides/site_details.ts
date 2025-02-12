@@ -99,43 +99,6 @@ RegisterPolymerTemplateModifications({
         }
         curChild++
       }
-      const isNativeBraveWalletEnabled =
-        loadTimeData.getBoolean('isNativeBraveWalletFeatureEnabled')
-      if (isNativeBraveWalletEnabled) {
-        insertBefore(firstPermissionItem, html`<site-details-permission
-             category="[[contentSettingsTypesEnum_.ETHEREUM]]"
-             icon="ethereum-on">
-           </site-details-permission>`)
-        const ethereumSettings = templateContent.querySelector(
-          `div.list-frame > site-details-permission:nth-child(${curChild})`)
-        if (!ethereumSettings) {
-          console.error('[Settings] Couldn\'t find Ethereum settings')
-        } else {
-          ethereumSettings.setAttribute(
-            'label', loadTimeData.getString('siteSettingsEthereum'))
-        }
-        curChild++
-        insertBefore(firstPermissionItem, html`<site-details-permission
-             category="[[contentSettingsTypesEnum_.SOLANA]]"
-             icon="solana-on">
-           </site-details-permission>`)
-        const solanaSettings = templateContent.querySelector(
-          `div.list-frame > site-details-permission:nth-child(${curChild})`)
-        if (!solanaSettings) {
-          console.error('[Settings] Couldn\'t find Solana settings')
-        } else {
-          solanaSettings.setAttribute(
-            'label', loadTimeData.getString('siteSettingsSolana'))
-        }
-        const adPersonalization =
-          templateContent.querySelector('#adPersonalization')
-        if (!adPersonalization) {
-          console.error(
-            '[Settings] Could not find adPersonalization element to hide')
-        } else {
-          adPersonalization.remove()
-        }
-      }
     }
 
     // In Chromium, the VR and AR icons are the same but we want to have

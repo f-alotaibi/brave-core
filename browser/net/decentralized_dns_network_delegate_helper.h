@@ -12,7 +12,6 @@
 #include <vector>
 
 #include "brave/browser/net/url_context.h"
-#include "brave/components/brave_wallet/common/brave_wallet.mojom.h"
 #include "net/base/completion_once_callback.h"
 
 namespace decentralized_dns {
@@ -27,7 +26,6 @@ void OnBeforeURLRequest_UnstoppableDomainsRedirectWork(
     const brave::ResponseCallback& next_callback,
     std::shared_ptr<brave::BraveRequestInfo> ctx,
     const std::optional<GURL>& url,
-    brave_wallet::mojom::ProviderError error,
     const std::string& error_message);
 
 void OnBeforeURLRequest_EnsRedirectWork(
@@ -35,14 +33,12 @@ void OnBeforeURLRequest_EnsRedirectWork(
     std::shared_ptr<brave::BraveRequestInfo> ctx,
     const std::vector<uint8_t>& content_hash,
     bool require_offchain_consent,
-    brave_wallet::mojom::ProviderError error,
     const std::string& error_message);
 
 void OnBeforeURLRequest_SnsRedirectWork(
     const brave::ResponseCallback& next_callback,
     std::shared_ptr<brave::BraveRequestInfo> ctx,
     const std::optional<GURL>& url,
-    brave_wallet::mojom::SolanaProviderError error,
     const std::string& error_message);
 
 }  // namespace decentralized_dns

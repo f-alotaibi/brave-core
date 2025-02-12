@@ -20,7 +20,6 @@ import {
   ToggleCardsText
 } from '../../../components/default'
 import braveVPNBanner from './assets/brave-vpn.png'
-import rewardsBanner from './assets/braverewards.png'
 import Toggle from '@brave/leo/react/toggle'
 import Button from '@brave/leo/react/button'
 
@@ -41,9 +40,6 @@ const StyledButton = styled(Button) <{ float: boolean }>`
 `
 
 interface Props {
-  toggleShowRewards: () => void
-  showRewards: boolean
-  braveRewardsSupported: boolean
   toggleCards: (show: boolean) => void
   cardsHidden: boolean
 }
@@ -57,22 +53,10 @@ const ToggleButton = ({ on, toggleFunc, float }: { on: boolean, toggleFunc: any,
   </StyledButton>
 }
 
-function CardSettings({ toggleShowRewards, showRewards, braveRewardsSupported, toggleCards, cardsHidden }: Props) {
+function CardSettings({ toggleCards, cardsHidden }: Props) {
   const [showBraveVPN, saveShowBraveVPN] = useNewTabPref('showBraveVPN')
 
   return <StyledWidgetSettings>
-    {braveRewardsSupported && <SettingsWidget>
-      <StyledBannerImage src={rewardsBanner} />
-      <StyledSettingsInfo>
-        <StyledSettingsTitle>
-          {getLocale('braveRewardsTitle')}
-        </StyledSettingsTitle>
-        <StyledSettingsCopy>
-          {getLocale('rewardsWidgetDesc')}
-        </StyledSettingsCopy>
-      </StyledSettingsInfo>
-      <ToggleButton on={showRewards} toggleFunc={toggleShowRewards} />
-    </SettingsWidget>}
     {loadTimeData.getBoolean('vpnWidgetSupported') && <SettingsWidget>
       <StyledBannerImage src={braveVPNBanner} />
       <StyledSettingsInfo>

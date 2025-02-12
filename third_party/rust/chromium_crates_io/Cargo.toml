@@ -21,7 +21,6 @@ skus-cxx = "0.1"
 json-cxx = "1"
 filecoin-cxx = "1"
 brave-news-cxx = "1"
-brave_wallet = "1"
 adblock-cxx = { version = "1" }
 constellation-cxx = "0.1"
 challenge-bypass-ristretto-cxx = "1"
@@ -64,10 +63,6 @@ package = "filecoin-cxx"
 [patch.crates-io.brave-news-cxx_v1]
 path = "../../../components/brave_news/rust"
 package = "brave-news-cxx"
-
-[patch.crates-io.brave_wallet_v1]
-path = "../../../components/brave_wallet/rust"
-package = "brave_wallet"
 
 [patch.crates-io.adblock-cxx_v1]
 path = "../../../components/brave_shields/adblock/rs"
@@ -317,22 +312,6 @@ package = "windows-sys"
 path = "../../../../third_party/rust/chromium_crates_io/vendor/windows-targets-0.52.6"
 package = "windows-targets"
 
-[patch.crates-io.zcash_v1]
-path = "../../../components/brave_wallet/browser/zcash/rust"
-package = "zcash"
-
-[patch.crates-io.zcash_protocol_v0_1]
-path = "../../../components/brave_wallet/browser/zcash/rust/librustzcash/src/components/zcash_protocol"
-package = "zcash_protocol"
-
-[patch.crates-io.zcash_encoding_v0_2]
-path = "../../../components/brave_wallet/browser/zcash/rust/librustzcash/src/components/zcash_encoding"
-package = "zcash_encoding"
-
-[patch.crates-io.zcash_primitives_v0_15]
-path = "../../../components/brave_wallet/browser/zcash/rust/librustzcash/src/zcash_primitives"
-package = "zcash_primitives"
-
 [patch.crates-io.zerocopy_v0_7]
 path = "../../../../third_party/rust/chromium_crates_io/vendor/zerocopy-0.7.35"
 package = "zerocopy"
@@ -340,8 +319,3 @@ package = "zerocopy"
 [patch.crates-io.zerocopy_derive_v0_7]
 path = "../../../../third_party/rust/chromium_crates_io/vendor/zerocopy-derive-0.7.35"
 package = "zerocopy-derive"
-
-[patch.crates-io.zcash_client_backend_v0_12]
-path = "../../../components/brave_wallet/browser/zcash/rust/librustzcash/src/zcash_client_backend"
-package = "zcash_client_backend"
-

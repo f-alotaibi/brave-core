@@ -15,9 +15,7 @@
 #include "components/policy/policy_constants.h"
 
 #if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_LINUX)
-#include "brave/components/brave_rewards/core/pref_names.h"
 #include "brave/components/brave_sync/brave_sync_prefs.h"
-#include "brave/components/brave_wallet/common/pref_names.h"
 #endif
 
 #if BUILDFLAG(ENABLE_TOR)
@@ -36,10 +34,6 @@ namespace policy {
 
 inline constexpr PolicyToPreferenceMapEntry kBraveSimplePolicyMap[] = {
 #if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_LINUX)
-    {policy::key::kBraveRewardsDisabled,
-     brave_rewards::prefs::kDisabledByPolicy, base::Value::Type::BOOLEAN},
-    {policy::key::kBraveWalletDisabled, brave_wallet::prefs::kDisabledByPolicy,
-     base::Value::Type::BOOLEAN},
     {policy::key::kBraveShieldsDisabledForUrls,
      kManagedBraveShieldsDisabledForUrls, base::Value::Type::LIST},
     {policy::key::kBraveShieldsEnabledForUrls,

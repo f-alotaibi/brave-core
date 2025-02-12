@@ -13,7 +13,6 @@ source_set("browser_tests") {
     "digital_goods_api_browsertest.cc",
     "file_system_access_browsertest.cc",
     "font_browsertest.cc",
-    "js_ethereum_provider_browsertest.cc",
     "navigator_connection_attribute_browsertest.cc",
     "subresource_web_bundles_browsertest.cc",
   ]
@@ -22,10 +21,7 @@ source_set("browser_tests") {
 
   deps = [
     "//base/test:test_support",
-    "//brave/browser/brave_wallet",
     "//brave/common",
-    "//brave/components/brave_wallet/browser",
-    "//brave/components/brave_wallet/browser:utils",
     "//chrome/browser/profiles:profile",
     "//chrome/browser/ui",
     "//chrome/common",
@@ -38,7 +34,6 @@ source_set("browser_tests") {
 
   if (enable_extensions) {
     deps += [
-      "//brave/browser/ethereum_remote_client:ethereum_remote_client",
       "//chrome/browser/extensions",
       "//extensions:test_support",
       "//extensions/browser",

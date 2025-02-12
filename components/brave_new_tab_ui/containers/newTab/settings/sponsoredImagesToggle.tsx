@@ -18,11 +18,9 @@ import { getLocale } from '../../../../common/locale'
 
 interface Props {
   onChange: () => void
-  onEnableRewards: () => void
 
   checked: boolean
   disabled: boolean
-  rewardsEnabled: boolean
   isExternalWalletConnected: boolean
 }
 
@@ -140,66 +138,32 @@ const DescriptionBody = styled.div`
   line-height: 18px;
 `
 
-const EnableRewardsButton = styled.button`
-  height: 36px;
-  background: var(--interactive5);
-  border-radius: 1000px;
-  border-width: 0;
-  color: white;
-  cursor: pointer;
-  padding: 10px 20px;
-  font-family: var(--brave-font-family-non-serif);
-  font-weight: 600;
-  font-size: 12px;
-  line-height: 16px;
-  align-self: start;
-`
-
-function getInfoTooltipText (checked: boolean, rewardsEnabled: boolean) {
+function getInfoTooltipText (checked: boolean) {
   if (!checked) {
-    return rewardsEnabled
-      ? getLocale('sponsoredImageOffRewardsOnDescription')
-      : getLocale('sponsoredImageRewardsOffDescription')
+    return getLocale('sponsoredImageRewardsOffDescription')
   }
 
   return getLocale('sponsoredImageOnDescription')
 }
 
-function getDescriptionText (rewardsEnabled: boolean) {
-  if (!rewardsEnabled) {
-    return getLocale('sponsoredImageRewardsOffDescription')
-  }
-
-  return getLocale('sponsoredImageOnRewardsOnNoCustodianDescription')
-}
-
-function getButtonText (rewardsEnabled: boolean) {
-  if (!rewardsEnabled) {
-    return getLocale('sponsoredImageEnableRewards')
-  }
-
-  return getLocale('braveRewardsTitle')
+function getDescriptionText () {
+  return getLocale('sponsoredImageRewardsOffDescription')
 }
 
 export default function SponsoredImageToggle (
   {
-    onChange, onEnableRewards, checked, disabled, rewardsEnabled,
-    isExternalWalletConnected
+    onChange, checked, disabled
   }: Props) {
   // Info icon is shown when:
   // 1. SI toggle is off
   // 2. Rewards is enabled (with a custodian connected)
-  const showInfoIcon =
-    !disabled &&
-    (!checked || (rewardsEnabled && isExternalWalletConnected))
+  const showInfoIcon = !disabled && !checked
 
   // Description is shown when SI toggle is on and:
   // 1. Rewards is not enabled (to show the button to enable Rewards)
   // 2. Rewards custodian is not connected (to show the button to go to Rewards)
   const showDescription =
-    !disabled &&
-    checked &&
-    (!rewardsEnabled || !isExternalWalletConnected)
+    !disabled && checked
 
   return (
     <div>
@@ -217,7 +181,7 @@ export default function SponsoredImageToggle (
                       : getLocale('sponsoredImageNotEarningTitle')}
                   </InfoIconTooltipTitle>
                   <InfoIconTooltipBody>
-                    {getInfoTooltipText(checked, rewardsEnabled)}
+                    {getInfoTooltipText(checked)}
                   </InfoIconTooltipBody>
                 </InfoIconTooltip>
               </div>
@@ -234,12 +198,9 @@ export default function SponsoredImageToggle (
               {getLocale('sponsoredImageNotEarningTitle')}
             </DescriptionTitle>
             <DescriptionBody>
-              {getDescriptionText(rewardsEnabled)}
+              {getDescriptionText()}
             </DescriptionBody>
           </DescriptionRow>
-          <EnableRewardsButton onClick={onEnableRewards} title=''>
-            {getButtonText(rewardsEnabled)}
-          </EnableRewardsButton>
         </Container>
       }
     </div>

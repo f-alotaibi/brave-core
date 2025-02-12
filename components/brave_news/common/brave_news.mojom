@@ -327,7 +327,6 @@ interface BraveNewsController {
   SetConfiguration(Configuration configuration) => ();
   AddConfigurationListener(pending_remote<ConfigurationListener> listener);
 
-  GetDisplayAd() => (DisplayAd? ad);
   // Lets the browser know when a user begins viewing or scrolling
   // through Brave News, for statistics gathering purposes.
   OnInteractionSessionStarted();
@@ -336,8 +335,4 @@ interface BraveNewsController {
   OnCardVisited(uint32 depth);
   OnSidebarFilterUsage();
 
-  OnPromotedItemView(string item_id, string creative_instance_id);
-  OnPromotedItemVisit(string item_id, string creative_instance_id);
-  OnDisplayAdVisit(string item_id, string creative_instance_id);
-  OnDisplayAdView(string item_id, string creative_instance_id);
 };

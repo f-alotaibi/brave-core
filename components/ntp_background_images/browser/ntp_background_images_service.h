@@ -149,7 +149,6 @@ class NTPBackgroundImagesService {
   virtual void RegisterSponsoredImagesComponent();
   virtual void RegisterSuperReferralComponent();
   virtual void DownloadSuperReferralMappingTable();
-  virtual void MonitorReferralPromoCodeChange();
   virtual void UnRegisterSuperReferralComponent();
   virtual void MarkThisInstallIsNotSuperReferralForever();
 

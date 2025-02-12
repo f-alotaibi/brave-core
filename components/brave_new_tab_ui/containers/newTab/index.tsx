@@ -10,10 +10,10 @@ import getNTPBrowserAPI from '../../api/background'
 import { addNewTopSite, editTopSite } from '../../api/topSites'
 import { brandedWallpaperLogoClicked } from '../../api/wallpaper'
 import {
- Clock, EditTopSite, OverrideReadabilityColor, RewardsWidget as Rewards, SearchPromotion, VPNWidget
+ Clock, EditTopSite, OverrideReadabilityColor, SearchPromotion, VPNWidget
 } from '../../components/default'
 import BrandedWallpaperLogo from '../../components/default/brandedWallpaper/logo'
-import BraveNews, { GetDisplayAdContent } from '../../components/default/braveNews'
+import BraveNews from '../../components/default/braveNews'
 import FooterInfo from '../../components/default/footer/footer'
 import * as Page from '../../components/default/page'
 import TopSitesGrid from './gridSites'
@@ -41,9 +41,6 @@ import BraveNewsHint from '../../components/default/braveNews/hint'
 import SponsoredImageClickArea from '../../components/default/sponsoredImage/sponsoredImageClickArea'
 import GridWidget from './gridWidget'
 
-import Icon from '@brave/leo/react/icon'
-
-import * as style from './style'
 import { defaultState } from '../../storage/new_tab_storage'
 import { EngineContextProvider } from '../../components/search/EngineContext'
 
@@ -56,9 +53,7 @@ interface Props {
   todayData: BraveNewsState
   braveVPNData: BraveVPNState
   actions: NewTabActions
-  getBraveNewsDisplayAd: GetDisplayAdContent
   saveShowBackgroundImage: (value: boolean) => void
-  saveShowRewards: (value: boolean) => void
   saveBrandedWallpaperOptIn: (value: boolean) => void
   saveSetAllStackWidgets: (value: boolean) => void
   chooseNewCustomBackgroundImage: () => void
@@ -308,10 +303,6 @@ class NewTabPage extends React.Component<Props, State> {
     this.props.actions.setMostVisitedSettings(showTopSites, customLinksEnabled)
   }
 
-  toggleShowRewards = () => {
-    this.props.saveShowRewards(!this.props.newTabData.showRewards)
-  }
-
   disableBrandedWallpaper = () => {
     this.props.saveBrandedWallpaperOptIn(false)
   }
@@ -322,16 +313,8 @@ class NewTabPage extends React.Component<Props, State> {
     )
   }
 
-  startRewards = () => {
-    chrome.braveRewards.openRewardsPanel()
-  }
-
   dismissBrandedWallpaperNotification = (isUserAction: boolean) => {
     this.props.actions.dismissBrandedWallpaperNotification(isUserAction)
-  }
-
-  dismissNotification = (id: string) => {
-    this.props.actions.dismissNotification(id)
   }
 
   closeSettings = () => {
@@ -386,10 +369,6 @@ class NewTabPage extends React.Component<Props, State> {
     this.props.actions.setForegroundStackWidget(widget)
   }
 
-  learnMoreRewards = () => {
-    window.open('https://brave.com/brave-rewards/', '_blank', 'noopener')
-  }
-
   braveVPNSupported = loadTimeData.getBoolean('vpnWidgetSupported')
 
   getCryptoContent () {
@@ -399,16 +378,10 @@ class NewTabPage extends React.Component<Props, State> {
 
     const {
       widgetStackOrder,
-      braveRewardsSupported,
-      showRewards,
       showBraveVPN,
     } = this.props.newTabData
 
     const lookup: { [p: string]: { display: boolean, render: any } } = {
-      'rewards': {
-        display: braveRewardsSupported && showRewards,
-        render: this.renderRewardsWidget.bind(this)
-      },
       'braveVPN': {
         display: this.braveVPNSupported && showBraveVPN,
         render: this.renderBraveVPNWidget
@@ -439,13 +412,10 @@ class NewTabPage extends React.Component<Props, State> {
 
   allWidgetsHidden = () => {
     const {
-      braveRewardsSupported,
-      showRewards,
       showBraveVPN,
       hideAllWidgets
     } = this.props.newTabData
     return hideAllWidgets || [
-      braveRewardsSupported && showRewards,
       this.braveVPNSupported && showBraveVPN,
     ].every((widget: boolean) => !widget)
   }
@@ -488,68 +458,6 @@ class NewTabPage extends React.Component<Props, State> {
     // image under certain conditions. We no longer show that tooltip, and there
     // are currently no other "branded wallpaper notifications" defined.
     return null
-  }
-
-  renderRewardsWidget (showContent: boolean, position: number) {
-    const { rewardsState, showRewards, textDirection, braveRewardsSupported } = this.props.newTabData
-    if (!braveRewardsSupported || !showRewards) {
-      return null
-    }
-
-    const customMenuItems = [
-      {
-        label: 'rewardsOpenPanel',
-        renderIcon: () => {
-          return (
-            <style.rewardsMenuIcon>
-              <Icon name='product-bat-outline' />
-            </style.rewardsMenuIcon>
-          )
-        },
-        onClick: () => { chrome.braveRewards.openRewardsPanel() }
-      },
-      {
-        label: 'rewardsSettings',
-        renderIcon: () => {
-          return (
-            <style.rewardsMenuIcon>
-              <Icon name='settings' />
-            </style.rewardsMenuIcon>
-          )
-        },
-        onClick: () => { window.open('chrome://rewards', '_blank', 'noopener') }
-      }
-    ]
-
-    const onSelfCustodyInviteDismissed = () => {
-      chrome.braveRewards.dismissSelfCustodyInvite()
-    }
-
-    const onTosUpdateAccepted = () => {
-      chrome.braveRewards.acceptTermsOfServiceUpdate()
-    }
-
-    return (
-      <Rewards
-        {...rewardsState}
-        widgetTitle={getLocale('rewardsWidgetBraveRewards')}
-        onLearnMore={this.learnMoreRewards}
-        menuPosition={'left'}
-        isCardWidget
-        paddingType={'none'}
-        isForeground={showContent}
-        stackPosition={position}
-        textDirection={textDirection}
-        preventFocus={false}
-        hideWidget={this.toggleShowRewards}
-        showContent={showContent}
-        onShowContent={this.setForegroundStackWidget.bind(this, 'rewards')}
-        onDismissNotification={this.dismissNotification}
-        customMenuItems={customMenuItems}
-        onSelfCustodyInviteDismissed={onSelfCustodyInviteDismissed}
-        onTermsOfServiceUpdateAccepted={onTosUpdateAccepted}
-      />
-    )
   }
 
   renderBraveVPNWidget = (showContent: boolean, position: number) => {
@@ -730,7 +638,6 @@ class NewTabPage extends React.Component<Props, State> {
           onCheckForUpdate={this.props.actions.today.checkForUpdate}
           onViewedDisplayAd={this.props.actions.today.displayAdViewed}
           onVisitDisplayAd={this.props.actions.today.visitDisplayAd}
-          getDisplayAd={this.props.getBraveNewsDisplayAd}
         />
         }
         <Settings
@@ -742,7 +649,6 @@ class NewTabPage extends React.Component<Props, State> {
           toggleShowBackgroundImage={this.toggleShowBackgroundImage}
           toggleShowTopSites={this.toggleShowTopSites}
           setMostVisitedSettings={this.setMostVisitedSettings}
-          toggleBrandedWallpaperOptIn={this.toggleShowBrandedWallpaper}
           chooseNewCustomImageBackground={this.props.chooseNewCustomBackgroundImage}
           setCustomImageBackground={this.props.setCustomImageBackground}
           removeCustomImageBackground={this.props.removeCustomImageBackground}
@@ -751,15 +657,10 @@ class NewTabPage extends React.Component<Props, State> {
           showBackgroundImage={newTabData.showBackgroundImage}
           showTopSites={newTabData.showTopSites}
           customLinksEnabled={newTabData.customLinksEnabled}
-          showRewards={newTabData.showRewards}
-          braveRewardsSupported={newTabData.braveRewardsSupported}
-          brandedWallpaperOptIn={newTabData.brandedWallpaperOptIn}
           allowBackgroundCustomization={allowBackgroundCustomization}
-          toggleShowRewards={this.toggleShowRewards}
           cardsHidden={this.allWidgetsHidden()}
           toggleCards={this.props.saveSetAllStackWidgets}
           newTabData={this.props.newTabData}
-          onEnableRewards={this.startRewards}
         />
         {
           showEditTopSite

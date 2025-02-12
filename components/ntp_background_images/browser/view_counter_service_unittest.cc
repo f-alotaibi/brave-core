@@ -18,8 +18,6 @@
 #include "brave/components/brave_ads/core/public/ad_units/new_tab_page_ad/new_tab_page_ad_info.h"
 #include "brave/components/brave_referrals/browser/brave_referrals_service.h"
 #include "brave/components/brave_referrals/common/pref_names.h"
-#include "brave/components/brave_rewards/core/pref_names.h"
-#include "brave/components/brave_rewards/core/pref_registry.h"
 #include "brave/components/constants/pref_names.h"
 #include "brave/components/ntp_background_images/browser/features.h"
 #include "brave/components/ntp_background_images/browser/ntp_background_images_data.h"
@@ -151,7 +149,6 @@ class NTPBackgroundImagesViewCounterTest : public testing::Test {
     // Need ntp_sponsored_images prefs
     auto* registry = prefs()->registry();
     ViewCounterService::RegisterProfilePrefs(registry);
-    brave_rewards::RegisterProfilePrefs(registry);
     auto* local_registry = local_pref_.registry();
     brave::RegisterPrefsForBraveReferralsService(local_registry);
     NTPBackgroundImagesService::RegisterLocalStatePrefs(local_registry);
@@ -177,7 +174,6 @@ class NTPBackgroundImagesViewCounterTest : public testing::Test {
 #endif
 
     // Set referral service is properly initialized sr component is set.
-    local_pref_.SetBoolean(kReferralCheckedForPromoCodeFile, true);
     local_pref_.SetDict(prefs::kNewTabPageCachedSuperReferralComponentInfo,
                         base::Value::Dict());
   }
@@ -436,8 +432,6 @@ TEST_F(NTPBackgroundImagesViewCounterTest,
        GetSponsoredImageWallpaperAdsServiceDisabled) {
   InitBackgroundAndSponsoredImageWallpapers();
 
-  prefs()->SetBoolean(brave_rewards::prefs::kEnabled, false);
-
   EXPECT_CALL(ads_service_mock_, MaybeGetPrefetchedNewTabPageAdForDisplay())
       .Times(0);
   EXPECT_CALL(ads_service_mock_, PrefetchNewTabPageAd()).Times(0);
@@ -456,8 +450,6 @@ TEST_F(NTPBackgroundImagesViewCounterTest,
 
 TEST_F(NTPBackgroundImagesViewCounterTest, SponsoredImageAdFrequencyCapped) {
   InitBackgroundAndSponsoredImageWallpapers();
-
-  prefs()->SetBoolean(brave_rewards::prefs::kEnabled, true);
 
   EXPECT_CALL(ads_service_mock_, MaybeGetPrefetchedNewTabPageAdForDisplay())
       .WillOnce(Return(std::nullopt));
@@ -480,8 +472,6 @@ TEST_F(NTPBackgroundImagesViewCounterTest, SponsoredImageAdServed) {
 
   brave_ads::NewTabPageAdInfo ad_info = CreateNewTabPageAdInfo();
   EXPECT_TRUE(AdInfoMatchesSponsoredImage(ad_info, 0, 1));
-
-  prefs()->SetBoolean(brave_rewards::prefs::kEnabled, true);
 
   EXPECT_CALL(ads_service_mock_, MaybeGetPrefetchedNewTabPageAdForDisplay())
       .WillOnce(Return(ad_info));
@@ -509,8 +499,6 @@ TEST_F(NTPBackgroundImagesViewCounterTest, WrongSponsoredImageAdServed) {
   brave_ads::NewTabPageAdInfo ad_info = CreateNewTabPageAdInfo();
   ad_info.creative_instance_id = "wrong_creative_instance_id";
   EXPECT_FALSE(AdInfoMatchesSponsoredImage(ad_info, 0, 1));
-
-  prefs()->SetBoolean(brave_rewards::prefs::kEnabled, true);
 
   EXPECT_CALL(ads_service_mock_, MaybeGetPrefetchedNewTabPageAdForDisplay())
       .WillOnce(Return(ad_info));

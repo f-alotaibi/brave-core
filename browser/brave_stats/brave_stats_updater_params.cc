@@ -13,10 +13,7 @@
 #include "base/time/time.h"
 #include "brave/browser/brave_stats/features.h"
 #include "brave/browser/brave_stats/first_run_util.h"
-#include "brave/components/brave_ads/core/public/prefs/pref_names.h"
-#include "brave/components/brave_referrals/common/pref_names.h"
 #include "brave/components/brave_stats/browser/brave_stats_updater_util.h"
-#include "brave/components/brave_wallet/browser/pref_names.h"
 #include "brave/components/constants/pref_names.h"
 #include "build/build_config.h"
 #include "chrome/browser/headless/headless_mode_util.h"
@@ -95,12 +92,7 @@ std::string BraveStatsUpdaterParams::GetReferralCodeParam() const {
       features::IsHeadlessClientRefcodeEnabled()) {
     return kHeadlessRefcode;
   }
-  return referral_promo_code_.empty() ? "none" : referral_promo_code_;
-}
-
-std::string BraveStatsUpdaterParams::GetAdsEnabledParam() const {
-  return BooleanToString(stats_pref_service_->GetBoolean(
-      brave_ads::prefs::kEnabledForLastProfile));
+  return "none";
 }
 
 std::string BraveStatsUpdaterParams::GetProcessArchParam() const {
@@ -113,25 +105,12 @@ std::string BraveStatsUpdaterParams::GetProcessArchParam() const {
   }
 }
 
-std::string BraveStatsUpdaterParams::GetWalletEnabledParam() const {
-  uint8_t usage_bitset = 0;
-  if (wallet_last_unlocked_ > last_reported_wallet_unlock_) {
-    usage_bitset = UsageBitfieldFromTimestamp(wallet_last_unlocked_,
-                                              last_reported_wallet_unlock_);
-  }
-  return std::to_string(usage_bitset);
-}
-
 void BraveStatsUpdaterParams::LoadPrefs() {
   last_check_ymd_ = stats_pref_service_->GetString(kLastCheckYMD);
   last_check_woy_ = stats_pref_service_->GetInteger(kLastCheckWOY);
   last_check_month_ = stats_pref_service_->GetInteger(kLastCheckMonth);
   first_check_made_ = stats_pref_service_->GetBoolean(kFirstCheckMade);
   week_of_installation_ = stats_pref_service_->GetString(kWeekOfInstallation);
-  wallet_last_unlocked_ =
-      stats_pref_service_->GetTime(kBraveWalletLastUnlockTime);
-  last_reported_wallet_unlock_ =
-      stats_pref_service_->GetTime(kBraveWalletPingReportedUnlockTime);
   if (week_of_installation_.empty())
     week_of_installation_ = GetLastMondayAsYMD();
 
@@ -145,8 +124,6 @@ void BraveStatsUpdaterParams::LoadPrefs() {
              "when running tests, but never in production code.";
     }
   }
-
-  referral_promo_code_ = stats_pref_service_->GetString(kReferralPromoCode);
 }
 
 void BraveStatsUpdaterParams::SavePrefs() {
@@ -156,9 +133,6 @@ void BraveStatsUpdaterParams::SavePrefs() {
   stats_pref_service_->SetBoolean(kFirstCheckMade, true);
   stats_pref_service_->SetString(kWeekOfInstallation, week_of_installation_);
 
-  last_reported_wallet_unlock_ = wallet_last_unlocked_;
-  stats_pref_service_->SetTime(kBraveWalletPingReportedUnlockTime,
-                               last_reported_wallet_unlock_);
 }
 
 std::string BraveStatsUpdaterParams::BooleanToString(bool bool_value) const {
@@ -219,11 +193,7 @@ GURL BraveStatsUpdaterParams::GetUpdateURL(
   update_url =
       net::AppendQueryParameter(update_url, "ref", GetReferralCodeParam());
   update_url =
-      net::AppendQueryParameter(update_url, "adsEnabled", GetAdsEnabledParam());
-  update_url =
       net::AppendQueryParameter(update_url, "arch", GetProcessArchParam());
-  update_url =
-      net::AppendQueryParameter(update_url, "wallet2", GetWalletEnabledParam());
   return update_url;
 }
 

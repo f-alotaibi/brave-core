@@ -11,7 +11,6 @@
 #include "brave/components/permissions/contexts/brave_google_sign_in_permission_context.h"
 #include "brave/components/permissions/contexts/brave_localhost_permission_context.h"
 #include "brave/components/permissions/contexts/brave_open_ai_chat_permission_context.h"
-#include "brave/components/permissions/contexts/brave_wallet_permission_context.h"
 #include "brave/components/permissions/permission_lifetime_manager.h"
 #include "components/permissions/features.h"
 
@@ -32,12 +31,6 @@ PermissionManagerFactory::BuildServiceInstanceForBrowserContext(
   Profile* profile = Profile::FromBrowserContext(context);
   auto permission_contexts = CreatePermissionContexts(profile);
 
-  permission_contexts[ContentSettingsType::BRAVE_ETHEREUM] =
-      std::make_unique<permissions::BraveWalletPermissionContext>(
-          profile, ContentSettingsType::BRAVE_ETHEREUM);
-  permission_contexts[ContentSettingsType::BRAVE_SOLANA] =
-      std::make_unique<permissions::BraveWalletPermissionContext>(
-          profile, ContentSettingsType::BRAVE_SOLANA);
   permission_contexts[ContentSettingsType::BRAVE_GOOGLE_SIGN_IN] =
       std::make_unique<permissions::BraveGoogleSignInPermissionContext>(
           profile);

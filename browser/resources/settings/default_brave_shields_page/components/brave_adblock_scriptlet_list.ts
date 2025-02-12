@@ -60,10 +60,10 @@ class AdblockScriptletList extends AdblockScriptletListBase {
   override ready() {
     super.ready()
 
-    if (loadTimeData.getBoolean('shouldExposeElementsForTesting')) {
+    /*if (loadTimeData.getBoolean('shouldExposeElementsForTesting')) {
       window.testing = window.testing || {}
       window.testing[`adblockScriptletList`] = this.shadowRoot
-    }
+    }*/
 
     this.isEditing_ = false
     this.browserProxy_.getCustomScriptlets().then((scriptlets) => {

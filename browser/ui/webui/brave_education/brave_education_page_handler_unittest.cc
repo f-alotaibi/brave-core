@@ -62,9 +62,7 @@ class BraveEducationPageHandlerTest : public testing::Test {
     std::vector<brave_browser_command::mojom::Command> supported_commands = {};
     supported_commands.insert(
         supported_commands.end(),
-        {brave_browser_command::mojom::Command::kOpenRewardsOnboarding,
-         brave_browser_command::mojom::Command::kOpenWalletOnboarding,
-         brave_browser_command::mojom::Command::kOpenVPNOnboarding,
+        {brave_browser_command::mojom::Command::kOpenVPNOnboarding,
          brave_browser_command::mojom::Command::kOpenAIChat});
 
     page_handler_ = std::make_unique<BraveBrowserCommandHandler>(
@@ -92,13 +90,6 @@ TEST_F(BraveEducationPageHandlerTest, BasicCommandsExecuted) {
   auto& handler = CreateHandler();
 
   base::test::TestFuture<bool> future;
-
-  handler->ExecuteCommand(
-      brave_browser_command::mojom::Command::kOpenWalletOnboarding,
-      base::DoNothing());
-  handler->ExecuteCommand(
-      brave_browser_command::mojom::Command::kOpenRewardsOnboarding,
-      future.GetCallback());
 
   ASSERT_TRUE(future.Get());
   EXPECT_EQ(actions()[0], "open-url: chrome://wallet/");
@@ -146,16 +137,6 @@ TEST_F(BraveEducationPageHandlerTest, OffTheRecordProfile) {
   // calls `CanExecuteCommand` before calling `ExecuteCommand`
   //
   // Since OTR does not allow, callback is immediately called w/ false
-  handler->CanExecuteCommand(
-      brave_browser_command::mojom::Command::kOpenWalletOnboarding,
-      future.GetCallback());
-  ASSERT_FALSE(future.Get());
-
-  handler->CanExecuteCommand(
-      brave_browser_command::mojom::Command::kOpenRewardsOnboarding,
-      future.GetCallback());
-  ASSERT_FALSE(future.Get());
-
   handler->CanExecuteCommand(
       brave_browser_command::mojom::Command::kOpenVPNOnboarding,
       future.GetCallback());

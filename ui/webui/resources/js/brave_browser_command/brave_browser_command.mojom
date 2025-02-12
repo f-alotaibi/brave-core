@@ -12,8 +12,6 @@ module brave_browser_command.mojom;
 // chrome:// URL or initiating a helpful flow. Note that the implementations of
 // these commands must be side-effect-free.
 enum Command {
-  kOpenRewardsOnboarding = 1,
-  kOpenWalletOnboarding = 2,
   kOpenVPNOnboarding = 3,
   kOpenAIChat = 4
 };

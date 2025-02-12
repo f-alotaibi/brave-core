@@ -10,23 +10,14 @@
 #include "base/strings/string_util.h"
 #include "brave/browser/brave_browser_features.h"
 #include "brave/browser/brave_features_internal_names.h"
-#include "brave/browser/ethereum_remote_client/buildflags/buildflags.h"
-#include "brave/browser/ethereum_remote_client/features.h"
 #include "brave/browser/ui/brave_ui_features.h"
 #include "brave/browser/ui/tabs/features.h"
 #include "brave/components/ai_rewriter/common/buildflags/buildflags.h"
-#include "brave/components/brave_ads/browser/ad_units/notification_ad/custom_notification_ad_feature.h"
-#include "brave/components/brave_ads/core/public/ad_units/notification_ad/notification_ad_feature.h"
-#include "brave/components/brave_ads/core/public/ads_feature.h"
 #include "brave/components/brave_component_updater/browser/features.h"
 #include "brave/components/brave_education/buildflags.h"
 #include "brave/components/brave_news/common/features.h"
-#include "brave/components/brave_rewards/core/buildflags/buildflags.h"
-#include "brave/components/brave_rewards/core/features.h"
 #include "brave/components/brave_shields/core/common/features.h"
 #include "brave/components/brave_vpn/common/buildflags/buildflags.h"
-#include "brave/components/brave_wallet/common/buildflags.h"
-#include "brave/components/brave_wallet/common/features.h"
 #include "brave/components/de_amp/common/features.h"
 #include "brave/components/debounce/core/common/features.h"
 #include "brave/components/google_sign_in_permission/features.h"
@@ -91,24 +82,6 @@
 
 #define EXPAND_FEATURE_ENTRIES(...) __VA_ARGS__,
 
-const flags_ui::FeatureEntry::FeatureParam
-    kZCashShieldedTransactionsDisabled[] = {
-        {"zcash_shielded_transactions_enabled", "false"}};
-
-#if BUILDFLAG(ENABLE_ORCHARD)
-const flags_ui::FeatureEntry::FeatureParam kZCashShieldedTransactionsEnabled[] =
-    {{"zcash_shielded_transactions_enabled", "true"}};
-#endif  // BUILDFLAG(ENABLE_ORCHARD)
-
-const flags_ui::FeatureEntry::FeatureVariation kZCashFeatureVariations[] = {
-    {"- Shielded support disabled", kZCashShieldedTransactionsDisabled,
-     std::size(kZCashShieldedTransactionsDisabled), nullptr},
-#if BUILDFLAG(ENABLE_ORCHARD)
-    {"- Shielded support enabled", kZCashShieldedTransactionsEnabled,
-     std::size(kZCashShieldedTransactionsEnabled), nullptr}
-#endif  // BUILDFLAG(ENABLE_ORCHARD)
-};
-
 #define SPEEDREADER_FEATURE_ENTRIES                                        \
   IF_BUILDFLAG(                                                            \
       ENABLE_SPEEDREADER,                                                  \
@@ -156,61 +129,6 @@ const flags_ui::FeatureEntry::FeatureVariation kZCashFeatureVariations[] = {
           FEATURE_VALUE_TYPE(::features::kBraveWorkaroundNewWindowFlash),  \
       }))
 
-#define BRAVE_REWARDS_GEMINI_FEATURE_ENTRIES                               \
-  IF_BUILDFLAG(                                                            \
-      ENABLE_GEMINI_WALLET,                                                \
-      EXPAND_FEATURE_ENTRIES({                                             \
-          "brave-rewards-gemini",                                          \
-          "Enable Gemini for Brave Rewards",                               \
-          "Enables support for Gemini as an external wallet provider for " \
-          "Brave",                                                         \
-          kOsDesktop,                                                      \
-          FEATURE_VALUE_TYPE(brave_rewards::features::kGeminiFeature),     \
-      }))
-
-#define BRAVE_NATIVE_WALLET_FEATURE_ENTRIES                                   \
-  EXPAND_FEATURE_ENTRIES(                                                     \
-      {                                                                       \
-          "native-brave-wallet",                                              \
-          "Enable Brave Wallet",                                              \
-          "Native cryptocurrency wallet support without the use of "          \
-          "extensions",                                                       \
-          kOsDesktop | kOsAndroid,                                            \
-          FEATURE_VALUE_TYPE(                                                 \
-              brave_wallet::features::kNativeBraveWalletFeature),             \
-      },                                                                      \
-      {"brave-wallet-zcash", "Enable BraveWallet ZCash support",              \
-       "Zcash support for native Brave Wallet", kOsDesktop | kOsAndroid,      \
-       FEATURE_WITH_PARAMS_VALUE_TYPE(                                        \
-           brave_wallet::features::kBraveWalletZCashFeature,                  \
-           kZCashFeatureVariations, "BraveWalletZCash")},                     \
-      {                                                                       \
-          "brave-wallet-bitcoin",                                             \
-          "Enable Brave Wallet Bitcoin support",                              \
-          "Bitcoin support for native Brave Wallet",                          \
-          kOsDesktop | kOsAndroid,                                            \
-          FEATURE_VALUE_TYPE(                                                 \
-              brave_wallet::features::kBraveWalletBitcoinFeature),            \
-      },                                                                      \
-      {                                                                       \
-          "brave-wallet-enable-ankr-balances",                                \
-          "Enable Ankr balances",                                             \
-          "Enable usage of Ankr Advanced API for fetching balances in Brave " \
-          "Wallet",                                                           \
-          kOsDesktop | kOsAndroid,                                            \
-          FEATURE_VALUE_TYPE(                                                 \
-              brave_wallet::features::kBraveWalletAnkrBalancesFeature),       \
-      },                                                                      \
-      {                                                                       \
-          "brave-wallet-enable-transaction-simulations",                      \
-          "Enable transaction simulations",                                   \
-          "Enable usage of Blowfish API for running transaction simulations " \
-          "in Brave Wallet",                                                  \
-          kOsDesktop | kOsAndroid,                                            \
-          FEATURE_VALUE_TYPE(brave_wallet::features::                         \
-                                 kBraveWalletTransactionSimulationsFeature),  \
-      })
-
 #define BRAVE_NEWS_FEATURE_ENTRIES                                             \
   EXPAND_FEATURE_ENTRIES(                                                      \
       {                                                                        \
@@ -228,22 +146,6 @@ const flags_ui::FeatureEntry::FeatureVariation kZCashFeatureVariations[] = {
           kOsDesktop,                                                          \
           FEATURE_VALUE_TYPE(brave_news::features::kBraveNewsFeedUpdate),      \
       })
-
-#define CRYPTO_WALLETS_FEATURE_ENTRIES                                      \
-  IF_BUILDFLAG(                                                             \
-      ETHEREUM_REMOTE_CLIENT_ENABLED,                                       \
-      EXPAND_FEATURE_ENTRIES({                                              \
-          "ethereum_remote-client_new-installs",                            \
-          "Enable Crypto Wallets option in settings",                       \
-          "Crypto Wallets extension is deprecated but with this option it " \
-          "can "                                                            \
-          "still be enabled in settings. If it was previously used, this "  \
-          "flag is "                                                        \
-          "ignored.",                                                       \
-          kOsDesktop,                                                       \
-          FEATURE_VALUE_TYPE(ethereum_remote_client::features::             \
-                                 kCryptoWalletsForNewInstallsFeature),      \
-      }))
 
 #define PLAYLIST_FEATURE_ENTRIES                                       \
   IF_BUILDFLAG(                                                        \
@@ -716,115 +618,6 @@ const flags_ui::FeatureEntry::FeatureVariation kZCashFeatureVariations[] = {
           FEATURE_VALUE_TYPE(net::features::kBraveForgetFirstPartyStorage),    \
       },                                                                       \
       {                                                                        \
-          "brave-rewards-verbose-logging",                                     \
-          "Enable Brave Rewards verbose logging",                              \
-          "Enables detailed logging of Brave Rewards system events to a log "  \
-          "file stored on your device. Please note that this log file could "  \
-          "include information such as browsing history and credentials such " \
-          "as passwords and access tokens depending on your activity. Please " \
-          "do not share it unless asked to by Brave staff.",                   \
-          kOsDesktop | kOsAndroid,                                             \
-          FEATURE_VALUE_TYPE(brave_rewards::features::kVerboseLoggingFeature), \
-      },                                                                       \
-      {                                                                        \
-          "brave-rewards-allow-unsupported-wallet-providers",                  \
-          "Always show Brave Rewards custodial connection options",            \
-                                                                               \
-          "Allows all custodial options to be selected in Brave Rewards, "     \
-          "including those not supported for your Rewards country.",           \
-          kOsDesktop | kOsAndroid,                                             \
-          FEATURE_VALUE_TYPE(brave_rewards::features::                         \
-                                 kAllowUnsupportedWalletProvidersFeature),     \
-      },                                                                       \
-      {                                                                        \
-          "brave-rewards-allow-self-custody-providers",                        \
-          "Enable Brave Rewards self-custody connection options",              \
-          "Enables self-custody options to be selected in Brave Rewards.",     \
-          kOsDesktop | kOsAndroid,                                             \
-          FEATURE_VALUE_TYPE(                                                  \
-              brave_rewards::features::kAllowSelfCustodyProvidersFeature),     \
-      },                                                                       \
-      {                                                                        \
-          "brave-rewards-new-rewards-ui",                                      \
-          "Show the new Rewards UI",                                           \
-          "Displays the new Rewards UI.",                                      \
-          kOsDesktop | kOsAndroid,                                             \
-          FEATURE_VALUE_TYPE(brave_rewards::features::kNewRewardsUIFeature),   \
-      },                                                                       \
-      {                                                                        \
-          "brave-rewards-animated-background",                                 \
-          "Show an animated background on the Rewards UI",                     \
-          "Shows an animated background on the Rewards panel and page.",       \
-          kOsDesktop | kOsAndroid,                                             \
-          FEATURE_VALUE_TYPE(                                                  \
-              brave_rewards::features::kAnimatedBackgroundFeature),            \
-      },                                                                       \
-      {                                                                        \
-          "brave-rewards-platform-creator-detection",                          \
-          "Detect Brave Creators on media platform sites",                     \
-          "Enables detection of Brave Creator pages on media platform sites.", \
-          kOsDesktop | kOsAndroid,                                             \
-          FEATURE_VALUE_TYPE(                                                  \
-              brave_rewards::features::kPlatformCreatorDetectionFeature),      \
-      },                                                                       \
-      {                                                                        \
-          "brave-ads-should-always-run-brave-ads-service",                     \
-          "Should always run Brave Ads service",                               \
-          "Always run Brave Ads service to support triggering ad events when " \
-          "Brave Private Ads are disabled.",                                   \
-          kOsAll,                                                              \
-          FEATURE_VALUE_TYPE(                                                  \
-              brave_ads::kShouldAlwaysRunBraveAdsServiceFeature),              \
-      },                                                                       \
-      {                                                                        \
-          "brave-ads-should-always-trigger-new-tab-page-ad-events",            \
-          "Should always trigger new tab page ad events",                      \
-          "Support triggering new tab page ad events if Brave Private Ads "    \
-          "are disabled. Requires "                                            \
-          "#brave-ads-should-always-run-brave-ads-service to be enabled.",     \
-          kOsAll,                                                              \
-          FEATURE_VALUE_TYPE(                                                  \
-              brave_ads::kShouldAlwaysTriggerBraveNewTabPageAdEventsFeature),  \
-      },                                                                       \
-      {                                                                        \
-          "brave-ads-should-support-search-result-ads",                        \
-          "Support Search Result Ads feature",                                 \
-          "Should be used in combination with "                                \
-          "#brave-ads-should-always-trigger-search-result-ad-events and "      \
-          "#brave-ads-should-always-run-brave-ads-service",                    \
-          kOsAll,                                                              \
-          FEATURE_VALUE_TYPE(brave_ads::kShouldSupportSearchResultAdsFeature), \
-      },                                                                       \
-      {                                                                        \
-          "brave-ads-should-always-trigger-search-result-ad-events",           \
-          "Should always trigger search result ad events",                     \
-          "Support triggering search result ad events if Brave Private Ads "   \
-          "are disabled. Requires "                                            \
-          "#brave-ads-should-always-run-brave-ads-service to be enabled.",     \
-          kOsAll,                                                              \
-          FEATURE_VALUE_TYPE(                                                  \
-              brave_ads::                                                      \
-                  kShouldAlwaysTriggerBraveSearchResultAdEventsFeature),       \
-      },                                                                       \
-      {                                                                        \
-          "brave-ads-custom-push-notifications-ads",                           \
-          "Enable Brave Ads custom push notifications",                        \
-          "Enable Brave Ads custom push notifications to support rich media",  \
-          kOsAll,                                                              \
-          FEATURE_VALUE_TYPE(brave_ads::kCustomNotificationAdFeature),         \
-      },                                                                       \
-      {                                                                        \
-          "brave-ads-allowed-to-fallback-to-custom-push-notification-ads",     \
-          "Allow Brave Ads to fallback from native to custom push "            \
-          "notifications",                                                     \
-          "Allow Brave Ads to fallback from native to custom push "            \
-          "notifications on operating systems which do not support native "    \
-          "notifications",                                                     \
-          kOsAll,                                                              \
-          FEATURE_VALUE_TYPE(                                                  \
-              brave_ads::kAllowedToFallbackToCustomNotificationAdFeature),     \
-      },                                                                       \
-      {                                                                        \
           "file-system-access-api",                                            \
           "File System Access API",                                            \
           "Enables the File System Access API, giving websites access to the " \
@@ -974,10 +767,7 @@ const flags_ui::FeatureEntry::FeatureVariation kZCashFeatureVariations[] = {
           kOsWin | kOsLinux | kOsMac,                                          \
           FEATURE_VALUE_TYPE(features::kBraveWebViewRoundedCorners),           \
       })                                                                       \
-  BRAVE_NATIVE_WALLET_FEATURE_ENTRIES                                          \
   BRAVE_NEWS_FEATURE_ENTRIES                                                   \
-  CRYPTO_WALLETS_FEATURE_ENTRIES                                               \
-  BRAVE_REWARDS_GEMINI_FEATURE_ENTRIES                                         \
   SPEEDREADER_FEATURE_ENTRIES                                                  \
   REQUEST_OTR_FEATURE_ENTRIES                                                  \
   BRAVE_MODULE_FILENAME_PATCH                                                  \

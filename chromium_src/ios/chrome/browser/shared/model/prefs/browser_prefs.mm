@@ -9,7 +9,6 @@
 #include "brave/components/brave_ads/core/public/prefs/obsolete_pref_util.h"
 #include "brave/components/brave_ads/core/public/prefs/pref_registry.h"
 #include "brave/components/brave_news/common/pref_names.h"
-#include "brave/components/brave_rewards/core/pref_registry.h"
 #include "brave/components/brave_shields/core/common/pref_names.h"
 #include "brave/components/brave_sync/brave_sync_prefs.h"
 #include "brave/components/brave_wallet/browser/brave_wallet_prefs.h"
@@ -31,8 +30,6 @@ void BraveRegisterBrowserStatePrefs(
     user_prefs::PrefRegistrySyncable* registry) {
   brave_ads::RegisterProfilePrefs(registry);
   brave_ads::RegisterProfilePrefsForMigration(registry);
-  brave_rewards::RegisterProfilePrefs(registry);
-  brave_rewards::RegisterProfilePrefsForMigration(registry);
   brave_sync::Prefs::RegisterProfilePrefs(registry);
   brave_wallet::RegisterProfilePrefs(registry);
   brave_wallet::RegisterProfilePrefsForMigration(registry);

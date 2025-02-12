@@ -21,7 +21,6 @@
 #include "base/strings/utf_string_conversions.h"
 #include "base/values.h"
 
-#include "brave/components/brave_wallet/common/common_utils.h"
 #include "brave/components/constants/webui_url_constants.h"
 #include "brave/components/l10n/common/locale_util.h"
 #include "brave/components/l10n/common/localization_util.h"
@@ -50,10 +49,6 @@ SidebarItem::BuiltInItemType GetBuiltInItemTypeForLegacyURL(
   // A previous version of prefs used the URL even for built-in items, and not
   // the |SidebarItem::BuiltInItemType|. Therefore, this list should not
   // need to be updated.
-  if (url == "chrome://wallet/") {
-    return SidebarItem::BuiltInItemType::kWallet;
-  }
-
   if (url == "chrome://sidebar-bookmarks.top-chrome/" ||
       url == "chrome://bookmarks/") {
     return SidebarItem::BuiltInItemType::kBookmarks;
@@ -148,8 +143,6 @@ void SidebarService::MigratePrefSidebarBuiltInItemsToHidden() {
   }
   // Only include items that were known prior to this migration
   std::vector<SidebarItem> built_in_items_to_hide;
-  built_in_items_to_hide.push_back(
-      GetBuiltInItemForType(SidebarItem::BuiltInItemType::kWallet));
   built_in_items_to_hide.push_back(
       GetBuiltInItemForType(SidebarItem::BuiltInItemType::kBookmarks));
 
@@ -585,17 +578,6 @@ std::vector<SidebarItem> SidebarService::GetDefaultSidebarItems() const {
 SidebarItem SidebarService::GetBuiltInItemForType(
     SidebarItem::BuiltInItemType type) const {
   switch (type) {
-    case SidebarItem::BuiltInItemType::kWallet: {
-      if (brave_wallet::IsAllowed(prefs_)) {
-        return SidebarItem::Create(GURL("chrome://wallet/"),
-                                   brave_l10n::GetLocalizedResourceUTF16String(
-                                       IDS_SIDEBAR_WALLET_ITEM_TITLE),
-                                   SidebarItem::Type::kTypeBuiltIn,
-                                   SidebarItem::BuiltInItemType::kWallet,
-                                   /* open_in_panel = */ false);
-      }
-      return SidebarItem();
-    }
     case SidebarItem::BuiltInItemType::kBookmarks:
       return SidebarItem::Create(brave_l10n::GetLocalizedResourceUTF16String(
                                      IDS_SIDEBAR_BOOKMARKS_ITEM_TITLE),

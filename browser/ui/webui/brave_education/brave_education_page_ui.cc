@@ -100,9 +100,7 @@ void BraveEducationPageUI::CreateBrowserCommandHandler(
 
   supported_commands.insert(
       supported_commands.end(),
-      {brave_browser_command::mojom::Command::kOpenRewardsOnboarding,
-       brave_browser_command::mojom::Command::kOpenWalletOnboarding,
-       brave_browser_command::mojom::Command::kOpenVPNOnboarding,
+      {brave_browser_command::mojom::Command::kOpenVPNOnboarding,
        brave_browser_command::mojom::Command::kOpenAIChat});
 
   auto* web_contents = web_ui()->GetWebContents();

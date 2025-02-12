@@ -12,7 +12,6 @@
 #include "base/ranges/algorithm.h"
 #include "base/strings/stringprintf.h"
 #include "base/uuid.h"
-#include "brave/components/brave_ads/core/public/ad_units/new_tab_page_ad/new_tab_page_ad_info.h"
 #include "brave/components/ntp_background_images/browser/url_constants.h"
 #include "content/public/common/url_constants.h"
 
@@ -233,26 +232,6 @@ Campaign NTPSponsoredImagesData::GetCampaignFromValue(
                                   focal_point->FindInt(kYKey).value_or(0)};
       }
 
-      if (const auto* const condition_matchers =
-              wallpaper.FindList(kWallpaperConditionMatchersKey)) {
-        for (const auto& condition_matcher : *condition_matchers) {
-          const auto& dict = condition_matcher.GetDict();
-          const auto* const pref_path =
-              dict.FindString(kWallpaperConditionMatcherPrefPathKey);
-          if (!pref_path) {
-            continue;
-          }
-
-          const auto* const condition =
-              dict.FindString(kWallpaperConditionMatcherKey);
-          if (!condition) {
-            continue;
-          }
-
-          background.condition_matchers.emplace(*pref_path, *condition);
-        }
-      }
-
       if (auto* viewbox = wallpaper.FindDict(kViewboxKey)) {
         gfx::Rect rect(viewbox->FindInt(kXKey).value_or(0),
                        viewbox->FindInt(kYKey).value_or(0),
@@ -354,16 +333,6 @@ std::optional<base::Value::Dict> NTPSponsoredImagesData::GetBackgroundAt(
   data.Set(kWallpaperFocalPointYKey,
            campaign.backgrounds[background_index].focal_point.y());
 
-  base::Value::List condition_matchers;
-  for (const auto& [pref_path, condition] :
-       campaign.backgrounds[background_index].condition_matchers) {
-    base::Value::Dict dict;
-    dict.Set(kWallpaperConditionMatcherPrefPathKey, pref_path);
-    dict.Set(kWallpaperConditionMatcherKey, condition);
-    condition_matchers.Append(std::move(dict));
-  }
-  data.Set(kWallpaperConditionMatchersKey, std::move(condition_matchers));
-
   data.Set(kCampaignIdKey, campaign.campaign_id);
   data.Set(kCreativeInstanceIDKey,
            campaign.backgrounds[background_index].creative_instance_id);
@@ -376,54 +345,6 @@ std::optional<base::Value::Dict> NTPSponsoredImagesData::GetBackgroundAt(
   logo_data.Set(kAltKey, logo.alt_text);
   logo_data.Set(kDestinationURLKey, logo.destination_url);
   data.Set(kLogoKey, std::move(logo_data));
-  return data;
-}
-
-std::optional<base::Value::Dict>
-NTPSponsoredImagesData::GetBackgroundFromAdInfo(
-    const brave_ads::NewTabPageAdInfo& ad_info) {
-  // Find campaign
-  size_t campaign_index = 0;
-  for (; campaign_index != campaigns.size(); ++campaign_index) {
-    if (campaigns[campaign_index].campaign_id == ad_info.campaign_id) {
-      break;
-    }
-  }
-  if (campaign_index == campaigns.size()) {
-    VLOG(0) << "The ad campaign wasn't found in the NTP sponsored images data: "
-            << ad_info.campaign_id;
-    return std::nullopt;
-  }
-
-  const auto& sponsored_backgrounds = campaigns[campaign_index].backgrounds;
-  size_t background_index = 0;
-  for (; background_index != sponsored_backgrounds.size(); ++background_index) {
-    if (sponsored_backgrounds[background_index].creative_instance_id ==
-        ad_info.creative_instance_id) {
-      break;
-    }
-  }
-  if (background_index == sponsored_backgrounds.size()) {
-    VLOG(0) << "Creative instance wasn't found in NTP sposored images data: "
-            << ad_info.creative_instance_id;
-    return std::nullopt;
-  }
-
-  if (VLOG_IS_ON(0)) {
-    if (!AdInfoMatchesSponsoredImage(ad_info, campaign_index,
-                                     background_index)) {
-      VLOG(0) << "Served creative info does not fully match with NTP "
-                 "sponsored images metadata. Campaign id: "
-              << ad_info.campaign_id
-              << ". Creative instance id: " << ad_info.creative_instance_id;
-    }
-  }
-
-  std::optional<base::Value::Dict> data =
-      GetBackgroundAt(campaign_index, background_index);
-  if (data) {
-    data->Set(kWallpaperIDKey, ad_info.placement_id);
-  }
   return data;
 }
 
@@ -440,43 +361,6 @@ void NTPSponsoredImagesData::PrintCampaignsParsingResult() const {
               << ") - id: " << background.creative_instance_id;
     }
   }
-}
-
-bool NTPSponsoredImagesData::AdInfoMatchesSponsoredImage(
-    const brave_ads::NewTabPageAdInfo& ad_info,
-    size_t campaign_index,
-    size_t background_index) const {
-  DCHECK(campaign_index < campaigns.size() && background_index >= 0 &&
-         background_index < campaigns[campaign_index].backgrounds.size());
-
-  const Campaign& campaign = campaigns[campaign_index];
-  if (!campaign.IsValid()) {
-    return false;
-  }
-
-  if (ad_info.campaign_id != campaign.campaign_id) {
-    return false;
-  }
-
-  const SponsoredBackground& background =
-      campaign.backgrounds[background_index];
-  if (ad_info.creative_instance_id != background.creative_instance_id) {
-    return false;
-  }
-
-  if (ad_info.target_url != GURL(background.logo.destination_url)) {
-    return false;
-  }
-
-  if (ad_info.alt != background.logo.alt_text) {
-    return false;
-  }
-
-  if (ad_info.company_name != background.logo.company_name) {
-    return false;
-  }
-
-  return true;
 }
 
 }  // namespace ntp_background_images

@@ -87,14 +87,6 @@ export class CrToolbarElement extends CrLitElement {
         reflect: true,
       },
 
-      shouldShowRewardsButton_: {
-        type: Boolean,
-      },
-
-      isBraveWalletAllowed_: {
-        type: Boolean,
-      },
-
       fontsLoadedClassName: {
         type: String
       },
@@ -120,8 +112,6 @@ export class CrToolbarElement extends CrLitElement {
   closeMenuPromo = ''
   showingSearch = false
   showRewardsButton = true
-  isBraveWalletAllowed_ = loadTimeData.getBoolean('brToolbarShowRewardsButton')
-
   alwaysShowLogo = false
   searchIconOverride?: string
   searchInputAriaDescription = ''
@@ -131,11 +121,6 @@ export class CrToolbarElement extends CrLitElement {
   settingsTitle = loadTimeData.getString('brToolbarSettingsTitle')
   bookmarksTitle = loadTimeData.getString('brToolbarBookmarksTitle')
   downloadsTitle = loadTimeData.getString('brToolbarDownloadsTitle')
-  braveRewardsTitle = loadTimeData.getString('brToolbarRewardsTitle')
-  walletsTitle = loadTimeData.getString('brToolbarWalletsTitle')
-
-  // Settings from `loadTimeData`
-  shouldShowRewardsButton_ = loadTimeData.getBoolean('brToolbarShowRewardsButton')
 
   // Non-observed properties
   fontsLoadedClassName = ''

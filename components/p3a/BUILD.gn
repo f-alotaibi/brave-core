@@ -84,7 +84,6 @@ static_library("p3a") {
     deps += [ "//ios/web/public/thread" ]
   } else {
     deps += [
-      "//brave/components/brave_referrals/common",
       "//content/public/browser",
       "//content/public/common",
     ]
@@ -123,7 +122,6 @@ source_set("unit_tests") {
   ]
   if (!is_ios) {
     deps += [
-      "//brave/components/brave_referrals/common",
       "//content/test:test_support",
     ]
   }

@@ -11,10 +11,8 @@
 #include "brave/browser/shell_integrations/buildflags/buildflags.h"
 #include "brave/browser/ui/webui/brave_settings_ui.h"
 #include "brave/browser/ui/webui/settings/brave_privacy_handler.h"
-#include "brave/components/brave_rewards/core/pref_names.h"
 #include "brave/components/brave_shields/core/common/features.h"
 #include "brave/components/brave_vpn/common/buildflags/buildflags.h"
-#include "brave/components/brave_wallet/browser/pref_names.h"
 #include "brave/components/constants/url_constants.h"
 #include "brave/components/constants/webui_url_constants.h"
 #include "brave/components/l10n/common/localization_util.h"
@@ -649,16 +647,12 @@ void BraveAddCommonStrings(content::WebUIDataSource* html_source,
       {"defaultBaseCurrencyDesc", IDS_SETTINGS_DEFAULT_BASE_CURRENCY_DESC},
       {"defaultBaseCryptocurrencyDesc",
        IDS_SETTINGS_DEFAULT_BASE_CRYPTOCURRENCY_DESC},
-      {"showBravewalletIconOnToolbar",
-       IDS_SETTINGS_SHOW_BRAVE_WALLET_ICON_ON_TOOLBAR},
       {"enableNftDiscoveryLabel", IDS_SETTINGS_ENABLE_NFT_DISCOVERY_LABEL},
       {"enableNftDiscoveryDesc", IDS_SETTINGS_ENABLE_NFT_DISCOVERY_DESC},
       {"enablePrivateWindowsLabel",
        IDS_SETTINGS_ENABLE_BRAVE_WALLET_IN_PRIVATE_WINDOWS_LABEL},
       {"enablePrivateWindowsDesc",
        IDS_SETTINGS_ENABLE_BRAVE_WALLET_IN_PRIVATE_WINDOWS_DESC},
-      {"showBravewalletTestNetworks",
-       IDS_SETTINGS_SHOW_BRAVE_WALLET_TEST_NETWORKS},
       {"autoLockMinutes", IDS_SETTINGS_AUTO_LOCK_MINUTES},
       {"autoLockMinutesDesc", IDS_SETTINGS_AUTO_LOCK_MINUTES_DESC},
       {"googleLoginForExtensionsDesc",
@@ -729,80 +723,6 @@ void BraveAddCommonStrings(content::WebUIDataSource* html_source,
       {"resetTransactionInfo", IDS_SETTINGS_WALLET_RESET_TRANSACTION_INFO},
       {"resetTransactionInfoDesc",
        IDS_SETTINGS_WALLET_RESET_TRANSACTION_INFO_DESC},
-      {"walletResetConfirmation", IDS_SETTINGS_WALLET_RESET_CONFIRMATION},
-      {"walletResetTransactionInfoConfirmation",
-       IDS_SETTINGS_WALLET_RESET_TRANSACTION_INFO_CONFIRMATION},
-      {"walletResetConfirmed", IDS_SETTINGS_WALLET_RESET_CONFIRMED},
-      {"walletResetTransactionInfoConfirmed",
-       IDS_SETTINGS_WALLET_RESET_TRANSACTION_INFO_CONFIRMED},
-      {"walletNetworksLinkTitle", IDS_SETTINGS_WALLET_NETWORKS_ITEM},
-      {"walletAddNetworkDialogTitle", IDS_SETTINGS_WALLET_ADD_NETWORK_TITLE},
-      {"walletAddNetworkInvalidURLInput",
-       IDS_SETTINGS_WALLET_ADD_NETWORK_INVALID_ADDRESS_ERROR},
-      {"walletNetworkAdd", IDS_SETTINGS_WALLET_ADD_NETWORK},
-      {"walletEthNetworksListTitle",
-       IDS_SETTINGS_WALLET_ETH_NETWORK_LIST_TITLE},
-      {"walletFilNetworksListTitle",
-       IDS_SETTINGS_WALLET_FIL_NETWORK_LIST_TITLE},
-      {"walletSolNetworksListTitle",
-       IDS_SETTINGS_WALLET_SOL_NETWORK_LIST_TITLE},
-      {"walletBtcNetworksListTitle",
-       IDS_SETTINGS_WALLET_BTC_NETWORK_LIST_TITLE},
-      {"walletZecNetworksListTitle",
-       IDS_SETTINGS_WALLET_ZEC_NETWORK_LIST_TITLE},
-      {"walletNetworksItemDesc", IDS_SETTINGS_WALLET_NETWORKS_ITEM_DESC},
-      {"walletNetworksError", IDS_SETTINGS_WALLET_NETWORKS_ERROR},
-      {"walletDeleteNetworkConfirmation",
-       IDS_SETTINGS_WALLET_DELETE_NETWORK_CONFIRMATION},
-      {"walletDefaultNetworkIsAlwaysVisible",
-       IDS_SETTINGS_WALLET_DEFAULT_NETWORK_IS_ALWAYS_VISIBLE},
-      {"walletShowHideNetwork", IDS_SETTINGS_WALLET_SHOW_HIDE_NETWORK},
-      {"walletResetNetworkConfirmation",
-       IDS_SETTINGS_WALLET_RESET_NETWORK_CONFIRMATION},
-      {"walletAddNetworkDialogChainIdTitle",
-       IDS_SETTINGS_WALLET_NETWORKS_CHAIN_ID_TITLE},
-      {"walletAddNetworkDialogChainIdPlaceholder",
-       IDS_SETTINGS_WALLET_NETWORKS_CHAIN_ID_PLACEHOLDER},
-      {"walletAddNetworkDialogSearchForNetworkLabel",
-       IDS_SETTINGS_WALLET_NETWORKS_SEARCH_FOR_NETWORK_LABEL},
-      {"walletAddNetworkDialogSearchForNetworkPlaceholder",
-       IDS_SETTINGS_WALLET_NETWORKS_SEARCH_FOR_NETWORK_PLACEHOLDER},
-      {"walletAddNetworkDialogChainNameTitle",
-       IDS_SETTINGS_WALLET_NETWORKS_CHAIN_NAME_TITLE},
-      {"walletAddNetworkDialogChainNamePlaceholder",
-       IDS_SETTINGS_WALLET_NETWORKS_CHAIN_NAME_PLACEHOLDER},
-      {"walletAddNetworkDialogCurrencyNameTitle",
-       IDS_SETTINGS_WALLET_NETWORKS_CURRENCY_NAME_TITLE},
-      {"walletAddNetworkDialogCurrencyNamePlaceholder",
-       IDS_SETTINGS_WALLET_NETWORKS_CURRENCY_NAME_PLACEHOLDER},
-      {"walletAddNetworkDialogCurrencySymbolTitle",
-       IDS_SETTINGS_WALLET_NETWORKS_CURRENCY_SYMBOL_TITLE},
-      {"walletAddNetworkDialogCurrencySymbolPlaceholder",
-       IDS_SETTINGS_WALLET_NETWORKS_CURRENCY_SYMBOL_PLACEHOLDER},
-      {"walletAddNetworkDialogCurrencyDecimalsTitle",
-       IDS_SETTINGS_WALLET_NETWORKS_CURRENCY_DECIMALS_TITLE},
-      {"walletAddNetworkDialogCurrencyDecimalsPlaceholder",
-       IDS_SETTINGS_WALLET_NETWORKS_CURRENCY_DECIMALS_PLACEHOLDER},
-      {"walletAddNetworkDialogRpcTitle",
-       IDS_SETTINGS_WALLET_NETWORKS_RPC_TITLE},
-      {"walletAddNetworkDialogUrlPlaceholder",
-       IDS_SETTINGS_WALLET_NETWORKS_URL_PLACEHOLDER},
-      {"walletAddNetworkDialogIconsTitle",
-       IDS_SETTINGS_WALLET_NETWORKS_ICONS_TITLE},
-      {"walletAddNetworkDialogBlocksTitle",
-       IDS_SETTINGS_WALLET_NETWORKS_BLOCKS_TITLE},
-      {"walletAddNetworkMandarotyFieldError",
-       IDS_SETTINGS_WALLET_NETWORKS_MANDATORY_ERROR},
-      {"walletAddNetworkInvalidChainId",
-       IDS_SETTINGS_WALLET_NETWORKS_CHAID_ID_ERROR},
-      {"walletAddNetworkDialogFillNativeCurrencyInfo",
-       IDS_SETTINGS_WALLET_NETWORKS_NATIVE_CURRENCY_ERROR},
-      {"walletAddNetworkDialogReplaceNetwork",
-       IDS_SETTINGS_WALLET_NETWORKS_REPLACE},
-      {"walletNetworkEdit", IDS_BRAVE_WALLET_NETWORK_EDIT},
-      {"walletNetworkRemove", IDS_BRAVE_WALLET_NETWORK_REMOVE},
-      {"walletNetworkReset", IDS_BRAVE_WALLET_NETWORK_RESET},
-      {"walletNetworkSetAsDefault", IDS_BRAVE_WALLET_NETWORK_SET_AS_DEFAULT},
       {"adblockContentFilteringLabel",
        IDS_BRAVE_ADBLOCK_CONTENT_FILTERING_LABEL},
       {"adblockAddCustomFiltersListsLabel",
@@ -924,17 +844,6 @@ void BraveAddCommonStrings(content::WebUIDataSource* html_source,
           l10n_util::GetStringUTF8(
               IDS_AI_CHAT_DEFAULT_CUSTOM_MODEL_SYSTEM_PROMPT),
           {"%datetime%"}, nullptr));
-  auto confirmation_phrase = brave_l10n::GetLocalizedResourceUTF16String(
-      IDS_SETTINGS_WALLET_RESET_CONFIRMATION_PHRASE);
-  html_source->AddString("walletResetConfirmationPhrase", confirmation_phrase);
-  auto confirmation_text = l10n_util::GetStringFUTF16(
-      IDS_SETTINGS_WALLET_RESET_CONFIRMATION, confirmation_phrase);
-  html_source->AddString("walletResetConfirmation", confirmation_text);
-  auto reset_tx_confirmation_text = l10n_util::GetStringFUTF16(
-      IDS_SETTINGS_WALLET_RESET_TRANSACTION_INFO_CONFIRMATION,
-      confirmation_phrase);
-  html_source->AddString("walletResetTransactionInfoConfirmation",
-                         reset_tx_confirmation_text);
 
 
 #if BUILDFLAG(ENABLE_EXTENSIONS)
@@ -948,10 +857,6 @@ void BraveAddCommonStrings(content::WebUIDataSource* html_source,
               GURL(extension_urls::GetWebstoreExtensionsCategoryURL()),
               g_browser_process->GetApplicationLocale())
               .spec()));
-  html_source->AddString("autoLockMinutesValue",
-                         std::to_string(profile->GetPrefs()->GetInteger(
-                             kBraveWalletAutoLockMinutes)));
-
   html_source->AddString(
       "transactionSimulationDesc",
       l10n_util::GetStringFUTF16(IDS_BRAVE_WALLET_TRANSACTION_SIMULATIONS_DESC,

@@ -9,11 +9,8 @@
 #include <utility>
 
 #include "base/feature_list.h"
-#include "brave/browser/brave_rewards/rewards_util.h"
-#include "brave/browser/ui/views/brave_actions/brave_rewards_action_view.h"
 #include "brave/browser/ui/views/brave_actions/brave_shields_action_view.h"
 #include "brave/browser/ui/views/rounded_separator.h"
-#include "brave/components/brave_rewards/core/pref_names.h"
 #include "brave/components/constants/pref_names.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/ui/browser.h"
@@ -56,25 +53,6 @@ void BraveActionsContainer::Init() {
   // make sure separator is at index 0
   AddChildViewAt(brave_button_separator_, 0);
   AddActionViewForShields();
-  AddActionViewForRewards();
-
-  // React to Brave Rewards preferences changes.
-  show_brave_rewards_button_.Init(
-      brave_rewards::prefs::kShowLocationBarButton,
-      browser_window_interface_->GetProfile()->GetPrefs(),
-      base::BindRepeating(
-          &BraveActionsContainer::OnBraveRewardsPreferencesChanged,
-          base::Unretained(this)));
-}
-
-bool BraveActionsContainer::ShouldShowBraveRewardsAction() const {
-  if (!brave_rewards::IsSupportedForProfile(
-          browser_window_interface_->GetProfile())) {
-    return false;
-  }
-  const PrefService* prefs =
-      browser_window_interface_->GetProfile()->GetPrefs();
-  return prefs->GetBoolean(brave_rewards::prefs::kShowLocationBarButton);
 }
 
 void BraveActionsContainer::AddActionViewForShields() {
@@ -84,22 +62,9 @@ void BraveActionsContainer::AddActionViewForShields() {
   shields_action_btn_->Init();
 }
 
-void BraveActionsContainer::AddActionViewForRewards() {
-  auto button =
-      std::make_unique<BraveRewardsActionView>(browser_window_interface_);
-  rewards_action_btn_ = AddChildViewAt(std::move(button), 2);
-  rewards_action_btn_->SetPreferredSize(GetActionSize());
-  rewards_action_btn_->SetVisible(ShouldShowBraveRewardsAction());
-  rewards_action_btn_->Update();
-}
-
 void BraveActionsContainer::Update() {
   if (shields_action_btn_) {
     shields_action_btn_->Update();
-  }
-
-  if (rewards_action_btn_) {
-    rewards_action_btn_->Update();
   }
 
   UpdateVisibility();
@@ -111,10 +76,6 @@ void BraveActionsContainer::UpdateVisibility() {
 
   if (shields_action_btn_) {
     can_show = shields_action_btn_->GetVisible();
-  }
-
-  if (rewards_action_btn_) {
-    can_show = can_show || rewards_action_btn_->GetVisible();
   }
 
   // If no buttons are visible, then we want to hide this view so that the
@@ -134,13 +95,6 @@ void BraveActionsContainer::SetShouldHide(bool should_hide) {
 
 void BraveActionsContainer::ChildPreferredSizeChanged(views::View* child) {
   PreferredSizeChanged();
-}
-
-// Brave Rewards preferences change observers callback
-void BraveActionsContainer::OnBraveRewardsPreferencesChanged() {
-  if (rewards_action_btn_) {
-    rewards_action_btn_->SetVisible(ShouldShowBraveRewardsAction());
-  }
 }
 
 BEGIN_METADATA(BraveActionsContainer)
