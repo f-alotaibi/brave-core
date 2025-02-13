@@ -10,7 +10,6 @@
 #include <string>
 
 #include "brave/components/brave_new_tab_ui/brave_new_tab_page.mojom.h"
-#include "brave/components/brave_news/common/brave_news.mojom.h"
 #include "brave/components/brave_vpn/common/buildflags/buildflags.h"
 #include "chrome/browser/ui/webui/searchbox/realbox_handler.h"
 #include "content/public/browser/web_ui_controller.h"
@@ -24,10 +23,6 @@
 #include "brave/components/brave_vpn/common/mojom/brave_vpn.mojom.h"  // nogncheck
 #endif
 
-namespace brave_news {
-class BraveNewsController;
-}  // namespace brave_news
-
 class BraveNewTabPageHandler;
 
 class BraveNewTabUI : public ui::MojoWebUIController,
@@ -40,9 +35,6 @@ class BraveNewTabUI : public ui::MojoWebUIController,
 
   // Instantiates the implementor of the mojo
   // interface passing the pending receiver that will be internally bound.
-  void BindInterface(
-      mojo::PendingReceiver<brave_news::mojom::BraveNewsController> receiver);
-
   void BindInterface(
       mojo::PendingReceiver<brave_new_tab_page::mojom::PageHandlerFactory>
           pending_receiver);

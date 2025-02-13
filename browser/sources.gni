@@ -4,7 +4,6 @@
 # You can obtain one at http://mozilla.org/MPL/2.0/.
 
 import("//brave/browser/autocomplete/sources.gni")
-import("//brave/browser/brave_news/sources.gni")
 import("//brave/browser/brave_shields/sources.gni")
 import("//brave/browser/brave_stats/sources.gni")
 import("//brave/browser/brave_vpn/sources.gni")
@@ -127,7 +126,6 @@ brave_chrome_browser_deps = [
   "//brave/components/brave_education:buildflags",
   "//brave/components/brave_federated",
   "//brave/components/brave_new_tab_ui:mojom",
-  "//brave/components/brave_news/common:mojom",
   "//brave/components/brave_perf_predictor/browser",
   "//brave/components/brave_private_new_tab_ui/common",
   "//brave/components/brave_private_new_tab_ui/common:mojom",
@@ -254,7 +252,6 @@ if (!is_android) {
   brave_chrome_browser_deps += [
 
     "//brave/browser/ui/tabs:impl",
-    "//brave/browser/ui/webui/brave_news_internals",
     "//brave/browser/user_education:features",
     "//components/feed:feature_list",
     "//components/feed/core/v2:feed_core_v2",
@@ -475,7 +472,6 @@ if (is_mac) {
 
 brave_chrome_browser_sources += brave_browser_profiles_sources
 brave_chrome_browser_sources += brave_browser_autocomplete_sources
-brave_chrome_browser_sources += brave_browser_brave_news_sources
 brave_chrome_browser_sources += brave_browser_brave_shields_sources
 brave_chrome_browser_sources += brave_browser_brave_stats_updater_sources
 brave_chrome_browser_sources += brave_browser_brave_vpn_sources
@@ -503,7 +499,6 @@ brave_chrome_browser_sources += brave_browser_web_discovery_sources
 brave_chrome_browser_sources += brave_browser_webcompat_reporter_sources
 
 brave_chrome_browser_deps += brave_browser_autocomplete_deps
-brave_chrome_browser_deps += brave_browser_brave_news_deps
 brave_chrome_browser_deps += brave_browser_brave_shields_deps
 brave_chrome_browser_deps += brave_browser_brave_stats_updater_deps
 brave_chrome_browser_deps += brave_browser_brave_vpn_deps

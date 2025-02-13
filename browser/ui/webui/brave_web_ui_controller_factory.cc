@@ -11,7 +11,6 @@
 #include "base/feature_list.h"
 #include "base/memory/ptr_util.h"
 #include "base/no_destructor.h"
-#include "brave/browser/brave_news/brave_news_controller_factory.h"
 #include "brave/browser/ui/webui/skus_internals_ui.h"
 #include "brave/components/ai_rewriter/common/buildflags/buildflags.h"
 #include "brave/components/brave_federated/features.h"
@@ -31,10 +30,8 @@
 #include "url/gurl.h"
 
 #if !BUILDFLAG(IS_ANDROID)
-#include "brave/browser/ui/webui/brave_news_internals/brave_news_internals_ui.h"
 #include "brave/browser/ui/webui/new_tab_page/brave_new_tab_ui.h"
 #include "brave/browser/ui/webui/welcome_page/brave_welcome_ui.h"
-#include "brave/components/brave_news/common/features.h"
 #include "brave/components/commands/common/features.h"
 #endif
 
@@ -71,12 +68,6 @@ WebUIController* NewWebUI(WebUI* web_ui, const GURL& url) {
   if (host == kSkusInternalsHost) {
     return new SkusInternalsUI(web_ui, url.host());
 #if !BUILDFLAG(IS_ANDROID)
-  } else if (base::FeatureList::IsEnabled(
-                 brave_news::features::kBraveNewsFeedUpdate) &&
-             host == kBraveNewsInternalsHost) {
-    return new BraveNewsInternalsUI(
-        web_ui, url.host(),
-        brave_news::BraveNewsControllerFactory::GetForBrowserContext(profile));
   } else if (host == kWelcomeHost && !profile->IsGuestSession()) {
     return new BraveWelcomeUI(web_ui, url.host());
   } else if (host == chrome::kChromeUINewTabHost) {
@@ -130,9 +121,6 @@ WebUIFactoryFunction GetWebUIFactoryFunction(WebUI* web_ui,
 #if BUILDFLAG(IS_ANDROID)
       (url.is_valid() && url.host_piece() == kWalletPageHost) ||
 #else
-      (base::FeatureList::IsEnabled(
-           brave_news::features::kBraveNewsFeedUpdate) &&
-       url.host_piece() == kBraveNewsInternalsHost) ||
       // On Android New Tab is a native page implemented in Java, so no need
       // in WebUI.
       url.host_piece() == chrome::kChromeUINewTabHost ||

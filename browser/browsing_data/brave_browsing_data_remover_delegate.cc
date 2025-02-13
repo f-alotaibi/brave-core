@@ -8,8 +8,6 @@
 #include <memory>
 #include <utility>
 
-#include "brave/browser/brave_news/brave_news_controller_factory.h"
-#include "brave/components/brave_news/browser/brave_news_controller.h"
 #include "brave/components/content_settings/core/browser/brave_content_settings_pref_provider.h"
 #include "brave/components/content_settings/core/browser/brave_content_settings_utils.h"
 #include "build/build_config.h"
@@ -46,15 +44,6 @@ void BraveBrowsingDataRemoverDelegate::RemoveEmbedderData(
   // shields settings with non-empty resource ids.
   if (remove_mask & chrome_browsing_data_remover::DATA_TYPE_CONTENT_SETTINGS) {
     ClearShieldsSettings(delete_begin, delete_end);
-  }
-
-  if (remove_mask & chrome_browsing_data_remover::DATA_TYPE_HISTORY) {
-    // Brave News feed cache
-    if (auto* brave_news_controller =
-            brave_news::BraveNewsControllerFactory::GetForBrowserContext(
-                profile_)) {
-      brave_news_controller->ClearHistory();
-    }
   }
 
   // That code executes on desktop only. Android part is done inside

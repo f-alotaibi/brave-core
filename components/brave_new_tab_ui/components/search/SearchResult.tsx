@@ -10,7 +10,6 @@ import { mojoString16ToString } from 'chrome://resources/js/mojo_type_util.js';
 import { AutocompleteMatch } from 'gen/ui/webui/resources/cr_components/searchbox/searchbox.mojom.m';
 import * as React from 'react';
 import styled from 'styled-components';
-import { useUnpaddedImageUrl } from '../../../brave_news/browser/resources/shared/useUnpaddedImageUrl';
 
 interface Props {
   match: AutocompleteMatch
@@ -100,9 +99,8 @@ const Divider = styled.hr`
 const hide = { opacity: 0 }
 const show = { opacity: 1 }
 function RichImage({ url }: { url: string }) {
-  const [loaded, setLoaded] = React.useState(false)
-  const iconUrl = useUnpaddedImageUrl(url, () => setLoaded(true))
-  return <img src={iconUrl} style={loaded ? show : hide} />
+  const [loaded] = React.useState(false)
+  return <img style={loaded ? show : hide} />
 }
 function Image({ match, isAskLeo }: { match: AutocompleteMatch, isAskLeo: boolean }) {
   // AskLeo is a case we treat specially. It's included on most queries.

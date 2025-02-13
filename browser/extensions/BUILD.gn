@@ -104,7 +104,6 @@ source_set("extensions") {
     "//brave/common",
     "//brave/common/extensions/api",
     "//brave/components/brave_extension:static_resources",
-    "//brave/components/brave_news/common",
     "//brave/components/brave_search/browser",
     "//brave/components/brave_shields/core/common",
     "//brave/components/brave_vpn/common/buildflags",

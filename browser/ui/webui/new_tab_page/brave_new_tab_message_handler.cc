@@ -17,7 +17,6 @@
 #include "base/values.h"
 #include "brave/browser/ntp_background/view_counter_service_factory.h"
 #include "brave/browser/profiles/profile_util.h"
-#include "brave/components/brave_news/common/pref_names.h"
 #include "brave/components/brave_perf_predictor/common/pref_names.h"
 #include "brave/components/brave_search_conversion/pref_names.h"
 #include "brave/components/brave_vpn/common/buildflags/buildflags.h"
@@ -75,13 +74,9 @@ base::Value::Dict GetPreferencesDictionary(PrefService* prefs) {
   pref_data.Set("showClock", prefs->GetBoolean(kNewTabPageShowClock));
   pref_data.Set("clockFormat", prefs->GetString(kNewTabPageClockFormat));
   pref_data.Set("showStats", prefs->GetBoolean(kNewTabPageShowStats));
-  pref_data.Set("showToday",
-                prefs->GetBoolean(brave_news::prefs::kNewTabPageShowToday));
   pref_data.Set("showRewards", prefs->GetBoolean(kNewTabPageShowRewards));
   pref_data.Set("isBrandedWallpaperNotificationDismissed",
                 prefs->GetBoolean(kBrandedWallpaperNotificationDismissed));
-  pref_data.Set("isBraveNewsOptedIn",
-                prefs->GetBoolean(brave_news::prefs::kBraveNewsOptedIn));
   pref_data.Set("hideAllWidgets", prefs->GetBoolean(kNewTabPageHideAllWidgets));
   pref_data.Set("showBraveTalk", prefs->GetBoolean(kNewTabPageShowBraveTalk));
 #if BUILDFLAG(ENABLE_BRAVE_VPN)
@@ -211,11 +206,6 @@ void BraveNewTabMessageHandler::OnJavascriptAllowed() {
       kFingerprintingBlocked,
       base::BindRepeating(&BraveNewTabMessageHandler::OnStatsChanged,
                           base::Unretained(this)));
-  // News
-  pref_change_registrar_.Add(
-      brave_news::prefs::kBraveNewsOptedIn,
-      base::BindRepeating(&BraveNewTabMessageHandler::OnPreferencesChanged,
-                          base::Unretained(this)));
   // New Tab Page preferences
   pref_change_registrar_.Add(
       kNewTabPageShowBackgroundImage,
@@ -251,10 +241,6 @@ void BraveNewTabMessageHandler::OnJavascriptAllowed() {
                           base::Unretained(this)));
   pref_change_registrar_.Add(
       kNewTabPageShowStats,
-      base::BindRepeating(&BraveNewTabMessageHandler::OnPreferencesChanged,
-                          base::Unretained(this)));
-  pref_change_registrar_.Add(
-      brave_news::prefs::kNewTabPageShowToday,
       base::BindRepeating(&BraveNewTabMessageHandler::OnPreferencesChanged,
                           base::Unretained(this)));
   pref_change_registrar_.Add(
@@ -355,10 +341,6 @@ void BraveNewTabMessageHandler::HandleSaveNewTabPagePref(
     settings_key = kNewTabPageShowClock;
   } else if (settings_key_input == "showStats") {
     settings_key = kNewTabPageShowStats;
-  } else if (settings_key_input == "showToday") {
-    settings_key = brave_news::prefs::kNewTabPageShowToday;
-  } else if (settings_key_input == "isBraveNewsOptedIn") {
-    settings_key = brave_news::prefs::kBraveNewsOptedIn;
   } else if (settings_key_input == "showRewards") {
     settings_key = kNewTabPageShowRewards;
   } else if (settings_key_input == "isBrandedWallpaperNotificationDismissed") {

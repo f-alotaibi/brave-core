@@ -7,7 +7,6 @@
 
 #include "base/feature_list.h"
 #include "brave/browser/brave_federated/brave_federated_service_factory.h"
-#include "brave/browser/brave_news/brave_news_controller_factory.h"
 #include "brave/browser/brave_search/backup_results_service_factory.h"
 #include "brave/browser/brave_shields/ad_block_pref_service_factory.h"
 #include "brave/browser/brave_shields/brave_farbling_service_factory.h"
@@ -105,8 +104,6 @@ void EnsureBrowserContextKeyedServiceFactoriesBuilt() {
 #endif
 
   webcompat_reporter::WebcompatReporterServiceFactory::GetInstance();
-
-  brave_news::BraveNewsControllerFactory::GetInstance();
 
 #if !BUILDFLAG(IS_ANDROID)
   if (base::FeatureList::IsEnabled(commands::features::kBraveCommands)) {

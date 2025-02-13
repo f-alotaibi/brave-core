@@ -16,7 +16,6 @@
 #include "brave/browser/ui/tabs/brave_tab_prefs.h"
 #include "brave/browser/ui/tabs/features.h"
 #include "brave/browser/ui/views/brave_actions/brave_actions_container.h"
-#include "brave/browser/ui/views/brave_news/brave_news_action_icon_view.h"
 #include "brave/browser/ui/views/location_bar/brave_search_conversion/promotion_button_controller.h"
 #include "brave/browser/ui/views/location_bar/brave_search_conversion/promotion_button_view.h"
 #include "brave/browser/ui/views/playlist/playlist_action_icon_view.h"
@@ -114,14 +113,6 @@ void BraveLocationBarView::Init() {
     }
   }
 
-  if (!browser_->profile()->IsOffTheRecord()) {
-    brave_news_action_icon_view_ =
-        AddChildView(std::make_unique<BraveNewsActionIconView>(
-            browser_->profile(), this, this));
-    brave_news_action_icon_view_->SetVisible(false);
-    views::InkDrop::Get(brave_news_action_icon_view_)
-        ->SetVisibleOpacity(GetPageActionInkDropVisibleOpacity());
-  }
 #if BUILDFLAG(ENABLE_TOR)
   onion_location_view_ = AddChildView(
       std::make_unique<OnionLocationView>(browser_->profile(), this, this));
@@ -176,10 +167,6 @@ void BraveLocationBarView::Update(content::WebContents* contents) {
   }
 #endif
 
-  if (brave_news_action_icon_view_) {
-    brave_news_action_icon_view_->Update();
-  }
-
   LocationBarView::Update(contents);
 }
 
@@ -207,10 +194,6 @@ void BraveLocationBarView::OnChanged() {
   }
 #endif
 
-  if (brave_news_action_icon_view_) {
-    brave_news_action_icon_view_->Update();
-  }
-
   if (promotion_controller_) {
     const bool show_button =
         promotion_controller_->ShouldShowSearchPromotionButton() &&
@@ -224,10 +207,6 @@ void BraveLocationBarView::OnChanged() {
 
 std::vector<views::View*> BraveLocationBarView::GetRightMostTrailingViews() {
   std::vector<views::View*> views;
-  if (brave_news_action_icon_view_) {
-    views.push_back(brave_news_action_icon_view_);
-  }
-
   if (brave_actions_) {
     views.push_back(brave_actions_);
   }
@@ -267,13 +246,6 @@ gfx::Size BraveLocationBarView::CalculatePreferredSize(
     const int brave_actions_min = brave_actions_->GetMinimumSize().width();
     const int extra_width =
         brave_actions_min + GetLayoutConstant(LOCATION_BAR_ELEMENT_PADDING);
-    min_size.Enlarge(extra_width, 0);
-  }
-  if (brave_news_action_icon_view_ &&
-      brave_news_action_icon_view_->GetVisible()) {
-    const int extra_width =
-        GetLayoutConstant(LOCATION_BAR_ELEMENT_PADDING) +
-        brave_news_action_icon_view_->GetMinimumSize().width();
     min_size.Enlarge(extra_width, 0);
   }
 #if BUILDFLAG(ENABLE_TOR)

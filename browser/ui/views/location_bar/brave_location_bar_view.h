@@ -10,7 +10,6 @@
 #include <vector>
 
 #include "base/gtest_prod_util.h"
-#include "brave/browser/ui/views/brave_news/brave_news_action_icon_view.h"
 #include "brave/browser/ui/views/playlist/playlist_bubbles_controller.h"
 #include "brave/browser/ui/views/view_shadow.h"
 #include "brave/components/tor/buildflags/buildflags.h"
@@ -117,7 +116,6 @@ class BraveLocationBarView : public LocationBarView {
 
   std::unique_ptr<ViewShadow> shadow_;
   raw_ptr<BraveActionsContainer> brave_actions_ = nullptr;
-  raw_ptr<BraveNewsActionIconView> brave_news_action_icon_view_ = nullptr;
   std::unique_ptr<PromotionButtonController> promotion_controller_;
   raw_ptr<PromotionButtonView> promotion_button_ = nullptr;
 #if BUILDFLAG(ENABLE_TOR)

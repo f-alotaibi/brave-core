@@ -13,11 +13,6 @@
 #include "brave/browser/translate/brave_translate_prefs_migration.h"
 #include "brave/browser/ui/bookmark/brave_bookmark_prefs.h"
 #include "brave/browser/ui/omnibox/brave_omnibox_client_impl.h"
-#include "brave/components/brave_news/browser/brave_news_controller.h"
-#include "brave/components/brave_news/browser/brave_news_p3a.h"
-#include "brave/components/brave_news/browser/brave_news_pref_manager.h"
-#include "brave/components/brave_news/common/p3a_pref_names.h"
-#include "brave/components/brave_news/common/pref_names.h"
 #include "brave/components/brave_perf_predictor/browser/p3a_bandwidth_savings_tracker.h"
 #include "brave/components/brave_perf_predictor/browser/perf_predictor_tab_helper.h"
 #include "brave/components/brave_search/browser/brave_search_default_host.h"
@@ -161,9 +156,6 @@ void RegisterProfilePrefsForMigration(
   registry->RegisterBooleanPref(kBraveSuggestedSiteSuggestionsEnabled, false);
 #endif
 
-  // Added Feb 2023
-  brave_news::p3a::prefs::RegisterProfileNewsMetricsPrefsForMigration(registry);
-
   // Added May 2023
 #if defined(TOOLKIT_VIEWS)
   registry->RegisterBooleanPref(sidebar::kSidebarAlignmentChangedTemporarily,
@@ -207,8 +199,6 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
   brave_sync::Prefs::RegisterProfilePrefs(registry);
 
   brave_shields::RegisterShieldsP3AProfilePrefs(registry);
-
-  brave_news::prefs::RegisterProfilePrefs(registry);
 
   // TODO(shong): Migrate this to local state also and guard in ENABLE_WIDEVINE.
   // We don't need to display "don't ask widevine prompt option" in settings

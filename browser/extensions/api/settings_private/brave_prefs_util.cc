@@ -6,7 +6,6 @@
 #include "brave/browser/extensions/api/settings_private/brave_prefs_util.h"
 
 #include "brave/browser/ui/tabs/brave_tab_prefs.h"
-#include "brave/components/brave_news/common/pref_names.h"
 #include "brave/components/brave_shields/core/common/pref_names.h"
 #include "brave/components/brave_vpn/common/buildflags/buildflags.h"
 #include "brave/components/brave_wayback_machine/buildflags/buildflags.h"
@@ -115,8 +114,6 @@ const PrefsUtil::TypedPrefMap& BravePrefsUtil::GetAllowlistedKeys() {
   // appearance prefs
   (*s_brave_allowlist)[kShowBookmarksButton] = settings_api::PrefType::kBoolean;
   (*s_brave_allowlist)[kShowSidePanelButton] = settings_api::PrefType::kBoolean;
-  (*s_brave_allowlist)[brave_news::prefs::kShouldShowToolbarButton] =
-      settings_api::PrefType::kBoolean;
   (*s_brave_allowlist)[kLocationBarIsWide] = settings_api::PrefType::kBoolean;
   (*s_brave_allowlist)[omnibox::kAutocompleteEnabled] =
       settings_api::PrefType::kBoolean;

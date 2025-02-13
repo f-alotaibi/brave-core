@@ -15,7 +15,6 @@
 #include "brave/components/ai_rewriter/common/buildflags/buildflags.h"
 #include "brave/components/brave_component_updater/browser/features.h"
 #include "brave/components/brave_education/buildflags.h"
-#include "brave/components/brave_news/common/features.h"
 #include "brave/components/brave_shields/core/common/features.h"
 #include "brave/components/brave_vpn/common/buildflags/buildflags.h"
 #include "brave/components/de_amp/common/features.h"
@@ -128,24 +127,6 @@
           kOsWin,                                                          \
           FEATURE_VALUE_TYPE(::features::kBraveWorkaroundNewWindowFlash),  \
       }))
-
-#define BRAVE_NEWS_FEATURE_ENTRIES                                             \
-  EXPAND_FEATURE_ENTRIES(                                                      \
-      {                                                                        \
-          "brave-news-peek",                                                   \
-          "Brave News prompts on New Tab Page",                                \
-          "Prompt Brave News via the top featured article peeking up from "    \
-          "the bottom of the New Tab Page, after a short delay.",              \
-          kOsDesktop,                                                          \
-          FEATURE_VALUE_TYPE(brave_news::features::kBraveNewsCardPeekFeature), \
-      },                                                                       \
-      {                                                                        \
-          "brave-news-feed-update",                                            \
-          "Brave News Feed Update",                                            \
-          "Use the updated Brave News feed",                                   \
-          kOsDesktop,                                                          \
-          FEATURE_VALUE_TYPE(brave_news::features::kBraveNewsFeedUpdate),      \
-      })
 
 #define PLAYLIST_FEATURE_ENTRIES                                       \
   IF_BUILDFLAG(                                                        \
@@ -767,7 +748,6 @@
           kOsWin | kOsLinux | kOsMac,                                          \
           FEATURE_VALUE_TYPE(features::kBraveWebViewRoundedCorners),           \
       })                                                                       \
-  BRAVE_NEWS_FEATURE_ENTRIES                                                   \
   SPEEDREADER_FEATURE_ENTRIES                                                  \
   REQUEST_OTR_FEATURE_ENTRIES                                                  \
   BRAVE_MODULE_FILENAME_PATCH                                                  \

@@ -9,7 +9,6 @@
 #include "base/task/sequenced_task_runner.h"
 #include "brave/browser/brave_browser_process.h"
 #include "brave/browser/perf/brave_perf_switches.h"
-#include "brave/components/brave_news/common/pref_names.h"
 #include "brave/components/brave_shields/content/browser/ad_block_service.h"
 #include "brave/components/brave_shields/core/browser/ad_block_component_service_manager.h"
 #include "brave/components/brave_shields/core/common/brave_shield_constants.h"
@@ -53,11 +52,6 @@ void MaybeEnableBraveFeatureForPerfTesting(Profile* profile) {
       !cmd->HasSwitch(::switches::kUserDataDir)) {
     return;
   }
-
-  // Brave news
-  profile->GetPrefs()->SetBoolean(brave_news::prefs::kNewTabPageShowToday,
-                                  true);
-  profile->GetPrefs()->SetBoolean(brave_news::prefs::kBraveNewsOptedIn, true);
 
 #if BUILDFLAG(ENABLE_SPEEDREADER)
   // Speedreader

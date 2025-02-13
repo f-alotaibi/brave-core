@@ -11,7 +11,6 @@
 #include "base/feature_list.h"
 #include "base/functional/callback_helpers.h"
 #include "brave/browser/brave_browser_process.h"
-#include "brave/browser/brave_news/brave_news_tab_helper.h"
 #include "brave/browser/brave_shields/brave_shields_web_contents_observer.h"
 #include "brave/browser/ephemeral_storage/ephemeral_storage_tab_helper.h"
 #include "brave/browser/misc_metrics/page_metrics_tab_helper.h"
@@ -137,8 +136,6 @@ void AttachTabHelpers(content::WebContents* web_contents) {
       web_contents, web_contents->GetBrowserContext()->IsTor());
   tor::OnionLocationTabHelper::CreateForWebContents(web_contents);
 #endif
-
-  BraveNewsTabHelper::MaybeCreateForWebContents(web_contents);
 
 #if defined(TOOLKIT_VIEWS)
   OnboardingTabHelper::MaybeCreateForWebContents(web_contents);

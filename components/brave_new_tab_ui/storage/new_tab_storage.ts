@@ -13,8 +13,6 @@ export const keyName = 'new-tab-data'
 export const defaultState: NewTab.State = {
   initialDataLoaded: false,
   textDirection: loadTimeData.getString('textdirection'),
-  featureFlagBraveNewsPromptEnabled: loadTimeData.getBoolean('featureFlagBraveNewsPromptEnabled'),
-  featureFlagBraveNewsFeedV2Enabled: loadTimeData.getBoolean('featureFlagBraveNewsFeedV2Enabled'),
   featureCustomBackgroundEnabled: loadTimeData.getBoolean('featureCustomBackgroundEnabled'),
   searchPromotionEnabled: false,
   showBackgroundImage: false,
@@ -34,7 +32,6 @@ export const defaultState: NewTab.State = {
   hideAllWidgets: false,
   brandedWallpaperOptIn: false,
   isBrandedWallpaperNotificationDismissed: true,
-  isBraveNewsOptedIn: false,
   showEmptyPage: false,
   isIncognito: chrome.extension.inIncognitoContext,
   torCircuitEstablished: false,

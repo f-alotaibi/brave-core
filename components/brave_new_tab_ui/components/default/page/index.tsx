@@ -6,7 +6,6 @@
 import * as React from 'react'
 import styled, { createGlobalStyle, css } from 'styled-components'
 import { requestAnimationFrameThrottle } from '../../../../common/throttle'
-import { defaultState } from '../../../storage/new_tab_storage'
 import { font, spacing } from '@brave/leo/tokens/css/variables'
 
 const breakpointLargeBlocks = '980px'
@@ -33,13 +32,12 @@ type AppProps = {
 type PageProps = {
   showClock: boolean
   showStats: boolean
-  showCryptoContent: boolean
   showTopSites: boolean
   showBrandedWallpaper: boolean
 } & HasImageProps
 
 function getItemRowCount(p: PageProps): number {
-  let right = (p.showClock ? 1 : 0) + (p.showCryptoContent ? 2 : 0)
+  let right = (p.showClock ? 1 : 0)
   let left = (p.showStats ? 1 : 0) + (p.showTopSites ? 1 : 0)
   // Has space for branded logo to sit next to something on right?
   if (p.showBrandedWallpaper && left >= right) {
@@ -378,7 +376,7 @@ export const App = styled('div') <AppProps & HasImageProps>`
   opacity: ${p => p.dataIsReady ? 1 : 0};
   ${getPageBackground}
 
-  ${defaultState.featureFlagBraveNewsFeedV2Enabled && css`
+  ${css`
   &::before {
       /* The FeedV2 has a semi-transparent white overlay. This is done via a
        * linear-gradient to not break any of the FeedV1 features. */

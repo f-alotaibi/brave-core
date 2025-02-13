@@ -9,7 +9,6 @@
 #include "base/strings/sys_string_conversions.h"
 #include "brave/components/ai_chat/core/common/features.h"
 #include "brave/components/brave_component_updater/browser/features.h"
-#include "brave/components/brave_news/common/features.h"
 #include "brave/components/brave_rewards/core/features.h"
 #include "brave/components/brave_search/common/features.h"
 #include "brave/components/brave_search_conversion/features.h"
@@ -174,16 +173,6 @@
 + (Feature*)kBraveNTPSuperReferralWallpaper {
   return [[Feature alloc] initWithFeature:&ntp_background_images::features::
                                               kBraveNTPSuperReferralWallpaper];
-}
-
-+ (Feature*)kBraveNewsCardPeekFeature {
-  return [[Feature alloc]
-      initWithFeature:&brave_news::features::kBraveNewsCardPeekFeature];
-}
-
-+ (Feature*)kBraveNewsFeedUpdate {
-  return [[Feature alloc]
-      initWithFeature:&brave_news::features::kBraveNewsFeedUpdate];
 }
 
 + (Feature*)kBraveReduceLanguage {

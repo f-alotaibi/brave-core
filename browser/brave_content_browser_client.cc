@@ -188,15 +188,12 @@ using extensions::ChromeContentBrowserClientExtensionsPart;
 #if !BUILDFLAG(IS_ANDROID)
 #include "brave/browser/new_tab/new_tab_shows_navigation_throttle.h"
 #include "brave/browser/ui/geolocation/brave_geolocation_permission_tab_helper.h"
-#include "brave/browser/ui/webui/brave_news_internals/brave_news_internals_ui.h"
 #include "brave/browser/ui/webui/brave_settings_ui.h"
 #include "brave/browser/ui/webui/brave_shields/cookie_list_opt_in_ui.h"
 #include "brave/browser/ui/webui/brave_shields/shields_panel_ui.h"
 #include "brave/browser/ui/webui/new_tab_page/brave_new_tab_ui.h"
 #include "brave/browser/ui/webui/private_new_tab_page/brave_private_new_tab_ui.h"
 #include "brave/components/brave_new_tab_ui/brave_new_tab_page.mojom.h"
-#include "brave/components/brave_news/common/brave_news.mojom.h"
-#include "brave/components/brave_news/common/features.h"
 #include "brave/components/brave_private_new_tab_ui/common/brave_private_new_tab.mojom.h"
 #include "brave/components/brave_shields/core/common/brave_shields_panel.mojom.h"
 #include "brave/components/brave_shields/core/common/cookie_list_opt_in.mojom.h"
@@ -498,8 +495,7 @@ void BraveContentBrowserClient::RegisterWebUIInterfaceBrokers(
 #if !BUILDFLAG(IS_ANDROID)
   auto ntp_registration =
       registry.ForWebUI<BraveNewTabUI>()
-          .Add<brave_new_tab_page::mojom::PageHandlerFactory>()
-          .Add<brave_news::mojom::BraveNewsController>();
+          .Add<brave_new_tab_page::mojom::PageHandlerFactory>();
 
 #if BUILDFLAG(ENABLE_BRAVE_VPN)
   if (brave_vpn::IsBraveVPNFeatureEnabled()) {
@@ -511,12 +507,6 @@ void BraveContentBrowserClient::RegisterWebUIInterfaceBrokers(
     ntp_registration.Add<searchbox::mojom::PageHandler>();
   }
 
-  if (base::FeatureList::IsEnabled(
-          brave_news::features::kBraveNewsFeedUpdate)) {
-    registry.ForWebUI<BraveNewsInternalsUI>()
-        .Add<brave_news::mojom::BraveNewsController>()
-        .Add<brave_news::mojom::BraveNewsInternals>();
-  }
 #endif
 }
 

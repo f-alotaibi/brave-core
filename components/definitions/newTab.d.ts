@@ -117,15 +117,12 @@ declare namespace NewTab {
     promptEnableSearchSuggestions: boolean
     searchSuggestionsEnabled: boolean
     hideAllWidgets: boolean
-    isBraveNewsOptedIn: boolean
     isBrandedWallpaperNotificationDismissed: boolean
   }
 
   export type EphemeralState = Preferences & {
     initialDataLoaded: boolean
     textDirection: string
-    featureFlagBraveNewsPromptEnabled: boolean
-    featureFlagBraveNewsFeedV2Enabled: boolean
     searchPromotionEnabled: boolean
     featureCustomBackgroundEnabled: boolean
     isIncognito: boolean

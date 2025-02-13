@@ -11,7 +11,6 @@
 #include "base/check.h"
 #include "base/feature_list.h"
 #include "brave/browser/brave_browser_process.h"
-#include "brave/browser/brave_news/brave_news_controller_factory.h"
 #include "brave/browser/misc_metrics/process_misc_metrics.h"
 #include "brave/browser/new_tab/new_tab_shows_options.h"
 #include "brave/browser/ntp_background/brave_ntp_custom_background_service_factory.h"
@@ -21,8 +20,6 @@
 #include "brave/browser/ui/webui/new_tab_page/brave_new_tab_page_handler.h"
 #include "brave/browser/ui/webui/new_tab_page/top_sites_message_handler.h"
 #include "brave/components/brave_new_tab/resources/grit/brave_new_tab_generated_map.h"
-#include "brave/components/brave_news/browser/brave_news_controller.h"
-#include "brave/components/brave_news/common/features.h"
 #include "brave/components/l10n/common/localization_util.h"
 #include "brave/components/misc_metrics/new_tab_metrics.h"
 #include "brave/components/ntp_background_images/browser/ntp_custom_images_source.h"
@@ -95,14 +92,6 @@ BraveNewTabUI::BraveNewTabUI(content::WebUI* web_ui, const std::string& name)
           ThemePrefInMigration::kNtpCustomBackgroundDict)));
 
   // Let frontend know about feature flags
-  source->AddBoolean("featureFlagBraveNewsPromptEnabled",
-                     base::FeatureList::IsEnabled(
-                         brave_news::features::kBraveNewsCardPeekFeature));
-
-  source->AddBoolean(
-      "featureFlagBraveNewsFeedV2Enabled",
-      base::FeatureList::IsEnabled(brave_news::features::kBraveNewsFeedUpdate));
-
   source->AddBoolean(
       "featureFlagSearchWidget",
       base::FeatureList::IsEnabled(features::kBraveNtpSearchWidget));
@@ -130,18 +119,6 @@ BraveNewTabUI::BraveNewTabUI(content::WebUI* web_ui, const std::string& name)
 }
 
 BraveNewTabUI::~BraveNewTabUI() = default;
-
-void BraveNewTabUI::BindInterface(
-    mojo::PendingReceiver<brave_news::mojom::BraveNewsController> receiver) {
-  auto* profile = Profile::FromWebUI(web_ui());
-  DCHECK(profile);
-  // Wire up JS mojom to service
-  auto* brave_news_controller =
-      brave_news::BraveNewsControllerFactory::GetForBrowserContext(profile);
-  if (brave_news_controller) {
-    brave_news_controller->Bind(std::move(receiver));
-  }
-}
 
 void BraveNewTabUI::BindInterface(
     mojo::PendingReceiver<brave_new_tab_page::mojom::PageHandlerFactory>

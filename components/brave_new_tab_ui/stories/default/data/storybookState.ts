@@ -79,8 +79,6 @@ export const useNewTabData = (state: NewTab.State = defaultState) => {
     readabilityThreshold: number('Readability threshold', ColorUtil.getThresholdForReadability(), { range: true, min: 0, max: 10, step: 0.1 }),
     customLinksEnabled: boolean('CustomLinks Enabled?', false),
     featureCustomBackgroundEnabled: true,
-    featureFlagBraveNewsPromptEnabled: true,
-    featureFlagBraveNewsFeedV2Enabled: false,
     searchPromotionEnabled: false,
     forceSettingsTab: select('Open settings tab?', [undefined, ...Object.keys(SettingsTabType)], undefined),
     showBackgroundImage: boolean('Show background image?', true),
@@ -93,7 +91,6 @@ export const useNewTabData = (state: NewTab.State = defaultState) => {
     promptEnableSearchSuggestions: boolean('Prompt to enable search suggestions', true),
     searchSuggestionsEnabled: boolean('Search suggestions enabled', false),
     hideAllWidgets: boolean('Hide all widgets?', false),
-    isBraveNewsOptedIn: boolean('Brave News opted-in?', false),
     textDirection: select('Text direction', { ltr: 'ltr', rtl: 'rtl' }, 'ltr'),
     stats: {
       ...state.stats,

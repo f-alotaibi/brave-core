@@ -20,11 +20,9 @@ speedreader-ffi = "0.1"
 skus-cxx = "0.1"
 json-cxx = "1"
 filecoin-cxx = "1"
-brave-news-cxx = "1"
 adblock-cxx = { version = "1" }
 constellation-cxx = "0.1"
 challenge-bypass-ristretto-cxx = "1"
-zcash = "1"
 anonymous-credentials = "0.1"
 document-extractor = "0.1"
 
@@ -59,10 +57,6 @@ package = "json-cxx"
 [patch.crates-io.filecoin-cxx_v1]
 path = "../../../components/filecoin/rs"
 package = "filecoin-cxx"
-
-[patch.crates-io.brave-news-cxx_v1]
-path = "../../../components/brave_news/rust"
-package = "brave-news-cxx"
 
 [patch.crates-io.adblock-cxx_v1]
 path = "../../../components/brave_shields/adblock/rs"

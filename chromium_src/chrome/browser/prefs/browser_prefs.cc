@@ -9,9 +9,6 @@
 #include "brave/browser/misc_metrics/uptime_monitor.h"
 #include "brave/browser/themes/brave_dark_mode_utils.h"
 #include "brave/browser/translate/brave_translate_prefs_migration.h"
-#include "brave/components/brave_news/browser/brave_news_p3a.h"
-#include "brave/components/brave_news/common/p3a_pref_names.h"
-#include "brave/components/brave_news/common/pref_names.h"
 #include "brave/components/brave_search_conversion/p3a.h"
 #include "brave/components/brave_shields/content/browser/brave_shields_p3a.h"
 #include "brave/components/brave_sync/brave_sync_prefs.h"
@@ -99,8 +96,6 @@ void MigrateObsoleteProfilePrefs(PrefService* profile_prefs,
   profile_prefs->ClearPref(kBraveSearchVisitCount);
 #endif
 
-  // Added 05/2021
-  profile_prefs->ClearPref(kBraveNewsIntroDismissed);
   // Added 07/2021
   profile_prefs->ClearPref(prefs::kNetworkPredictionOptions);
 
@@ -148,8 +143,6 @@ void MigrateObsoleteProfilePrefs(PrefService* profile_prefs,
 
   profile_prefs->ClearPref(sidebar::kSidebarAlignmentChangedTemporarily);
 #endif
-
-  brave_news::p3a::prefs::MigrateObsoleteProfileNewsMetricsPrefs(profile_prefs);
 
   // Added 2023-09
   ntp_background_images::ViewCounterService::MigrateObsoleteProfilePrefs(
