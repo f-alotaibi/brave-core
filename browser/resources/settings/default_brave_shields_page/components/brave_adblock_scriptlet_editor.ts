@@ -27,6 +27,12 @@ interface AdblockScriptletEditor {
   }
 }
 
+declare global {
+  interface Window {
+    testing: any;
+  }
+}
+
 const AdblockScriptletEditorBase = I18nMixin(PrefsMixin(PolymerElement))
 
 class AdblockScriptletEditor extends AdblockScriptletEditorBase {
@@ -57,10 +63,10 @@ class AdblockScriptletEditor extends AdblockScriptletEditorBase {
 
   override ready() {
     super.ready()
-    /*if (loadTimeData.getBoolean('shouldExposeElementsForTesting')) {
+    if (loadTimeData.getBoolean('shouldExposeElementsForTesting')) {
       window.testing = window.testing || {}
       window.testing[`adblockScriptletEditor`] = this.shadowRoot
-    }*/
+    }
 
     this.oldScriptletName_ = this.scriptlet.name
 
